@@ -1,103 +1,594 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة إدارة متجر النور</title>
-    <style>
-        body { font-family: Tahoma, sans-serif; padding: 20px; background: #f0f2f5; direction: rtl; }
-        .container { max-width: 900px; margin: 0 auto; }
-        .box { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .input-group { margin-bottom: 10px; }
-        input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        button { background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .order-card { border-right: 5px solid #ffc107; background: #fff8e1; padding: 15px; margin-bottom: 10px; border-radius: 4px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم الفخمة - النور ستور</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --accent-color: #6366f1;
+      --accent-hover: #4f46e5;
+      --danger-color: #ef4444;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #1e1b4b, #0f172a);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 25px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    header h1 {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    header h1 i {
+      color: var(--accent-color);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .stat-info h3 {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .stat-info p {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    /* Dashboard Main Section */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 25px;
+    }
+
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Glass Card */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 25px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      margin-bottom: 25px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    /* Forms & Inputs */
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+    }
+
+    /* File Input Styling */
+    .file-upload-box {
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.4);
+      transition: all 0.3s;
+    }
+
+    .file-upload-box:hover {
+      border-color: var(--accent-color);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .file-upload-box i {
+      font-size: 30px;
+      color: var(--accent-color);
+      margin-bottom: 8px;
+    }
+
+    .file-preview {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary { background: var(--accent-color); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+    .btn-danger { background: var(--danger-color); color: #fff; }
+    .btn-warning { background: var(--warning-color); color: #fff; }
+
+    /* Products List Grid */
+    .products-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .product-item {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      background: #1e293b;
+    }
+
+    .product-details {
+      padding: 12px;
+      flex-grow: 1;
+    }
+
+    .product-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .product-price {
+      color: var(--success-color);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+    }
+
+    /* Config Modal Setup */
+    #config-banner {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--danger-color);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>🛠️ لوحة إدارة متجر النور</h2>
-    <hr style="margin: 15px 0;">
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1><i class="fa-solid fa-sliders"></i> لوحة التحكم الفخمة - إدارة المتجر</h1>
+      <a href="index.html" target="_blank" style="color: var(--accent-color); text-decoration: none; font-weight: 700;">
+        <i class="fa-solid fa-store"></i> فتح المتجر
+      </a>
+    </header>
 
-    <!-- قسم إضافة بضاعة جديدة -->
-    <div class="box">
-        <h3>➕ إضافة منتج جديد للمتجر</h3>
-        <div class="input-group"><input type="text" id="p-title" placeholder="اسم المنتج"></div>
-        <div class="input-group"><input type="number" id="p-price" placeholder="السعر (ج.م)"></div>
-        <div class="input-group"><input type="text" id="p-img" placeholder="رابط صورة المنتج (URL)"></div>
-        <button onclick="addProduct()">نشر المنتج في المتجر 🚀</button>
+    <!-- Setup Banner if needed -->
+    <div id="config-banner">
+      <i class="fa-solid fa-triangle-exclamation" style="color: var(--danger-color);"></i>
+      <strong>تنبيه:</strong> يرجى التأكد من ربط Firebase للوحة التحكم للبدء في إضافة المنتجات والطلبات.
     </div>
 
-    <!-- قسم استقبال الطلبات الحية -->
-    <div class="box">
-        <h3>🔔 الطلبات الواردة (تحديث مباشر)</h3>
-        <div id="orders-list">في انتظار الطلبات الجديد...</div>
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-box"></i></div>
+        <div class="stat-info">
+          <h3>إجمالي المنتجات</h3>
+          <p id="total-products-count">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--success-color);">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+        <div class="stat-info">
+          <h3>إجمالي الطلبات</h3>
+          <p id="total-orders-count">0</p>
+        </div>
+      </div>
     </div>
-</div>
 
-<script type="module">
+    <!-- Main Content -->
+    <div class="main-grid">
+      
+      <!-- Add / Edit Product Form -->
+      <div class="glass-card">
+        <div class="card-title">
+          <i class="fa-solid fa-square-plus" id="form-icon"></i>
+          <span id="form-title">إضافة منتج جديد</span>
+        </div>
+
+        <form id="product-form">
+          <input type="hidden" id="edit-product-id">
+
+          <div class="form-group">
+            <label>اسم المنتج</label>
+            <input type="text" id="p-name" class="form-control" placeholder="أدخل اسم المنتج" required>
+          </div>
+
+          <div class="form-group">
+            <label>السعر (ج.م)</label>
+            <input type="number" id="p-price" class="form-control" placeholder="أدخل السعر" required>
+          </div>
+
+          <!-- Upload Image From File -->
+          <div class="form-group">
+            <label>صورة المنتج (اختر ملفاً من جهازك)</label>
+            <div class="file-upload-box" onclick="document.getElementById('p-file').click();">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <p id="upload-text" style="font-size: 13px; color: var(--text-muted);">اضغط هنا لاختيار صورة من الموبايل أو الكمبيوتر</p>
+              <input type="file" id="p-file" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+              <img id="image-preview" class="file-preview" alt="معاينة الصورة">
+            </div>
+          </div>
+
+          <!-- Alternatively Image Link -->
+          <div class="form-group">
+            <label>أو ضع رابط صورة جاهز</label>
+            <input type="url" id="p-image-url" class="form-control" placeholder="https://example.com/image.jpg" oninput="handleUrlInput()">
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="save-btn">
+            <i class="fa-solid fa-check"></i> حفظ ونشر المنتج
+          </button>
+          
+          <button type="button" class="btn btn-danger" id="cancel-btn" style="display: none; margin-top: 10px;" onclick="resetForm()">
+            إلغاء التعديل
+          </button>
+        </form>
+      </div>
+
+      <!-- Management Area -->
+      <div>
+        <div class="glass-card">
+          <div class="card-title">
+            <i class="fa-solid fa-boxes-stacked"></i> المنتجات المعروضة
+          </div>
+          <div class="products-list" id="products-container">
+            <p style="color: var(--text-muted);">جاري تحميل المنتجات...</p>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-title">
+            <i class="fa-solid fa-receipt"></i> الطلبات الواردة
+          </div>
+          <div class="orders-list" id="orders-container">
+            <p style="color: var(--text-muted);">لا توجد طلبات جديدة حالياً.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Firebase Logic -->
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // ⚠️ استبدل بنفس مفاتيح Firebase المستخدمة في المتجر
-    const firebaseConfig = {
-    apiKey: "AIzaSyDsvNr5yJs4jMzAVwqc7g_Kti-_r3ntQa0",
-    authDomain: "alnoorstore.firebaseapp.com",
-    projectId: "alnoorstore",
-    storageBucket: "alnoorstore.firebasestorage.app",
-    messagingSenderId: "817663342597",
-    appId: "1:817663342597:web:524594c402e7860b9f446c",
-    measurementId: "G-07VZE5CQJG"
-};
+    // محاولة جلب الإعدادات المخزنة أو الافتراضية
+    let firebaseConfig = JSON.parse(localStorage.getItem('alnoor_firebase_config')) || null;
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    if (!firebaseConfig) {
+      // إعدادات افتراضية في حال وجودها
+      firebaseConfig = {
+        apiKey: "AIzaSyDummyKeyForAlNoorApp",
+        authDomain: "alnoorstore-app.firebaseapp.com",
+        projectId: "alnoorstore-app",
+        storageBucket: "alnoorstore-app.appspot.com",
+        messagingSenderId: "123456789",
+        appId: "1:123456789:web:abcdef"
+      };
+    }
 
-    // صوت التنبيه للطلبات الجديدة
-    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+    let db;
+    try {
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      initApp();
+    } catch (e) {
+      document.getElementById('config-banner').style.display = 'block';
+    }
 
-    // إضافة منتج جديد
-    window.addProduct = async () => {
-        const title = document.getElementById('p-title').value;
-        const price = document.getElementById('p-price').value;
-        const img = document.getElementById('p-img').value;
+    let base64Image = "";
 
-        if(!title || !price || !img) return alert('يرجى إكمال بيانات المنتج');
-
-        await addDoc(collection(db, "products"), { title, price, img });
-        alert('تم نشر المنتج بنجاح وظهر للزبائن الآن!');
-        document.getElementById('p-title').value = '';
-        document.getElementById('p-price').value = '';
-        document.getElementById('p-img').value = '';
+    // Image Upload Function
+    window.handleImageUpload = function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          base64Image = e.target.result;
+          const preview = document.getElementById('image-preview');
+          preview.src = base64Image;
+          preview.style.display = 'block';
+          document.getElementById('upload-text').innerText = "تم اختيار: " + file.name;
+          document.getElementById('p-image-url').value = "";
+        };
+        reader.readAsDataURL(file);
+      }
     };
 
-    // التسمع على الطلبات الجديدة لحظة بلحظة
-    let isFirstLoad = true;
-    const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
-    
-    onSnapshot(q, (snapshot) => {
-        const ordersList = document.getElementById('orders-list');
-        
-        if(!isFirstLoad && snapshot.docChanges().some(change => change.type === "added")) {
-            audio.play(); // تشغيل صوت التنبيه عند وصول طلب جديد
-        }
-        isFirstLoad = false;
+    window.handleUrlInput = function() {
+      const url = document.getElementById('p-image-url').value;
+      if (url) {
+        base64Image = url;
+        const preview = document.getElementById('image-preview');
+        preview.src = url;
+        preview.style.display = 'block';
+        document.getElementById('upload-text').innerText = "تم استخدام رابط صورة خارجي";
+      }
+    };
 
-        ordersList.innerHTML = snapshot.docs.map(doc => {
-            const data = doc.data();
-            const items = data.items ? data.items.map(i => i.title).join(', ') : '';
-            return `
-                <div class="order-card">
-                    <h4>العميل: ${data.customer.name} - 📞 ${data.customer.phone}</h4>
-                    <p><strong>العنوان:</strong> ${data.customer.address}</p>
-                    <p><strong>طريقة الدفع:</strong> ${data.customer.payment}</p>
-                    <p><strong>المنتجات:</strong> ${items}</p>
-                    <p><strong>الإجمالي:</strong> <span style="color:red; font-weight:bold;">${data.total} ج.م</span></p>
-                </div>
-            `;
-        }).join('');
+    function initApp() {
+      // Load Products
+      onSnapshot(collection(db, "products"), (snapshot) => {
+        const container = document.getElementById('products-container');
+        document.getElementById('total-products-count').innerText = snapshot.docs.length;
+        
+        if (snapshot.empty) {
+          container.innerHTML = '<p style="color: var(--text-muted);">لا توجد منتجات حالياً.</p>';
+          return;
+        }
+
+        container.innerHTML = '';
+        snapshot.docs.forEach(docSnap => {
+          const item = docSnap.data();
+          const id = docSnap.id;
+
+          container.innerHTML += `
+            <div class="product-item">
+              <img src="${item.image || 'https://via.placeholder.com/150'}" class="product-img" alt="${item.name}">
+              <div class="product-details">
+                <div class="product-title">${item.name}</div>
+                <div class="product-price">${item.price} ج.م</div>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-warning btn-sm" onclick="prepareEdit('${id}', '${item.name}', ${item.price}, '${item.image}')">
+                  <i class="fa-solid fa-pen"></i> تعديل
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="deleteProduct('${id}')">
+                  <i class="fa-solid fa-trash"></i> حذف
+                </button>
+              </div>
+            </div>
+          `;
+        });
+      }, (error) => {
+        document.getElementById('config-banner').style.display = 'block';
+      });
+
+      // Load Orders
+      onSnapshot(collection(db, "orders"), (snapshot) => {
+        const container = document.getElementById('orders-container');
+        document.getElementById('total-orders-count').innerText = snapshot.docs.length;
+
+        if (snapshot.empty) {
+          container.innerHTML = '<p style="color: var(--text-muted);">لا توجد طلبات واردة حالياً.</p>';
+          return;
+        }
+
+        container.innerHTML = '';
+        snapshot.docs.forEach(docSnap => {
+          const order = docSnap.data();
+          const id = docSnap.id;
+
+          container.innerHTML += `
+            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 8px;">
+                <strong>العميل: ${order.customerName || 'غير معروف'}</strong>
+                <button class="btn btn-danger btn-sm" style="width: auto;" onclick="deleteOrder('${id}')">حذف الطلب</button>
+              </div>
+              <div style="font-size: 13px; color: var(--text-muted);">العنوان: ${order.address || 'غير محدد'} | الهاتف: ${order.phone || 'غير محدد'}</div>
+              <div style="margin-top: 8px; font-weight: 700; color: var(--success-color);">المبلغ الإجمالي: ${order.totalPrice || 0} ج.م</div>
+            </div>
+          `;
+        });
+      });
+    }
+
+    // Submit Form
+    document.getElementById('product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const editId = document.getElementById('edit-product-id').value;
+      const name = document.getElementById('p-name').value;
+      const price = parseFloat(document.getElementById('p-price').value);
+      const image = base64Image || 'https://via.placeholder.com/150';
+
+      try {
+        if (editId) {
+          await updateDoc(doc(db, "products", editId), { name, price, image });
+          alert('تم تعديل المنتج بنجاح!');
+        } else {
+          await addDoc(collection(db, "products"), { name, price, image, createdAt: new Date() });
+          alert('تم إضافة المنتج بنجاح!');
+        }
+        resetForm();
+      } catch (error) {
+        alert('حدث خطأ أثناء الحفظ: ' + error.message);
+      }
     });
-</script>
+
+    // Reset Form
+    window.resetForm = function() {
+      document.getElementById('product-form').reset();
+      document.getElementById('edit-product-id').value = "";
+      document.getElementById('image-preview').style.display = 'none';
+      document.getElementById('upload-text').innerText = "اضغط هنا لاختيار صورة من الموبايل أو الكمبيوتر";
+      document.getElementById('form-title').innerText = "إضافة منتج جديد";
+      document.getElementById('save-btn').innerHTML = '<i class="fa-solid fa-check"></i> حفظ ونشر المنتج';
+      document.getElementById('cancel-btn').style.display = 'none';
+      base64Image = "";
+    };
+
+    // Edit Product
+    window.prepareEdit = function(id, name, price, image) {
+      document.getElementById('edit-product-id').value = id;
+      document.getElementById('p-name').value = name;
+      document.getElementById('p-price').value = price;
+      base64Image = image;
+      
+      const preview = document.getElementById('image-preview');
+      preview.src = image;
+      preview.style.display = 'block';
+
+      document.getElementById('form-title').innerText = "تعديل المنتج";
+      document.getElementById('save-btn').innerHTML = '<i class="fa-solid fa-rotate"></i> تحديث البيانات';
+      document.getElementById('cancel-btn').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Delete Product
+    window.deleteProduct = async function(id) {
+      if (confirm('هل ترغب في حذف هذا المنتج نهائياً؟')) {
+        await deleteDoc(doc(db, "products", id));
+      }
+    };
+
+    // Delete Order
+    window.deleteOrder = async function(id) {
+      if (confirm('هل ترغب في حذف هذا الطلب؟')) {
+        await deleteDoc(doc(db, "orders", id));
+      }
+    };
+  </script>
 </body>
 </html>
