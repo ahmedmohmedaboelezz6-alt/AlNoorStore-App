@@ -40,16 +40,19 @@
         .btn:hover { opacity: 0.9; }
         .btn-danger { background: #ef4444; }
 
-        /* تصميم حقل رفع الصورة من الجهاز المدمج */
+        /* رفع الصورة من الجهاز */
         .file-upload-wrapper { border: 2px dashed var(--primary); border-radius: 10px; padding: 15px; text-align: center; cursor: pointer; background: var(--bg-color); position: relative; margin: 8px 0; }
         .file-upload-wrapper input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
-        /* تصميم قسم الشات المطور */
+        /* قسم الشات المطور */
         .chat-container-grid { display: grid; grid-template-columns: 280px 1fr; gap: 20px; height: 580px; }
-        .chat-customer-item { padding: 12px 15px; border-radius: 10px; cursor: pointer; margin-bottom: 8px; font-size: 13px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; }
+        .chat-customer-item { padding: 12px 15px; border-radius: 10px; cursor: pointer; margin-bottom: 8px; font-size: 13px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; position: relative; }
         .chat-customer-item:hover { background: var(--bg-color); }
         .chat-customer-item.active-client { background: var(--primary) !important; color: white !important; border-color: var(--primary); }
         
+        /* النقطة الصفراء للعملاء الذين لم يتم الرد عليهم */
+        .pending-dot { width: 10px; height: 10px; background-color: #facc15; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #facc15; }
+
         .chat-msg-bubble { max-width: 75%; padding: 10px 14px; border-radius: 12px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
         .msg-admin { background: var(--primary); color: white; margin-left: auto; border-bottom-left-radius: 2px; }
         .msg-customer { background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); margin-right: auto; border-bottom-right-radius: 2px; }
@@ -105,7 +108,7 @@
                 </div>
             </div>
 
-            <!-- 2. المنتجات (مع ميزة رفع الصور من الجهاز) -->
+            <!-- 2. المنتجات -->
             <div id="tab-products" class="section-tab">
                 <div class="card-box">
                     <h3 style="margin-top:0;"><i class="fa-solid fa-plus-circle"></i> إضافة منتج جديد</h3>
@@ -117,7 +120,6 @@
                         <input type="number" id="p-stock" placeholder="الكمية المتاحة">
                     </div>
                     
-                    <!-- حقل رفع الصورة من الجهاز -->
                     <div style="margin-top: 5px;">
                         <label style="font-size: 13px; font-weight: 600;">صورة المنتج من جهازك:</label>
                         <div class="file-upload-wrapper">
@@ -125,7 +127,6 @@
                             <div id="file-name-display" style="font-size: 12px; color: #64748b;">اضغط هنا لاختيار صورة المنتج من جهازك</div>
                             <input type="file" id="p-image-file" accept="image/*" onchange="previewUploadedImage(this)">
                         </div>
-                        <!-- معاينة الصورة -->
                         <div id="image-preview-container" style="text-align: center; display: none; margin-top: 10px;">
                             <img id="img-preview-tag" src="" style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color);">
                         </div>
@@ -158,10 +159,9 @@
                 </div>
             </div>
 
-            <!-- 4. خدمة العملاء المطورة -->
+            <!-- 4. خدمة العملاء المطورة (مع النقطة الصفراء للرسائل غير المردود عليها) -->
             <div id="tab-chats" class="section-tab">
                 <div class="card-box chat-container-grid">
-                    <!-- قائمة العملاء الجانبية -->
                     <div style="border-left: 1px solid var(--border-color); overflow-y: auto; padding-left: 10px;">
                         <h4 style="margin-top:0; color:var(--primary);">👥 عملاء المحادثات النشطة</h4>
                         <div id="chat-customers-list">
@@ -169,7 +169,6 @@
                         </div>
                     </div>
                     
-                    <!-- صندوق المحادثة الخاص بالعميل المحدد -->
                     <div style="display: flex; flex-direction: column; height: 100%;">
                         <div id="active-chat-header" style="font-weight:bold; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom:10px; font-size:15px; color:var(--primary);">
                             <i class="fa-solid fa-comment-dots"></i> اختر عميلاً من القائمة الجانبية لعرض رسائله
@@ -209,7 +208,6 @@
 
     <div id="toast-container"></div>
 
-    <!-- صوت التنبيه -->
     <script>
         function playNotificationSound() {
             try {
@@ -227,7 +225,6 @@
         }
     </script>
 
-    <!-- فايربيس -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -247,8 +244,9 @@
 
         let activeCustomerId = null;
         let lastOrdersCount = null;
+        let totalChatsCount = null;
         let globalChatsData = {};
-        let base64SelectedImage = ""; // لتخزين كود الصورة المرفوعة من الجهاز
+        let base64SelectedImage = "";
 
         window.showToast = function(text, color = "#10b981") {
             const container = document.getElementById('toast-container');
@@ -273,7 +271,6 @@
             element.classList.add('active');
         };
 
-        // تحويل الصورة المختارة من الجهاز إلى Base64
         window.previewUploadedImage = function(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
@@ -288,7 +285,6 @@
             }
         };
 
-        // مراقبة الطلبات
         onSnapshot(collection(db, "orders"), (snapshot) => {
             let totalSales = 0;
             let totalOrders = snapshot.size;
@@ -427,7 +423,6 @@
                 showToast("🚀 تمت إضافة المنتج بنجاح!");
             }
 
-            // إعادة ضبط الفورم
             document.getElementById('edit-product-id').value = '';
             document.getElementById('p-name').value = '';
             document.getElementById('p-price').value = '';
@@ -461,14 +456,35 @@
             }
         };
 
-        // إدارة الشات
+        // إدارة الشات مع وضع نقطة صفراء للعملاء الذين لم يتم الرد على أحدث رسالة منهم
         onSnapshot(collection(db, "chats"), (snapshot) => {
             globalChatsData = {};
+            let newChatsCount = 0;
+            let currentTotalMessages = snapshot.size;
+
             snapshot.forEach(docSnap => {
                 const data = docSnap.data();
                 if(!globalChatsData[data.customerId]) globalChatsData[data.customerId] = [];
                 globalChatsData[data.customerId].push(data);
+
+                if(data.sender === 'customer') {
+                    newChatsCount++;
+                }
             });
+
+            if (totalChatsCount !== null && currentTotalMessages > totalChatsCount) {
+                playNotificationSound();
+                showToast("💬 رسالة جديدة وصلت من أحد العملاء في خدمة العملاء!", "#2563eb");
+            }
+            totalChatsCount = currentTotalMessages;
+
+            const chatBadge = document.getElementById('chats-nav-badge');
+            if(newChatsCount > 0) {
+                chatBadge.innerText = newChatsCount;
+                chatBadge.style.display = 'inline-block';
+            } else {
+                chatBadge.style.display = 'none';
+            }
 
             const listDiv = document.getElementById('chat-customers-list');
             listDiv.innerHTML = "";
@@ -481,12 +497,25 @@
 
             keys.forEach(custId => {
                 const isSelected = activeCustomerId === custId ? 'active-client' : '';
+                
+                // التحقق مما إذا كانت آخر رسالة مرسلة في الشات هي من العميل (بمعنى أن الآدمن لم يرد بعد)
+                const msgs = globalChatsData[custId] || [];
+                msgs.sort((a,b)=>(a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
+                const lastMsg = msgs[msgs.length - 1];
+                const needsReply = lastMsg && lastMsg.sender === 'customer';
+
                 listDiv.innerHTML += `
                     <div class="chat-customer-item ${isSelected}" onclick="selectChatCustomer('${custId}')">
-                        <div>
-                            <i class="fa-solid fa-user-circle"></i> <strong>العميل:</strong> ${custId.substring(0,8)}...
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-user-circle"></i> 
+                            <div>
+                                <strong>العميل:</strong> ${custId.substring(0,8)}...
+                            </div>
                         </div>
-                        <span style="font-size:11px; opacity:0.8;">(${globalChatsData[custId].length})</span>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            ${needsReply ? '<span class="pending-dot" title="لم يتم الرد عليه بعد"></span>' : ''}
+                            <span style="font-size:11px; opacity:0.8;">(${msgs.length})</span>
+                        </div>
                     </div>
                 `;
             });
