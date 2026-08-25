@@ -47,7 +47,7 @@
         <h2><i class="fa-solid fa-shield-halved"></i> لوحة التحكم</h2>
         <a class="nav-link active" onclick="switchTab('products', this)"><i class="fa-solid fa-boxes-stacked"></i> إدارة المنتجات</a>
         <a class="nav-link" onclick="switchTab('orders', this)"><i class="fa-solid fa-cart-shopping"></i> طلبات العملاء</a>
-        <a class="nav-link" onclick="switchTab('interviews', this)"><i class="fa-solid fa-user-check"></i> طلبات المقابلات (الطلاب)</a>
+        <a class="nav-link" onclick="switchTab('interviews', this)"><i class="fa-solid fa-user-check"></i> طلبات المقابلات / المتاجر</a>
         <a class="nav-link" onclick="switchTab('settings', this)"><i class="fa-solid fa-gear"></i> إعدادات المتجر</a>
     </div>
 
@@ -58,7 +58,7 @@
             <span>مرحباً، مشرف المتجر 👑</span>
         </div>
 
-        <!-- 1. قسم المنتجات -->
+        <!-- 1. قسم المنتجات (مع رفع صورة من الملفات بدلاً من الرابط) -->
         <div id="tab-products" class="tab-content active section-box">
             <h3><i class="fa-solid fa-plus-circle"></i> إضافة منتج جديد</h3>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -69,7 +69,10 @@
                 <input type="text" id="p-category" placeholder="التصنيف (مثال: إلكترونيات)">
                 <input type="number" id="p-stock" placeholder="الكمية المتاحة بالمخزون">
             </div>
-            <input type="text" id="p-image" placeholder="رابط صورة المنتج (URL)">
+            
+            <label style="font-size: 13px; font-weight: bold; color: #475569;">اختر صورة المنتج من جهازك:</label>
+            <input type="file" id="p-image-file" accept="image/*" style="background: #f8fafc; cursor: pointer;">
+
             <textarea id="p-desc" placeholder="وصف المنتج التفصيلي..." rows="2"></textarea>
             <button onclick="addNewProduct()">حفظ وإضافة المنتج 🚀</button>
 
@@ -77,6 +80,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th>الصورة</th>
                         <th>الاسم</th>
                         <th>السعر</th>
                         <th>التصنيف</th>
@@ -85,7 +89,7 @@
                     </tr>
                 </thead>
                 <tbody id="admin-products-list">
-                    <tr><td colspan="5" style="text-align:center;">جاري التحميل...</td></tr>
+                    <tr><td colspan="6" style="text-align:center;">جاري التحميل...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -110,27 +114,28 @@
             </table>
         </div>
 
-        <!-- 3. قسم مقابلات الطلاب -->
+        <!-- 3. قسم طلبات المقابلات وطلبات إنشاء المتاجر معاً -->
         <div id="tab-interviews" class="tab-content section-box">
-            <h3><i class="fa-solid fa-user-clock"></i> طلبات حجز المقابلات / الطلاب</h3>
-            <p style="font-size: 13px; color: #64748b;">قم بمراجعة طلبات المقابلات للطلاب واختيار قبول أو رفض الطلب مباشرة.</p>
+            <h3><i class="fa-solid fa-user-clock"></i> طلبات المقابلات وطلبات إنشاء المتاجر (تك)</h3>
+            <p style="font-size: 13px; color: #64748b;">هنا تظهر كافة طلبات الطلاب وأيضاً طلبات المتقدمين لإنشاء صفحات المتاجر الخاصة بهم.</p>
             <table>
                 <thead>
                     <tr>
-                        <th>اسم الطالب/المتقدم</th>
+                        <th>نوع الطلب</th>
+                        <th>اسم المتقدم</th>
                         <th>رقم الهاتف</th>
                         <th>التفاصيل / الملاحظات</th>
                         <th>الحالة الحالية</th>
-                        <th>قرار المقابلة</th>
+                        <th>الإجراء</th>
                     </tr>
                 </thead>
                 <tbody id="admin-interviews-list">
-                    <tr><td colspan="5" style="text-align:center;">جاري جلب طلبات المقابلات...</td></tr>
+                    <tr><td colspan="6" style="text-align:center;">جاري جلب الطلبات...</td></tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- 4. قسم الإعدادات (تمت إضافة اختيار لون المتجر هنا) -->
+        <!-- 4. قسم الإعدادات -->
         <div id="tab-settings" class="tab-content section-box">
             <h3><i class="fa-solid fa-sliders"></i> إعدادات المتجر العامة</h3>
             <label>اسم المتجر:</label>
@@ -173,50 +178,69 @@
             document.getElementById('tab-' + tabId).classList.add('active');
             element.classList.add('active');
             
-            const titles = { 'products': 'إدارة المنتجات', 'orders': 'طلبات العملاء', 'interviews': 'طلبات المقابلات (الطلاب)', 'settings': 'إعدادات المتجر' };
+            const titles = { 
+                'products': 'إدارة المنتجات', 
+                'orders': 'طلبات العملاء', 
+                'interviews': 'طلبات المقابلات وطلبات المتاجر', 
+                'settings': 'إعدادات المتجر' 
+            };
             document.getElementById('page-title').innerText = titles[tabId];
         };
 
-        // إضافة منتج جديد
-        window.addNewProduct = async function() {
+        // إضافة منتج جديد مع تحويل الصورة المرفوعة من الجهاز إلى Base64
+        window.addNewProduct = function() {
             const name = document.getElementById('p-name').value.trim();
             const price = parseFloat(document.getElementById('p-price').value);
             const category = document.getElementById('p-category').value.trim() || 'عام';
             const stock = parseInt(document.getElementById('p-stock').value) || 10;
-            const image = document.getElementById('p-image').value.trim();
             const description = document.getElementById('p-desc').value.trim();
+            const imageFile = document.getElementById('p-image-file').files[0];
 
             if(!name || isNaN(price)) {
                 alert("يرجى إدخال اسم المنتج والسعر على الأقل.");
                 return;
             }
 
+            if(imageFile) {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const base64Image = e.target.result;
+                    await saveProductToDb(name, price, category, stock, description, base64Image);
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                saveProductToDb(name, price, category, stock, description, "");
+            }
+        };
+
+        async function saveProductToDb(name, price, category, stock, description, image) {
             try {
-                await addDoc(collection(db, "products"), { name, price, category, stock, image, description, ratings: [] });
+                await addDoc(collection(db, "products"), { name, price, category, stock, description, image, ratings: [] });
                 alert("✅ تمت إضافة المنتج بنجاح!");
                 document.getElementById('p-name').value = '';
                 document.getElementById('p-price').value = '';
                 document.getElementById('p-category').value = '';
                 document.getElementById('p-stock').value = '';
-                document.getElementById('p-image').value = '';
+                document.getElementById('p-image-file').value = '';
                 document.getElementById('p-desc').value = '';
             } catch(e) {
                 alert("حدث خطأ أثناء الإضافة.");
             }
-        };
+        }
 
         // جلب وعرض المنتجات للآدمن
         onSnapshot(collection(db, "products"), (snapshot) => {
             const list = document.getElementById('admin-products-list');
             list.innerHTML = "";
             if(snapshot.empty) {
-                list.innerHTML = `<tr><td colspan="5" style="text-align:center;">لا توجد منتجات مسجلة.</td></tr>`;
+                list.innerHTML = `<tr><td colspan="6" style="text-align:center;">لا توجد منتجات مسجلة.</td></tr>`;
                 return;
             }
             snapshot.forEach(docSnap => {
                 const p = docSnap.data();
                 list.innerHTML += `
                     <tr>
+                        <td><img src="${p.image || 'https://via.placeholder.com/40'}" style="width:40px; height:40px; object-fit:cover; border-radius:4px;"></td>
                         <td>${p.name}</td>
                         <td>${p.price} ج.م</td>
                         <td>${p.category}</td>
@@ -261,43 +285,68 @@
             alert("تم تحديث حالة الطلب بنجاح.");
         };
 
-        // --- قسم طلبات المقابلات (الطلاب) ---
-        onSnapshot(collection(db, "interviews"), (snapshot) => {
+        // --- دمج قسم المقابلات وطلبات إنشاء المتاجر (تظهر معاً في نفس جدول طلبات المقابلات) ---
+        function renderCombinedRequests() {
             const list = document.getElementById('admin-interviews-list');
-            list.innerHTML = "";
-            if(snapshot.empty) {
-                list.innerHTML = `<tr><td colspan="5" style="text-align:center;">لا توجد طلبات مقابلات مسجلة حالياً.</td></tr>`;
-                return;
-            }
-            snapshot.forEach(docSnap => {
-                const item = docSnap.data();
-                const statusColor = item.status === 'تم القبول' ? '#10b981' : (item.status === 'تم الرفض' ? '#ef4444' : '#f59e0b');
-                
-                list.innerHTML += `
-                    <tr>
-                        <td><strong>${item.studentName || item.customerName || 'غير معروف'}</strong></td>
-                        <td>${item.studentPhone || item.customerPhone || '-'}</td>
-                        <td>${item.notes || item.details || 'لا توجد تفاصيل إضافية'}</td>
-                        <td><span style="color:${statusColor}; font-weight:bold;">${item.status || 'قيد المراجعة'}</span></td>
-                        <td>
-                            <button class="btn-accept" onclick="updateInterviewStatus('${docSnap.id}', 'تم القبول')">قبول المقابلة ✓</button>
-                            <button class="btn-reject" onclick="updateInterviewStatus('${docSnap.id}', 'تم الرفض')">رفض ✕</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        });
+            list.innerHTML = `<tr><td colspan="6" style="text-align:center;">جاري جلب الطلبات...</td></tr>`;
 
-        window.updateInterviewStatus = async function(id, status) {
+            // جلب المقابلات
+            onSnapshot(collection(db, "interviews"), (snapInterviews) => {
+                // جلب طلبات المتاجر
+                onSnapshot(collection(db, "merchant_requests"), (snapMerchants) => {
+                    list.innerHTML = "";
+                    let allItems = [];
+
+                    snapInterviews.forEach(docSnap => {
+                        allItems.push({ id: docSnap.id, collectionName: 'interviews', type: 'طلب مقابلة (طالب)', ...docSnap.data() });
+                    });
+
+                    snapMerchants.forEach(docSnap => {
+                        allItems.push({ id: docSnap.id, collectionName: 'merchant_requests', type: '🛒 طلب إنشاء متجر (تك)', ...docSnap.data() });
+                    });
+
+                    if(allItems.length === 0) {
+                        list.innerHTML = `<tr><td colspan="6" style="text-align:center;">لا توجد طلبات مسجلة حالياً.</td></tr>`;
+                        return;
+                    }
+
+                    allItems.forEach(item => {
+                        const name = item.studentName || item.customerName || item.name || 'غير معروف';
+                        const phone = item.studentPhone || item.customerPhone || item.phone || '-';
+                        const details = item.notes || item.details || 'لا توجد تفاصيل';
+                        const status = item.status || 'قيد المراجعة';
+                        const statusColor = status === 'تم القبول' || status === 'تم التفعيل' ? '#10b981' : (status === 'تم الرفض' || status === 'مرفوض' ? '#ef4444' : '#f59e0b');
+
+                        list.innerHTML += `
+                            <tr>
+                                <td><span style="background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:bold;">${item.type}</span></td>
+                                <td><strong>${name}</strong></td>
+                                <td>${phone}</td>
+                                <td>${details}</td>
+                                <td><span style="color:${statusColor}; font-weight:bold;">${status}</span></td>
+                                <td>
+                                    <button class="btn-accept" onclick="updateRequestStatus('${item.collectionName}', '${item.id}', 'تم القبول')">قبول ✓</button>
+                                    <button class="btn-reject" onclick="updateRequestStatus('${item.collectionName}', '${item.id}', 'تم الرفض')">رفض ✕</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                });
+            });
+        }
+        renderCombinedRequests();
+
+        window.updateRequestStatus = async function(colName, id, status) {
             try {
-                await updateDoc(doc(db, "interviews", id), { status: status });
-                alert(`تم تحديث حالة طلب المقابلة إلى: ${status}`);
+                const finalStatus = (colName === 'merchant_requests' && status === 'تم القبول') ? 'تم التفعيل' : status;
+                await updateDoc(doc(db, colName, id), { status: finalStatus });
+                alert(`تم تحديث حالة الطلب إلى: ${finalStatus}`);
             } catch(e) {
-                alert("حدث خطأ أثناء تحديث الحالة.");
+                alert("حدث خطأ أثناء التحديث.");
             }
         };
 
-        // إعدادات المتجر العامة (تتضمن حفظ اسم المتجر، الشريط، واللون الرئيسي)
+        // إعدادات المتجر العامة
         window.saveGeneralSettings = async function() {
             const storeName = document.getElementById('set-store-name').value.trim();
             const announcement = document.getElementById('set-announcement').value.trim();
