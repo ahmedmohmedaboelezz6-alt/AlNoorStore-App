@@ -13,10 +13,8 @@
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: background 0.2s, color 0.2s; }
         body { margin: 0; padding: 0; background: var(--bg-color); color: var(--text-color); }
 
-        /* شريط الإعلانات العلوي */
         .announcement-bar { background: #1e293b; color: #fff; text-align: center; padding: 8px; font-size: 13px; font-weight: 600; }
         
-        /* الهيدر العلوي */
         header { background: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
         .logo { font-size: 22px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; }
         
@@ -25,10 +23,8 @@
         .icon-btn:hover { background: rgba(0,0,0,0.05); }
         .badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50px; font-weight: bold; }
 
-        /* حاوية المحتوى الرئيسي */
         .container { max-width: 1200px; margin: auto; padding: 20px; }
 
-        /* قسم البحث والفلاتر المتقدم */
         .search-filter-section { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; align-items: center; }
         .search-box { flex: 1; min-width: 250px; position: relative; }
         .search-box input { width: 100%; padding: 12px 45px 12px 15px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); outline: none; font-size: 14px; }
@@ -39,21 +35,19 @@
         .chip { padding: 8px 16px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; color: var(--text-color); }
         .chip.active, .chip:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* شبكة المنتجات الاحترافية */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .product-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: transform 0.2s, box-shadow 0.2s; }
+        .product-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
         .product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px rgba(0,0,0,0.06); }
         
         .product-img-container { height: 180px; background: #f1f5f9; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         .product-img-container img { width: 100%; height: 100%; object-fit: cover; }
         .stock-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 3px 8px; font-size: 11px; border-radius: 6px; backdrop-filter: blur(4px); }
-        .wishlist-btn { position: absolute; top: 10px; right: 10px; background: var(--card-bg); border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ef4444; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .wishlist-btn { position: absolute; top: 10px; right: 10px; background: var(--card-bg); border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ef4444; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 2; }
         
         .product-body { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
         .product-category { font-size: 11px; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
         .product-title { font-size: 16px; font-weight: 700; margin: 0 0 6px 0; color: var(--text-color); }
         
-        /* نظام التقييمات بالنجوم التفاعلي */
         .rating-box { display: flex; align-items: center; gap: 4px; margin-bottom: 8px; font-size: 13px; color: var(--accent); }
         .rating-box span { color: #64748b; font-size: 11px; margin-right: 4px; }
         .star-interactive { cursor: pointer; color: #cbd5e1; }
@@ -61,25 +55,28 @@
 
         .product-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border-color); }
         .product-price { font-size: 17px; font-weight: 700; color: var(--primary); }
-        .btn-add { background: var(--primary); color: white; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px; }
-        .btn-add:hover { opacity: 0.9; }
+        .btn-details { background: #e2e8f0; color: var(--text-color); border: none; padding: 8px 12px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 12px; }
+        .btn-details:hover { background: #cbd5e1; }
 
-        /* سلة المشتريات الجانبية */
+        .custom-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2500; display: none; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(2px); }
+        .modal-box { background: var(--card-bg); width: 100%; max-width: 450px; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal-box input, .modal-box textarea, .modal-box select { width: 100%; padding: 11px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); outline: none; font-size: 13px; }
+
+        /* ستايل نافذة تفاصيل المنتج واختيار الكمية */
+        .modal-product-img { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; background: #f1f5f9; }
+        .qty-selector { display: flex; align-items: center; gap: 15px; margin: 15px 0; background: var(--bg-color); padding: 10px; border-radius: 12px; border: 1px solid var(--border-color); justify-content: space-between; }
+        .qty-controls { display: flex; align-items: center; gap: 10px; }
+        .qty-btn { width: 35px; height: 35px; border-radius: 8px; background: var(--card-bg); border: 1px solid var(--border-color); font-size: 16px; font-weight: bold; cursor: pointer; color: var(--text-color); display: flex; align-items: center; justify-content: center; }
+        .qty-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
         #cart-drawer { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; justify-content: flex-end; backdrop-filter: blur(2px); }
         .cart-content { width: 100%; max-width: 380px; background: var(--card-bg); height: 100%; padding: 20px; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
         .cart-items { flex-grow: 1; overflow-y: auto; margin: 15px 0; }
         .cart-item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); font-size: 13px; }
 
-        /* النوافذ التفاعلية العامة (المودال) */
-        .custom-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2500; display: none; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(2px); }
-        .modal-box { background: var(--card-bg); width: 100%; max-width: 420px; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
-        .modal-box input, .modal-box textarea, .modal-box select { width: 100%; padding: 11px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); outline: none; font-size: 13px; }
-
-        /* الدردشة الحية العائمة */
         #chat-widget-btn { position: fixed; bottom: 25px; left: 25px; background: #10b981; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; z-index: 1500; box-shadow: 0 4px 12px rgba(16,185,129,0.4); }
         #chat-window { position: fixed; bottom: 95px; left: 25px; width: 320px; height: 400px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; z-index: 1500; display: none; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.15); overflow: hidden; }
 
-        /* زر العودة للأعلى والتنبيهات الاحترافية */
         #back-to-top { position: fixed; bottom: 25px; right: 25px; background: var(--primary); color: white; width: 45px; height: 45px; border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; z-index: 1400; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         #toast-container { position: fixed; bottom: 85px; right: 25px; z-index: 3000; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: #10b981; color: white; padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 8px; }
@@ -88,10 +85,8 @@
 </head>
 <body>
 
-    <!-- شريط الإعلانات العلوي -->
     <div id="announcement-bar" class="announcement-bar">🎉 أهلاً بكم في متجر النور - خصومات كبرى لفترة محدودة!</div>
 
-    <!-- الهيدر -->
     <header>
         <div class="logo"><i class="fa-solid fa-store" style="color:var(--primary);"></i> <span id="store-brand-name">متجر النور</span></div>
         <div class="header-actions">
@@ -104,9 +99,7 @@
         </div>
     </header>
 
-    <!-- المحتوى الرئيسي -->
     <div class="container">
-        <!-- البحث الصوتي والفلاتر -->
         <div class="search-filter-section">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -121,17 +114,42 @@
             </div>
         </div>
 
-        <!-- شبكة المنتجات -->
         <div id="products-grid" class="products-grid">
             <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">جاري تحميل المنتجات بذكاء... ⏳</div>
         </div>
     </div>
 
-    <!-- نافذة تسجيل الهاتف الإجبارية لتسجيل المعاملات والطلبات -->
+    <!-- نافذة تفاصيل المنتج واختيار الكمية -->
+    <div id="product-details-modal" class="custom-modal" onclick="if(event.target === this) closeProductDetailsModal()">
+        <div class="modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span id="modal-p-cat" class="product-category" style="margin:0;">التصنيف</span>
+                <button onclick="closeProductDetailsModal()" style="background:transparent; border:none; font-size:18px; cursor:pointer; color:var(--text-color);">✕</button>
+            </div>
+            <img id="modal-p-img" class="modal-product-img" src="" alt="صورة المنتج">
+            <h2 id="modal-p-name" style="margin: 0 0 8px 0; font-size: 18px;">اسم المنتج</h2>
+            <p id="modal-p-desc" style="font-size: 13px; color: #64748b; line-height: 1.6; margin-bottom: 15px;">وصف المنتج التفصيلي يظهر هنا...</p>
+            <div style="font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 10px;" id="modal-p-price">0 ج.م</div>
+            
+            <!-- أداة اختيار الكمية المطلوبة -->
+            <div class="qty-selector">
+                <span style="font-size: 13px; font-weight: 600;">الكمية المطلوبة:</span>
+                <div class="qty-controls">
+                    <button class="qty-btn" onclick="changeModalQty(-1)">-</button>
+                    <span id="modal-selected-qty" style="font-weight: bold; font-size: 15px; min-width: 20px; text-align: center;">1</span>
+                    <button class="qty-btn" onclick="changeModalQty(1)">+</button>
+                </div>
+            </div>
+
+            <button onclick="addModalProductToCart()" style="width:100%; background:var(--primary); color:white; border:none; padding:12px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:15px; margin-top:5px;">إضافة بالسلة بالكمية المحددة 🛒</button>
+        </div>
+    </div>
+
+    <!-- نافذة تسجيل الهاتف الإجبارية -->
     <div id="register-modal" class="custom-modal">
         <div class="modal-box">
             <h3 style="margin-top:0; color:var(--primary);">👋 مرحباً بك في متجر النور</h3>
-            <p style="font-size: 13px; color:#64748b; line-height: 1.6;">برجاء إدخال رقم هاتفك المحمول أولاً لمتابعة طلباتك، حفظ مشترياتك، وتسهيل عملية الشحن الفوري.</p>
+            <p style="font-size: 13px; color:#64748b; line-height: 1.6;">برجاء إدخال رقم هاتفك المحمول أولاً لمتابعة طلباتك وحفظ مشترياتك.</p>
             <input type="text" id="global-phone-input" placeholder="رقم الهاتف (مثال: 01012345678)">
             <button onclick="saveCustomerPhone()" style="width:100%; background:var(--primary); color:white; border:none; padding:12px; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px;">استمرار وتسجيل الدخول 🚀</button>
         </div>
@@ -163,11 +181,10 @@
         </div>
     </div>
 
-    <!-- نافذة إتمام الطلب وحاسبة الشحن -->
+    <!-- نافذة إتمام الطلب -->
     <div id="checkout-modal" class="custom-modal" onclick="if(event.target === this) closeCheckoutModal()">
         <div class="modal-box">
             <h3 style="margin-top:0; color:var(--primary);">📋 بيانات التوصيل والشحن</h3>
-            <p style="font-size: 12px; color:#64748b; margin-bottom: 15px;">أكد عنوانك لإتمام الشحن الفوري.</p>
             <input type="text" id="cust-name" placeholder="الاسم الكامل">
             <input type="text" id="cust-phone-display" disabled style="background:#e2e8f0; cursor:not-allowed;" title="رقم الهاتف مسجل مسبقاً">
             <select id="cust-city" onchange="updateShippingCost()">
@@ -192,10 +209,8 @@
         </div>
     </div>
 
-    <!-- زر العودة للأعلى -->
     <div id="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})"><i class="fa-solid fa-arrow-up"></i></div>
 
-    <!-- الدردشة الحية مع الآدمن -->
     <div id="chat-widget-btn" onclick="toggleChatWindow()"><i class="fa-solid fa-headset"></i></div>
     <div id="chat-window">
         <div style="background:var(--primary); color:white; padding:12px; font-weight:bold; display:flex; justify-content:space-between; align-items:center; font-size:14px;">
@@ -209,10 +224,8 @@
         </div>
     </div>
 
-    <!-- حاوية التنبيهات -->
     <div id="toast-container"></div>
 
-    <!-- سكربت التطوير والفايربيس -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -234,8 +247,11 @@
         let cart = [];
         let selectedCategory = 'الكل';
         let shippingCost = 50;
-        
         let customerPhone = localStorage.getItem('customerPhone');
+
+        // المتغيرات الخاصة بالمنتج الحالي المعروض في نافذة التفاصيل
+        let currentActiveProduct = null;
+        let currentSelectedQty = 1;
 
         window.onload = function() {
             if(!customerPhone) {
@@ -310,17 +326,16 @@
 
             products.forEach(p => {
                 const stockVal = p.stock ?? 10;
-                const stockText = stockVal < 5 ? `⚠️ متبقي ${stockVal} قطع فقط!` : `مخزون: ${stockVal}`;
-                
+                const stockText = stockVal < 5 ? `⚠️ متبقي ${stockVal} قطع!` : `مخزون: ${stockVal}`;
                 const ratings = p.ratings || [];
                 const avgRating = ratings.length > 0 ? (ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1) : '0.0';
 
                 grid.innerHTML += `
-                    <div class="product-card">
+                    <div class="product-card" onclick="openProductDetails('${p.id}')">
                         <div class="product-img-container">
                             <img src="${p.image || 'https://via.placeholder.com/250'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/250'">
                             <span class="stock-badge">${stockText}</span>
-                            <button class="wishlist-btn" onclick="toggleWishlist('${p.id}')"><i class="fa-solid fa-heart"></i></button>
+                            <button class="wishlist-btn" onclick="event.stopPropagation(); toggleWishlist('${p.id}')"><i class="fa-solid fa-heart"></i></button>
                         </div>
                         <div class="product-body">
                             <span class="product-category">${p.category || 'عام'}</span>
@@ -328,23 +343,86 @@
                             
                             <div class="rating-box">
                                 <div>
-                                    <i class="fa-solid fa-star star-interactive" onclick="rateProduct('${p.id}', 1)" title="تقييم نجمة"></i>
-                                    <i class="fa-solid fa-star star-interactive" onclick="rateProduct('${p.id}', 2)" title="تقييم نجمتان"></i>
-                                    <i class="fa-solid fa-star star-interactive" onclick="rateProduct('${p.id}', 3)" title="تقييم 3 نجوم"></i>
-                                    <i class="fa-solid fa-star star-interactive" onclick="rateProduct('${p.id}', 4)" title="تقييم 4 نجوم"></i>
-                                    <i class="fa-solid fa-star star-interactive" onclick="rateProduct('${p.id}', 5)" title="تقييم 5 نجوم"></i>
+                                    <i class="fa-solid fa-star star-interactive" onclick="event.stopPropagation(); rateProduct('${p.id}', 1)"></i>
+                                    <i class="fa-solid fa-star star-interactive" onclick="event.stopPropagation(); rateProduct('${p.id}', 2)"></i>
+                                    <i class="fa-solid fa-star star-interactive" onclick="event.stopPropagation(); rateProduct('${p.id}', 3)"></i>
+                                    <i class="fa-solid fa-star star-interactive" onclick="event.stopPropagation(); rateProduct('${p.id}', 4)"></i>
+                                    <i class="fa-solid fa-star star-interactive" onclick="event.stopPropagation(); rateProduct('${p.id}', 5)"></i>
                                 </div>
-                                <span>(${avgRating} - ${ratings.length} تقييم)</span>
+                                <span>(${avgRating})</span>
                             </div>
 
                             <div class="product-footer">
                                 <span class="product-price">${p.price} ج.م</span>
-                                <button class="btn-add" onclick="addToCart('${p.id}', '${p.name}', ${p.price})">إضافة للسلة 🛒</button>
+                                <button class="btn-details">التفاصيل والكمية 🔍</button>
                             </div>
                         </div>
                     </div>
                 `;
             });
+        };
+
+        // فتح نافذة تفاصيل المنتج
+        window.openProductDetails = function(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if(!product) return;
+
+            currentActiveProduct = product;
+            currentSelectedQty = 1; // تعيين الكمية الافتراضية بـ 1 عند فتح المنتج
+
+            document.getElementById('modal-p-cat').innerText = product.category || 'عام';
+            document.getElementById('modal-p-img').src = product.image || 'https://via.placeholder.com/250';
+            document.getElementById('modal-p-name').innerText = product.name;
+            document.getElementById('modal-p-desc').innerText = product.description || 'لا يوجد وصف تفصيلي متاح لهذا المنتج حالياً.';
+            document.getElementById('modal-p-price').innerText = product.price + " ج.م";
+            document.getElementById('modal-selected-qty').innerText = currentSelectedQty;
+
+            document.getElementById('product-details-modal').style.display = 'flex';
+        };
+
+        window.closeProductDetailsModal = function() {
+            document.getElementById('product-details-modal').style.display = 'none';
+        };
+
+        // تغيير الكمية من داخل نافذة التفاصيل
+        window.changeModalQty = function(delta) {
+            currentSelectedQty += delta;
+            if(currentSelectedQty < 1) currentSelectedQty = 1;
+            
+            // التأكد من عدم تجاوز المخزون المتاح إن وجد
+            const maxStock = currentActiveProduct.stock ?? 50;
+            if(currentSelectedQty > maxStock) {
+                currentSelectedQty = maxStock;
+                showToast(`عذراً، أقصى كمية متوفرة بالمخزون هي ${maxStock} قطع`, "#f59e0b");
+            }
+
+            document.getElementById('modal-selected-qty').innerText = currentSelectedQty;
+        };
+
+        // إضافة المنتج للسلة بالكمية المحددة
+        window.addModalProductToCart = function() {
+            if(!customerPhone) {
+                closeProductDetailsModal();
+                document.getElementById('register-modal').style.display = 'flex';
+                return;
+            }
+            if(!currentActiveProduct) return;
+
+            const existing = cart.find(item => item.id === currentActiveProduct.id);
+            if(existing) {
+                existing.qty += currentSelectedQty;
+            } else {
+                cart.push({ 
+                    id: currentActiveProduct.id, 
+                    name: currentActiveProduct.name, 
+                    price: currentActiveProduct.price, 
+                    qty: currentSelectedQty 
+                });
+            }
+
+            updateCartUI();
+            showToast(`تمت إضافة ${currentSelectedQty} قطع من "${currentActiveProduct.name}" إلى السلة بنجاح!`);
+            closeProductDetailsModal();
         };
 
         window.rateProduct = async function(productId, stars) {
@@ -409,21 +487,6 @@
                 return;
             }
             document.getElementById('cart-drawer').style.display = open ? 'flex' : 'none';
-        };
-
-        window.addToCart = function(id, name, price) {
-            if(!customerPhone) {
-                document.getElementById('register-modal').style.display = 'flex';
-                return;
-            }
-            const existing = cart.find(item => item.id === id);
-            if(existing) {
-                existing.qty++;
-            } else {
-                cart.push({ id, name, price, qty: 1 });
-            }
-            updateCartUI();
-            showToast(`تمت إضافة "${name}" إلى السلة بنجاح!`);
         };
 
         function updateCartUI() {
