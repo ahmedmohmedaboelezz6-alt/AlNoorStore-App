@@ -25,6 +25,16 @@
 
         .container { max-width: 1200px; margin: auto; padding: 20px; }
 
+        /* قسم لعبة النقرات والحصول على الخصم */
+        .click-survey-section { background: linear-gradient(135deg, #4f46e5, #3b82f6); color: white; border-radius: 16px; padding: 25px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 25px rgba(79,70,229,0.2); }
+        .click-survey-section h2 { margin: 0 0 8px 0; font-size: 20px; }
+        .click-survey-section p { margin: 0 0 20px 0; font-size: 13px; opacity: 0.9; }
+        .progress-bar-container { background: rgba(255,255,255,0.2); border-radius: 50px; height: 16px; width: 100%; max-width: 500px; margin: 0 auto 15px auto; overflow: hidden; position: relative; }
+        .progress-bar-fill { background: #10b981; height: 100%; width: 0%; border-radius: 50px; transition: width 0.3s ease; }
+        .click-target-btn { background: white; color: var(--primary); border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transform: scale(1); transition: transform 0.1s; }
+        .click-target-btn:active { transform: scale(0.95); }
+        .click-target-btn:disabled { background: #cbd5e1; color: #64748b; cursor: not-allowed; box-shadow: none; }
+
         .search-filter-section { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; align-items: center; }
         .search-box { flex: 1; min-width: 250px; position: relative; }
         .search-box input { width: 100%; padding: 12px 45px 12px 15px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); outline: none; font-size: 14px; }
@@ -58,11 +68,16 @@
         .btn-details { background: #e2e8f0; color: var(--text-color); border: none; padding: 8px 12px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 12px; }
         .btn-details:hover { background: #cbd5e1; }
 
+        .create-store-banner { background: linear-gradient(135deg, var(--primary), #1e40af); color: white; border-radius: 16px; padding: 30px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; box-shadow: 0 10px 25px rgba(37,99,235,0.2); }
+        .create-store-banner h2 { margin: 0 0 8px 0; font-size: 22px; }
+        .create-store-banner p { margin: 0; font-size: 14px; opacity: 0.9; }
+        .create-store-btn { background: white; color: var(--primary); border: none; padding: 12px 25px; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .create-store-btn:hover { background: #f1f5f9; }
+
         .custom-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2500; display: none; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(2px); }
         .modal-box { background: var(--card-bg); width: 100%; max-width: 450px; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-box input, .modal-box textarea, .modal-box select { width: 100%; padding: 11px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); outline: none; font-size: 13px; }
 
-        /* ستايل نافذة تفاصيل المنتج واختيار الكمية */
         .modal-product-img { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; background: #f1f5f9; }
         .qty-selector { display: flex; align-items: center; gap: 15px; margin: 15px 0; background: var(--bg-color); padding: 10px; border-radius: 12px; border: 1px solid var(--border-color); justify-content: space-between; }
         .qty-controls { display: flex; align-items: center; gap: 10px; }
@@ -100,6 +115,17 @@
     </header>
 
     <div class="container">
+        
+        <!-- قسم تحدي الـ 60 نقرة (نقرة واحدة لكل رقم هاتف) -->
+        <div class="click-survey-section">
+            <h2>🎁 تحدي النقرات الجماعي للحصول على خصم 20%</h2>
+            <p id="survey-status-text">كل رقم هاتف يمكنه المشاركة بـ "نقرة واحدة فقط" لنصل معاً إلى 60 نقرة وتفعيل الكوبون!</p>
+            <div class="progress-bar-container">
+                <div id="progress-bar-fill" class="progress-bar-fill"></div>
+            </div>
+            <button id="click-survey-btn" class="click-target-btn" onclick="registerClick()">اضغط هنا للمشاركة (نقرتك الواحدة)! (<span id="click-count-display">0</span>/60)</button>
+        </div>
+
         <div class="search-filter-section">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -117,6 +143,14 @@
         <div id="products-grid" class="products-grid">
             <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">جاري تحميل المنتجات بذكاء... ⏳</div>
         </div>
+
+        <div class="create-store-banner">
+            <div>
+                <h2>🚀 هل تريد فتح متجرك الإلكتروني الخاص؟</h2>
+                <p>انضم إلينا الآن وأنشئ متجرك بكل سهولة واعرض منتجاتك لآلاف العملاء يومياً.</p>
+            </div>
+            <button class="create-store-btn" onclick="openCreateStoreModal()">أنشئ متجرك الآن 💼</button>
+        </div>
     </div>
 
     <!-- نافذة تفاصيل المنتج واختيار الكمية -->
@@ -131,7 +165,6 @@
             <p id="modal-p-desc" style="font-size: 13px; color: #64748b; line-height: 1.6; margin-bottom: 15px;">وصف المنتج التفصيلي يظهر هنا...</p>
             <div style="font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 10px;" id="modal-p-price">0 ج.م</div>
             
-            <!-- أداة اختيار الكمية المطلوبة -->
             <div class="qty-selector">
                 <span style="font-size: 13px; font-weight: 600;">الكمية المطلوبة:</span>
                 <div class="qty-controls">
@@ -149,9 +182,24 @@
     <div id="register-modal" class="custom-modal">
         <div class="modal-box">
             <h3 style="margin-top:0; color:var(--primary);">👋 مرحباً بك في متجر النور</h3>
-            <p style="font-size: 13px; color:#64748b; line-height: 1.6;">برجاء إدخال رقم هاتفك المحمول أولاً لمتابعة طلباتك وحفظ مشترياتك.</p>
+            <p style="font-size: 13px; color:#64748b; line-height: 1.6;">برجاء إدخال رقم هاتفك المحمول أولاً للمتابعة والمشاركة في تحدي النقرات برقمك الخاص.</p>
             <input type="text" id="global-phone-input" placeholder="رقم الهاتف (مثال: 01012345678)">
             <button onclick="saveCustomerPhone()" style="width:100%; background:var(--primary); color:white; border:none; padding:12px; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px;">استمرار وتسجيل الدخول 🚀</button>
+        </div>
+    </div>
+
+    <!-- نافذة طلب إنشاء متجر -->
+    <div id="create-store-modal" class="custom-modal" onclick="if(event.target === this) closeCreateStoreModal()">
+        <div class="modal-box">
+            <h3 style="margin-top:0; color:var(--primary);">🛍️ طلب إنشاء متجر جديد</h3>
+            <p style="font-size: 13px; color:#64748b; line-height: 1.5;">أدخل بياناتك وسنتواصل معك لتفعيل متجرك الإلكتروني في أسرع وقت.</p>
+            <input type="text" id="store-owner-name" placeholder="اسمك الكامل">
+            <input type="text" id="store-owner-phone" placeholder="رقم الهاتف للتواصل">
+            <input type="text" id="proposed-store-name" placeholder="اسم المتجر المقترح (مثال: متجر الإلكترونيات الذكية)">
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button onclick="closeCreateStoreModal()" style="background:#64748b; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer; flex:1; font-weight:bold;">إلغاء</button>
+                <button onclick="submitStoreRequest()" style="background:var(--primary); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer; flex:2; font-weight:bold;">إرسال طلب المتجر 🚀</button>
+            </div>
         </div>
     </div>
 
@@ -164,9 +212,16 @@
             </div>
             <div id="cart-items-list" class="cart-items">سلة المشتريات فارغة</div>
             <div style="border-top: 1px solid var(--border-color); padding-top: 15px;">
+                <input type="text" id="coupon-input" placeholder="أدخل كوبون الخصم..." style="width:100%; padding:8px; margin-bottom:8px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color); font-size:12px;">
+                <button onclick="applyDiscountCoupon()" style="width:100%; background:#4f46e5; color:white; border:none; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:12px; margin-bottom:10px;">تطبيق الكوبون 🎟️</button>
+                
                 <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 5px;">
                     <span>المجموع الفرعي:</span>
                     <span id="cart-subtotal">0 ج.م</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 5px; color:#10b981;" id="discount-row-ui" style="display:none;">
+                    <span>الخصم:</span>
+                    <span id="cart-discount-val">0 ج.م</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 10px;">
                     <span>الشحن:</span>
@@ -203,8 +258,8 @@
     <!-- نافذة تتبع طلبات العميل -->
     <div id="orders-modal" class="custom-modal" onclick="if(event.target === this) closeOrdersModal()">
         <div class="modal-box">
-            <h3 style="margin-top:0; color:var(--primary);">📦 تتبع طلباتك السابقة</h3>
-            <div id="my-orders-results" style="margin-top: 15px; font-size: 13px;">جاري جلب طلباتك المسجلة...</div>
+            <h3 style="margin-top:0; color:var(--primary);">📦 سجل معاملاتك وطلباتك السابقة</h3>
+            <div id="my-orders-results" style="margin-top: 15px; font-size: 13px;">جاري جلب معاملاتك المسجلة برقم هاتفك...</div>
             <button onclick="closeOrdersModal()" style="width:100%; margin-top:15px; background:#64748b; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer; font-weight:bold;">إغلاق</button>
         </div>
     </div>
@@ -228,7 +283,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, getDocs, getDoc, setDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDsvNr5yJs4jMzAVwqc7g_Kti-_r3ntQa0",
@@ -248,14 +303,95 @@
         let selectedCategory = 'الكل';
         let shippingCost = 50;
         let customerPhone = localStorage.getItem('customerPhone');
+        let isDiscountUnlocked = false;
+        let discountRate = 0;
 
-        // المتغيرات الخاصة بالمنتج الحالي المعروض في نافذة التفاصيل
         let currentActiveProduct = null;
         let currentSelectedQty = 1;
 
         window.onload = function() {
             if(!customerPhone) {
                 document.getElementById('register-modal').style.display = 'flex';
+            }
+            initSurveyCounter();
+        };
+
+        // استماع فوري لعداد النقرات من فايربيز والتحقق هل هذا الرقم شارك مسبقاً
+        function initSurveyCounter() {
+            const surveyRef = doc(db, "settings", "click_survey");
+            onSnapshot(surveyRef, (docSnap) => {
+                let currentClicks = 0;
+                let participatedPhones = [];
+
+                if(docSnap.exists()) {
+                    currentClicks = docSnap.data().clicks || 0;
+                    participatedPhones = docSnap.data().participatedPhones || [];
+                } else {
+                    setDoc(surveyRef, { clicks: 0, participatedPhones: [] });
+                }
+
+                const btn = document.getElementById('click-survey-btn');
+
+                if(currentClicks >= 60) {
+                    currentClicks = 60;
+                    isDiscountUnlocked = true;
+                    document.getElementById('survey-status-text').innerHTML = "🎉 مبروك! تم الوصول إلى 60 نقرة، استخدم كود الخصم في سلة المشتريات: <strong style='color:#fde047;'>ALNOOR20</strong>";
+                    btn.innerText = "تم تفعيل خصم 20% بنجاح! 🎉";
+                    btn.disabled = true;
+                } else if(customerPhone && participatedPhones.includes(customerPhone)) {
+                    btn.innerText = "لقد قمت بالمشاركة برقمك مسبقاً ✔️";
+                    btn.disabled = true;
+                } else {
+                    btn.innerText = `اضغط هنا للمشاركة برقمك! (${currentClicks}/60)`;
+                    btn.disabled = false;
+                }
+
+                document.getElementById('click-count-display').innerText = currentClicks;
+                const percentage = (currentClicks / 60) * 100;
+                document.getElementById('progress-bar-fill').style.width = percentage + "%";
+            });
+        }
+
+        // تسجيل نقرة جديدة برقم الهاتف بحد أقصى نقرة واحدة لكل رقم
+        window.registerClick = async function() {
+            if(!customerPhone) {
+                document.getElementById('register-modal').style.display = 'flex';
+                return;
+            }
+
+            const surveyRef = doc(db, "settings", "click_survey");
+            try {
+                const snap = await getDoc(surveyRef);
+                let data = snap.exists() ? snap.data() : { clicks: 0, participatedPhones: [] };
+                let participatedPhones = data.participatedPhones || [];
+
+                if(participatedPhones.includes(customerPhone)) {
+                    alert("عذراً، هذا الرقم قام بالمشاركة مسبقاً ولا يملك سوى نقرة واحدة فقط!");
+                    document.getElementById('click-survey-btn').disabled = true;
+                    document.getElementById('click-survey-btn').innerText = "لقد قمت بالمشاركة برقمك مسبقاً ✔️";
+                    return;
+                }
+
+                let currentClicks = data.clicks || 0;
+                if(currentClicks < 60) {
+                    currentClicks += 1;
+                    participatedPhones.push(customerPhone);
+
+                    await updateDoc(surveyRef, { 
+                        clicks: currentClicks,
+                        participatedPhones: participatedPhones
+                    });
+
+                    showToast("👍 تم تسجيل نقرتك برقم هاتفك بنجاح!");
+                    document.getElementById('click-survey-btn').disabled = true;
+                    document.getElementById('click-survey-btn').innerText = "لقد قمت بالمشاركة برقمك مسبقاً ✔️";
+                }
+            } catch(e) {
+                await setDoc(surveyRef, { 
+                    clicks: 1, 
+                    participatedPhones: [customerPhone] 
+                });
+                showToast("👍 تم تسجيل نقرتك برقم هاتفك بنجاح!");
             }
         };
 
@@ -268,7 +404,8 @@
             customerPhone = phoneInput;
             localStorage.setItem('customerPhone', customerPhone);
             document.getElementById('register-modal').style.display = 'none';
-            showToast("✅ تم حفظ رقم هاتفك بنجاح، استمتع بالتسوق!");
+            showToast("✅ تم تسجيل الدخول بنجاح!");
+            initSurveyCounter();
         };
 
         window.showToast = function(text, color = "#10b981") {
@@ -326,7 +463,7 @@
 
             products.forEach(p => {
                 const stockVal = p.stock ?? 10;
-                const stockText = stockVal < 5 ? `⚠️ متبقي ${stockVal} قطع!` : `مخزون: ${stockVal}`;
+                const stockText = stockVal <= 0 ? `❌ نفذت الكمية` : (stockVal < 5 ? `⚠️ متبقي ${stockVal} قطع!` : `مخزون: ${stockVal}`);
                 const ratings = p.ratings || [];
                 const avgRating = ratings.length > 0 ? (ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1) : '0.0';
 
@@ -362,13 +499,12 @@
             });
         };
 
-        // فتح نافذة تفاصيل المنتج
         window.openProductDetails = function(productId) {
             const product = allProducts.find(p => p.id === productId);
             if(!product) return;
 
             currentActiveProduct = product;
-            currentSelectedQty = 1; // تعيين الكمية الافتراضية بـ 1 عند فتح المنتج
+            currentSelectedQty = 1;
 
             document.getElementById('modal-p-cat').innerText = product.category || 'عام';
             document.getElementById('modal-p-img').src = product.image || 'https://via.placeholder.com/250';
@@ -384,12 +520,10 @@
             document.getElementById('product-details-modal').style.display = 'none';
         };
 
-        // تغيير الكمية من داخل نافذة التفاصيل
         window.changeModalQty = function(delta) {
             currentSelectedQty += delta;
             if(currentSelectedQty < 1) currentSelectedQty = 1;
             
-            // التأكد من عدم تجاوز المخزون المتاح إن وجد
             const maxStock = currentActiveProduct.stock ?? 50;
             if(currentSelectedQty > maxStock) {
                 currentSelectedQty = maxStock;
@@ -399,7 +533,6 @@
             document.getElementById('modal-selected-qty').innerText = currentSelectedQty;
         };
 
-        // إضافة المنتج للسلة بالكمية المحددة
         window.addModalProductToCart = function() {
             if(!customerPhone) {
                 closeProductDetailsModal();
@@ -408,7 +541,20 @@
             }
             if(!currentActiveProduct) return;
 
+            const maxStock = currentActiveProduct.stock ?? 0;
+            if(maxStock <= 0) {
+                alert("عذراً، هذا المنتج نفذ من المخزون تماماً.");
+                return;
+            }
+
             const existing = cart.find(item => item.id === currentActiveProduct.id);
+            const currentCartQty = existing ? existing.qty : 0;
+
+            if((currentCartQty + currentSelectedQty) > maxStock) {
+                alert(`لا يمكنك إضافة كمية تزيد عن المتاح بالمخزون (${maxStock} قطع).`);
+                return;
+            }
+
             if(existing) {
                 existing.qty += currentSelectedQty;
             } else {
@@ -489,6 +635,17 @@
             document.getElementById('cart-drawer').style.display = open ? 'flex' : 'none';
         };
 
+        window.applyDiscountCoupon = function() {
+            const val = document.getElementById('coupon-input').value.trim();
+            if(val === 'ALNOOR20') {
+                discountRate = 0.20;
+                showToast("🎉 مبروك! تم تطبيق خصم 20% بنجاح على مشترياتك.");
+                updateCartUI();
+            } else {
+                alert("كود الخصم غير صحيح أو لم يتم اكتمال تحدي النقرات بعد.");
+            }
+        };
+
         function updateCartUI() {
             document.getElementById('cart-count').innerText = cart.reduce((sum, item) => sum + item.qty, 0);
             const list = document.getElementById('cart-items-list');
@@ -518,9 +675,17 @@
                     </div>
                 `;
             });
+
+            const discountAmount = subtotal * discountRate;
+            const finalTotal = (subtotal - discountAmount) + shippingCost;
+
             document.getElementById('cart-subtotal').innerText = subtotal + " ج.م";
+            if(discountRate > 0) {
+                document.getElementById('discount-row-ui').style.display = 'flex';
+                document.getElementById('cart-discount-val').innerText = "-" + discountAmount.toFixed(1) + " ج.م";
+            }
             document.getElementById('shipping-display').innerText = shippingCost + " ج.م";
-            document.getElementById('cart-total-price').innerText = (subtotal + shippingCost) + " ج.م";
+            document.getElementById('cart-total-price').innerText = finalTotal.toFixed(1) + " ج.م";
         }
 
         window.changeQty = function(index, delta) {
@@ -556,7 +721,8 @@
 
             const itemsList = cart.map(i => `${i.name} (×${i.qty})`);
             const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-            const totalPrice = subtotal + shippingCost;
+            const discountAmount = subtotal * discountRate;
+            const totalPrice = (subtotal - discountAmount) + shippingCost;
 
             try {
                 await addDoc(collection(db, "orders"), {
@@ -569,8 +735,18 @@
                     createdAt: new Date()
                 });
 
-                showToast("✅ تم إرسال طلبك بنجاح وسجل برقم هاتفك!");
+                for (const item of cart) {
+                    const productObj = allProducts.find(p => p.id === item.id);
+                    if (productObj) {
+                        const currentStock = productObj.stock ?? 10;
+                        const newStock = Math.max(0, currentStock - item.qty);
+                        await updateDoc(doc(db, "products", item.id), { stock: newStock });
+                    }
+                }
+
+                showToast("✅ تم إرسال طلبك بنجاح وخصم الكمية من المخزون!");
                 cart = [];
+                discountRate = 0;
                 updateCartUI();
                 closeCheckoutModal();
             } catch(e) {
@@ -585,7 +761,7 @@
             }
             document.getElementById('orders-modal').style.display = 'flex';
             const resultsBox = document.getElementById('my-orders-results');
-            resultsBox.innerHTML = "جاري جلب طلباتك المسجلة... ⏳";
+            resultsBox.innerHTML = "جاري جلب معاملاتك السابقة... ⏳";
 
             const querySnapshot = await getDocs(collection(db, "orders"));
             let html = "";
@@ -595,15 +771,53 @@
                     html += `<div style="background:var(--bg-color); padding:10px; border-radius:8px; margin-bottom:8px; border:1px solid var(--border-color);">
                         <strong>الطلب:</strong> ${data.items.join(', ')}<br>
                         <strong>الإجمالي:</strong> ${data.totalPrice} ج.م<br>
-                        <strong>الحالة:</strong> <span style="color:#10b981; font-weight:bold;">${data.status}</span>
+                        <strong>حالة التوصيل:</strong> <span style="color:#10b981; font-weight:bold;">${data.status}</span>
                     </div>`;
                 }
             });
 
-            resultsBox.innerHTML = html || "لا توجد طلبات مسجلة برقم هاتفك الحالي.";
+            resultsBox.innerHTML = html || "لا توجد طلبات أو معاملات مسجلة برقم هاتفك الحالي.";
         };
 
         window.closeOrdersModal = function() { document.getElementById('orders-modal').style.display = 'none'; };
+
+        window.openCreateStoreModal = function() {
+            if(!customerPhone) {
+                document.getElementById('register-modal').style.display = 'flex';
+                return;
+            }
+            document.getElementById('store-owner-phone').value = customerPhone;
+            document.getElementById('create-store-modal').style.display = 'flex';
+        };
+
+        window.closeCreateStoreModal = function() {
+            document.getElementById('create-store-modal').style.display = 'none';
+        };
+
+        window.submitStoreRequest = async function() {
+            const ownerName = document.getElementById('store-owner-name').value.trim();
+            const ownerPhone = document.getElementById('store-owner-phone').value.trim();
+            const storeName = document.getElementById('proposed-store-name').value.trim();
+
+            if(!ownerName || !ownerPhone || !storeName) {
+                alert("برجاء ملء جميع الحقول المطلوبة لإنشاء المتجر.");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "store_requests"), {
+                    ownerName: ownerName,
+                    ownerPhone: ownerPhone,
+                    storeName: storeName,
+                    status: 'قيد المراجعة',
+                    createdAt: new Date()
+                });
+                showToast("🎉 تم إرسال طلب إنشاء متجرك بنجاح! سنتواصل معك قريباً.");
+                closeCreateStoreModal();
+            } catch(e) {
+                alert("حدث خطأ أثناء إرسال الطلب.");
+            }
+        };
 
         window.toggleChatWindow = function() {
             if(!customerPhone) {
