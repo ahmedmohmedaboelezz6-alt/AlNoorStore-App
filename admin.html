@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم - متجر النور</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #eef2f5; max-width: 800px; margin: auto; }
+        body { font-family: sans-serif; padding: 20px; background: #eef2f5; max-width: 900px; margin: auto; }
         .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
         input, button { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; }
         button { background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .delete-btn { background: #dc3545; padding: 5px 10px; width: auto; }
         .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding: 10px 0; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: right; vertical-align: middle; }
         th { background: #f4f4f9; }
     </style>
 </head>
@@ -27,7 +27,7 @@
     </div>
 
     <div class="box">
-        <h2>🛍️ المنتجات الحالية (حذف المنتجات)</h2>
+        <h2>🛍️ المنتجات الحالية</h2>
         <div id="admin-products-list">جاري التحميل...</div>
     </div>
 
@@ -36,16 +36,31 @@
         <table>
             <thead>
                 <tr>
-                    <th>الاسم</th>
-                    <th>الهاتف</th>
-                    <th>المنتجات</th>
+                    <th>اسم العميل</th>
+                    <th>الهاتف والعنوان</th>
+                    <th>المنتجات المطلوبة</th>
+                    <th>إجمالي المبلغ</th>
                     <th>حذف</th>
                 </tr>
             </thead>
             <tbody id="orders-list">
-                <tr><td colspan="4">لا توجد طلبات حالياً</td></tr>
+                <tr><td colspan="5">لا توجد طلبات حالياً</td></tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="box">
+        <h2>💬 محادثات العملاء المباشرة</h2>
+        <div style="display: flex; gap: 15px; height: 350px;">
+            <div id="admin-chat-users" style="width: 30%; border-left: 1px solid #ccc; overflow-y: auto;"></div>
+            <div style="width: 70%; display: flex; flex-direction: column;">
+                <div id="admin-chat-body" style="flex-grow: 1; border: 1px solid #ccc; padding: 10px; overflow-y: auto; background: #fff; margin-bottom: 10px;">اختر عميلاً لبدء المحادثة</div>
+                <div style="display: flex; gap: 5px;">
+                    <input type="text" id="admin-chat-input" placeholder="اكتب الرد..." style="margin:0;" onkeypress="handleAdminKeyPress(event)">
+                    <button onclick="sendAdminReply()" style="width: 100px; margin:0;">إرسال</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script type="module">
@@ -73,14 +88,14 @@
 
             if(!name || !price) return alert("يرجى إدخال اسم المنتج والسعر!");
 
-            await addDoc(collection(db, "products"), { name, price, image });
+            await addDoc(collection(db, "products"), { name, price: Number(price), image });
             alert("تمت الإضافة بنجاح!");
             document.getElementById('p-name').value = '';
             document.getElementById('p-price').value = '';
             document.getElementById('p-img').value = '';
         });
 
-        // عرض المنتجات وحذفها
+        // عرض المنتجات
         onSnapshot(collection(db, "products"), (snapshot) => {
             const list = document.getElementById('admin-products-list');
             list.innerHTML = "";
@@ -96,40 +111,111 @@
             });
         });
 
-        // عرض طلبات العملاء
+        // عرض الطلبات
         onSnapshot(collection(db, "orders"), (snapshot) => {
             const list = document.getElementById('orders-list');
             list.innerHTML = "";
             if(snapshot.empty) {
-                list.innerHTML = `<tr><td colspan="4">لا توجد طلبات حالياً</td></tr>`;
+                list.innerHTML = `<tr><td colspan="5">لا توجد طلبات حالياً</td></tr>`;
                 return;
             }
             snapshot.forEach(document => {
                 const order = document.data();
                 const id = document.id;
+
                 list.innerHTML += `
                     <tr>
-                        <td>${order.customerName}</td>
-                        <td>${order.customerPhone}</td>
-                        <td>${order.items.join(', ')}</td>
+                        <td><strong>${order.customerName}</strong></td>
+                        <td>${order.customerPhone}<br><small color="gray">${order.customerAddress || ''}</small></td>
+                        <td>${order.items ? order.items.join(', ') : ''}</td>
+                        <td><strong>${order.totalPrice || 0} ج.م</strong></td>
                         <td><button class="delete-btn" onclick="deleteOrder('${id}')">حذف ❌</button></td>
                     </tr>
                 `;
             });
         });
 
-        // دالة حذف منتج
         window.deleteProduct = async (id) => {
             if(confirm("هل أنت تأكد من حذف هذا المنتج؟")) {
                 await deleteDoc(doc(db, "products", id));
             }
         };
 
-        // دالة حذف طلب
         window.deleteOrder = async (id) => {
             if(confirm("هل تريد حذف هذا الطلب؟")) {
                 await deleteDoc(doc(db, "orders", id));
             }
+        };
+
+        // الشات والمحادثات
+        let activeCustomerId = null;
+        let allChats = [];
+
+        onSnapshot(collection(db, "chats"), (snapshot) => {
+            allChats = [];
+            const usersSet = new Set();
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                allChats.push(data);
+                if (data.customerId) usersSet.add(data.customerId);
+            });
+
+            const usersList = document.getElementById('admin-chat-users');
+            usersList.innerHTML = "";
+            usersSet.forEach(userId => {
+                usersList.innerHTML += `
+                    <div onclick="selectUser('${userId}')" style="padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; background: ${userId === activeCustomerId ? '#e2e8f0' : 'none'}">
+                        👤 عميل: ${userId.substring(0, 8)}
+                    </div>
+                `;
+            });
+
+            if (activeCustomerId) renderAdminChat();
+        });
+
+        window.selectUser = function(userId) {
+            activeCustomerId = userId;
+            renderAdminChat();
+        };
+
+        function renderAdminChat() {
+            const body = document.getElementById('admin-chat-body');
+            body.innerHTML = "";
+
+            const userMessages = allChats.filter(m => m.customerId === activeCustomerId);
+            userMessages.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+
+            userMessages.forEach(msg => {
+                const align = msg.sender === 'admin' ? 'left' : 'right';
+                const bg = msg.sender === 'admin' ? '#d1e7dd' : '#f8d7da';
+                body.innerHTML += `
+                    <div style="text-align: ${align}; margin-bottom: 8px;">
+                        <span style="background: ${bg}; padding: 6px 10px; border-radius: 8px; display: inline-block;">
+                            ${msg.text}
+                        </span>
+                    </div>
+                `;
+            });
+            body.scrollTop = body.scrollHeight;
+        }
+
+        window.sendAdminReply = async function() {
+            const input = document.getElementById('admin-chat-input');
+            const text = input.value.trim();
+            if (!text || !activeCustomerId) return;
+
+            input.value = '';
+            await addDoc(collection(db, "chats"), {
+                customerId: activeCustomerId,
+                sender: 'admin',
+                text: text,
+                createdAt: new Date()
+            });
+        };
+
+        window.handleAdminKeyPress = function(e) {
+            if (e.key === 'Enter') sendAdminReply();
         };
     </script>
 </body>
