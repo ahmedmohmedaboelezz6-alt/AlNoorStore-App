@@ -3,146 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم الشاملة - متجر النور</title>
+    <title>لوحة التحكم الشاملة - متجر النور (Pro Edition)</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { padding: 20px; background: #f1f5f9; max-width: 1100px; margin: auto; color: #0f172a; }
+        :root { --bg-color: #f1f5f9; --card-bg: white; --text-color: #0f172a; --primary: #2563eb; }
+        body.dark-mode { --bg-color: #0f172a; --card-bg: #1e293b; --text-color: #f8fafc; }
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: 0.2s; }
+        body { padding: 20px; background: var(--bg-color); max-width: 1200px; margin: auto; color: var(--text-color); }
 
-        /* شاشة تسجيل الدخول والحماية المنظمة */
         #auth-screen { position: fixed; inset: 0; background: #0f172a; z-index: 9999; display: flex; justify-content: center; align-items: center; }
-        .auth-card { background: white; padding: 30px; border-radius: 16px; width: 100%; max-width: 420px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; }
+        .auth-card { background: white; padding: 30px; border-radius: 16px; width: 100%; max-width: 420px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; color: #0f172a; }
         .auth-card h2 { margin-bottom: 20px; color: #2563eb; }
 
-        /* أزرار التبويبات الثلاثة المنفصلة */
         .auth-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: #f1f5f9; padding: 5px; border-radius: 10px; }
-        .auth-tab-btn { flex: 1; padding: 10px 5px; border: none; background: transparent; font-weight: 700; font-size: 13px; cursor: pointer; border-radius: 8px; color: #64748b; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: 0.3s; }
-        .auth-tab-btn i { font-size: 16px; }
+        .auth-tab-btn { flex: 1; padding: 10px 5px; border: none; background: transparent; font-weight: 700; font-size: 13px; cursor: pointer; border-radius: 8px; color: #64748b; display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .auth-tab-btn.active { background: white; color: #2563eb; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
         .auth-form-section { display: none; }
         .auth-form-section.active { display: block; }
-
         #dashboard-content { display: none; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid #2563eb; }
-        .stat-card h3 { margin: 0; font-size: 28px; color: #2563eb; }
-        .stat-card p { margin: 5px 0 0; color: #64748b; font-weight: 600; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid var(--primary); }
+        .stat-card h3 { margin: 0; font-size: 26px; color: var(--primary); }
+        .stat-card p { margin: 5px 0 0; color: #64748b; font-weight: 600; font-size: 14px; }
 
-        .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .box h2 { margin-top: 0; font-size: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .box { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .box h2 { margin-top: 0; font-size: 18px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
 
-        input, select, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; }
-        button { background: #2563eb; color: white; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        input, select, button { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; background: transparent; color: inherit; }
+        input, select { background: var(--card-bg); }
+        button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
         button:hover { opacity: 0.9; }
 
-        .btn-export { background: #10b981; padding: 6px 14px; font-size: 14px; width: auto; margin: 0; }
-        .delete-btn { background: #ef4444; padding: 6px 12px; width: auto; font-size: 13px; }
-        .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding: 10px 0; }
+        .btn-export { background: #10b981; padding: 6px 14px; font-size: 13px; width: auto; margin: 0; }
+        .delete-btn { background: #ef4444; padding: 6px 10px; width: auto; font-size: 12px; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 10px 0; font-size: 14px; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: right; vertical-align: middle; }
-        th { background: #f8fafc; font-weight: bold; }
-        .status-select { padding: 4px; font-size: 13px; margin: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        th, td { border: 1px solid rgba(0,0,0,0.08); padding: 10px; text-align: right; vertical-align: middle; }
+        th { background: rgba(0,0,0,0.02); font-weight: bold; }
+        .status-select { padding: 4px; font-size: 12px; margin: 0; }
+
+        /* تذكرة التنبيهات المنبثقة (Toast) */
+        #toast-container { position: fixed; bottom: 20px; left: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-weight: bold; font-size: 14px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <!-- شاشة تسجيل الدخول المنظمة بـ 3 أيقونات وتبويبات -->
+    <!-- حاوية التنبيهات الاحترافية -->
+    <div id="toast-container"></div>
+
+    <!-- شاشة تسجيل الدخول -->
     <div id="auth-screen">
         <div class="auth-card">
-            <h2>🔐 بوابة التحكم</h2>
-            
+            <h2>🔐 لوحة التحكم الاحترافية</h2>
             <div class="auth-tabs">
                 <button class="auth-tab-btn active" onclick="switchAuthTab('admin', this)"><i class="fa-solid fa-crown"></i> الآدمن</button>
-                <button class="auth-tab-btn" onclick="switchAuthTab('login', this)"><i class="fa-solid fa-right-to-bracket"></i> تسجيل دخول</button>
+                <button class="auth-tab-btn" onclick="switchAuthTab('login', this)"><i class="fa-solid fa-right-to-bracket"></i> دخول</button>
                 <button class="auth-tab-btn" onclick="switchAuthTab('register', this)"><i class="fa-solid fa-user-plus"></i> طلب حساب</button>
             </div>
-
-            <!-- تبويب الآدمن الرئيسي (كلمة المرور 11111 مخفية) -->
             <div id="tab-admin" class="auth-form-section active">
-                <p style="font-size: 13px; color: #64748b; margin-bottom: 10px;">أدخل كلمة مرور الآدمن الرئيسي:</p>
                 <input type="password" id="admin-pass-input" placeholder="كلمة المرور السرية">
-                <button onclick="handleAdminLogin()" style="background: #2563eb; margin-top: 10px;">دخول الآدمن 👑</button>
+                <button onclick="handleAdminLogin()">دخول الآدمن 👑</button>
             </div>
-
-            <!-- تبويب تسجيل الدخول العادي للحسابات المعتمدة -->
             <div id="tab-login" class="auth-form-section">
                 <input type="text" id="login-user" placeholder="اسم المستخدم">
                 <input type="password" id="login-pass" placeholder="كلمة المرور">
-                <button onclick="handleUserLogin()" style="background: #10b981; margin-top: 10px;">تسجيل الدخول</button>
+                <button onclick="handleUserLogin()" style="background: #10b981;">تسجيل الدخول</button>
             </div>
-
-            <!-- تبويب طلب حساب جديد -->
             <div id="tab-register" class="auth-form-section">
-                <input type="text" id="reg-user" placeholder="اختر اسم مستخدم جديد">
-                <input type="password" id="reg-pass" placeholder="اختر كلمة مرور">
-                <button onclick="handleRegisterRequest()" style="background: #f59e0b; margin-top: 10px;">إرسال طلب الحساب 📝</button>
+                <input type="text" id="reg-user" placeholder="اسم مستخدم جديد">
+                <input type="password" id="reg-pass" placeholder="كلمة مرور جديدة">
+                <button onclick="handleRegisterRequest()" style="background: #f59e0b;">إرسال الطلب 📝</button>
             </div>
-
-            <div id="auth-msg" style="margin-top: 12px; font-size: 13px; font-weight: bold;"></div>
+            <div id="auth-msg" style="margin-top: 10px; font-size: 13px; font-weight: bold;"></div>
         </div>
     </div>
 
-    <!-- محتوى لوحة التحكم الكامل -->
+    <!-- محتوى لوحة التحكم المتقدمة -->
     <div id="dashboard-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h1 style="margin: 0; font-size: 22px;">📊 لوحة تحكم المتجر</h1>
-            <button onclick="localStorage.removeItem('isAdminLoggedIn'); location.reload();" style="background: #ef4444; width: auto; padding: 6px 15px;">تسجيل الخروج 🚪</button>
+            <h1 style="margin: 0; font-size: 20px;"><i class="fa-solid fa-chart-line"></i> لوحة التحكم الشاملة (Pro)</h1>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="toggleDarkMode()" style="width: auto; padding: 6px 12px; background: #64748b;"><i class="fa-solid fa-moon"></i></button>
+                <button onclick="localStorage.removeItem('isAdminLoggedIn'); location.reload();" style="background: #ef4444; width: auto; padding: 6px 15px;">خروج 🚪</button>
+            </div>
         </div>
 
         <audio id="alert-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
+        <!-- احصائيات متقدمة -->
         <div class="stats-grid">
-            <div class="stat-card"><h3 id="stat-sales">0</h3><p>إجمالي المبيعات (ج.م)</p></div>
-            <div class="stat-card" style="border-color:#10b981;"><h3 id="stat-orders" style="color:#10b981;">0</h3><p>إجمالي الطلبات</p></div>
-            <div class="stat-card" style="border-color:#f59e0b;"><h3 id="stat-products" style="color:#f59e0b;">0</h3><p>عدد المنتجات</p></div>
+            <div class="stat-card"><h3 id="stat-sales">0</h3><p>المبيعات الإجمالية (ج.م)</p></div>
+            <div class="stat-card" style="border-color:#10b981;"><h3 id="stat-orders" style="color:#10b981;">0</h3><p>عدد الطلبات</p></div>
+            <div class="stat-card" style="border-color:#f59e0b;"><h3 id="stat-products" style="color:#f59e0b;">0</h3><p>المنتجات المتاحة</p></div>
+            <div class="stat-card" style="border-color:#8b5cf6;"><h3 id="stat-pending" style="color:#8b5cf6;">0</h3><p>طلبات الحسابات</p></div>
         </div>
 
-        <!-- قسم إدارة طلبات الحسابات الجديدة (يظهر للآدمن) -->
+        <!-- صندوق طلبات الحسابات المعلقة -->
         <div class="box" id="admin-approvals-box" style="border: 2px dashed #f59e0b; display:none;">
-            <h2 style="color: #f59e0b;">👑 طلبات إنشاء الحسابات المعلقة للموافقة</h2>
-            <div id="pending-users-list">لا توجد طلبات حسابات جديدة حالياً</div>
+            <h2 style="color: #f59e0b;">👑 طلبات الحسابات المعلقة</h2>
+            <div id="pending-users-list">لا توجد طلبات جديدة</div>
         </div>
 
-        <!-- إعدادات وتخصيص المتجر -->
+        <!-- تخصيص المتجر وإعدادات الطوارئ -->
         <div class="box">
-            <h2>⚙️ إعدادات وتخصيص المتجر</h2>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:10px;">
+            <h2>⚙️ إعدادات المتجر العامة وصيانة الموقع</h2>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px;">
                 <div><label>اسم المتجر:</label><input type="text" id="setting-store-name" placeholder="متجر النور"></div>
-                <div><label>شريط التنبيهات العلوي:</label><input type="text" id="setting-announcement" placeholder="عروض مميزة..."></div>
-                <div><label>اللون الرئيسي للمتجر:</label><input type="color" id="setting-primary-color" value="#2563eb" style="height:42px; padding:2px;"></div>
+                <div><label>شريط التنبيهات:</label><input type="text" id="setting-announcement" placeholder="عروض مميزة..."></div>
+                <div><label>اللون الرئيسي:</label><input type="color" id="setting-primary-color" value="#2563eb" style="height:42px; padding:2px;"></div>
             </div>
-            <button onclick="saveStoreSettings()" style="margin-top:10px; width:auto; padding:10px 20px;">حفظ وتطبيق الإعدادات</button>
+            <button onclick="saveStoreSettings()" style="margin-top:10px; width:auto; padding:10px 20px;">حفظ الإعدادات 💾</button>
         </div>
 
+        <!-- قسم إضافة وإدارة المنتجات + البحث السريع -->
         <div class="box">
-            <h2>➕ إضافة منتج جديد وإدارة المخزون</h2>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+            <h2>
+                ➕ إدارة المنتجات والمخزون
+                <input type="text" id="search-product-input" placeholder="🔍 بحث عن منتج بالاسم..." oninput="filterAdminProducts()" style="width: 220px; margin: 0; padding: 6px; font-size: 13px;">
+            </h2>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px;">
                 <input type="text" id="p-name" placeholder="اسم المنتج">
-                <input type="number" id="p-price" placeholder="السعر بالجنيه">
-                <input type="number" id="p-stock" placeholder="الكمية في المخزن" value="10">
+                <input type="number" id="p-price" placeholder="السعر">
+                <input type="number" id="p-stock" placeholder="الكمية بالمخزن" value="10">
                 <select id="p-category">
                     <option value="إلكترونيات">إلكترونيات</option>
                     <option value="ملابس">ملابس</option>
-                    <option value="منزل">أجهزة منزلية</option>
+                    <option value="منزل">منزل</option>
                 </select>
             </div>
             <input type="text" id="p-img" placeholder="رابط صورة المنتج (URL)">
-            <button id="add-btn">إضافة المنتج للمتجر</button>
+            <button id="add-btn">إضافة المنتج للمتجر 🚀</button>
         </div>
 
+        <!-- قائمة المنتجات -->
         <div class="box">
-            <h2>🛍️ المنتجات الحالية</h2>
+            <h2>🛍️ قائمة المنتجات الحالية</h2>
             <div id="admin-products-list">جاري التحميل...</div>
         </div>
 
+        <!-- الطلبات الواردة مع الفاتورة والتصدير -->
         <div class="box">
             <h2>
-                📥 الطلبات الواردة
-                <button class="btn-export" onclick="exportOrdersCSV()">📊 تصدير إلى Excel (CSV)</button>
+                📥 الطلبات الواردة والعملاء
+                <button class="btn-export" onclick="exportOrdersCSV()">📊 تصدير Excel</button>
             </h2>
             <div style="overflow-x:auto;">
                 <table>
@@ -150,10 +159,10 @@
                         <tr>
                             <th>العميل</th>
                             <th>الهاتف والعنوان</th>
-                            <th>المنتجات المطلوبة</th>
+                            <th>المنتجات</th>
                             <th>المبلغ</th>
                             <th>الحالة</th>
-                            <th>إجراء</th>
+                            <th>إجراءات</th>
                         </tr>
                     </thead>
                     <tbody id="orders-list">
@@ -163,15 +172,16 @@
             </div>
         </div>
 
+        <!-- الدردشة المباشرة مع العملاء -->
         <div class="box">
-            <h2>💬 محادثات والدردشة المباشرة مع العملاء</h2>
-            <div style="display: flex; gap: 15px; height: 350px;">
-                <div id="admin-chat-users" style="width: 30%; border-left: 1px solid #e2e8f0; overflow-y: auto;"></div>
+            <h2>💬 دردشة العملاء والدعم الفني</h2>
+            <div style="display: flex; gap: 15px; height: 320px;">
+                <div id="admin-chat-users" style="width: 30%; border-left: 1px solid rgba(0,0,0,0.1); overflow-y: auto;"></div>
                 <div style="width: 70%; display: flex; flex-direction: column;">
-                    <div id="admin-chat-body" style="flex-grow: 1; border: 1px solid #e2e8f0; padding: 10px; overflow-y: auto; background: #f8fafc; border-radius: 8px; margin-bottom: 10px;">اختر عميلاً لبدء المراسلة</div>
+                    <div id="admin-chat-body" style="flex-grow: 1; border: 1px solid rgba(0,0,0,0.1); padding: 10px; overflow-y: auto; background: rgba(0,0,0,0.02); border-radius: 8px; margin-bottom: 10px;">اختر عميلاً لبدء المراسلة</div>
                     <div style="display: flex; gap: 5px;">
                         <input type="text" id="admin-chat-input" placeholder="اكتب ردك هنا..." style="margin:0;" onkeypress="if(event.key==='Enter') sendAdminReply()">
-                        <button onclick="sendAdminReply()" style="width: 100px; margin:0;">إرسال</button>
+                        <button onclick="sendAdminReply()" style="width: 90px; margin:0;">إرسال</button>
                     </div>
                 </div>
             </div>
@@ -195,7 +205,24 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // تبديل التبويبات الثلاثة
+        // نظام التنبيهات المنبثقة (Toast Notification)
+        window.showToast = function(text, color = "#10b981") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.background = color;
+            toast.innerText = text;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 3000);
+        };
+
+        // تفعيل الوضع الليلي
+        window.toggleDarkMode = function() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        };
+        if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+
         window.switchAuthTab = function(tabName, btnElement) {
             document.querySelectorAll('.auth-form-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.auth-tab-btn').forEach(el => el.classList.remove('active'));
@@ -204,7 +231,6 @@
             document.getElementById('auth-msg').innerText = '';
         };
 
-        // فحص حالة الجلسة المحفوظة مسبقاً
         if (localStorage.getItem('isAdminLoggedIn') === 'true') {
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('dashboard-content').style.display = 'block';
@@ -212,157 +238,88 @@
             initDashboard();
         }
 
-        // 1. دخول الآدمن الرئيسي (كلمة المرور 11111 فقط)
         window.handleAdminLogin = function() {
             const pass = document.getElementById('admin-pass-input').value.trim();
-            const msg = document.getElementById('auth-msg');
-
             if (pass === "11111") {
                 localStorage.setItem('isAdminLoggedIn', 'true');
                 document.getElementById('auth-screen').style.display = 'none';
                 document.getElementById('dashboard-content').style.display = 'block';
                 document.getElementById('admin-approvals-box').style.display = 'block';
                 initDashboard();
+                showToast("مرحباً بك يا رئيس الآدمن! 👑");
             } else {
-                msg.style.color = 'red';
-                msg.innerText = "❌ كلمة المرور غير صحيحة!";
+                document.getElementById('auth-msg').style.color = 'red';
+                document.getElementById('auth-msg').innerText = "❌ كلمة المرور غير صحيحة!";
             }
         };
 
-        // 2. تسجيل دخول المستخدمين العاديين المعتمدين
         window.handleUserLogin = async function() {
             const user = document.getElementById('login-user').value.trim();
             const pass = document.getElementById('login-pass').value.trim();
             const msg = document.getElementById('auth-msg');
-
-            if(!user || !pass) {
-                msg.style.color = 'red';
-                msg.innerText = "يرجى ملء جميع الحقول!";
-                return;
-            }
-
-            msg.style.color = '#2563eb';
-            msg.innerText = "جاري التحقق من الحساب...";
-
+            if(!user || !pass) return msg.innerText = "املأ كافة الحقول";
+            
             try {
                 const q = query(collection(db, "admin_users"), where("username", "==", user));
                 const snap = await getDocs(q);
-
                 if(!snap.empty) {
-                    let userData = null;
-                    snap.forEach(d => { userData = d.data(); });
-
-                    if(userData.password === pass) {
-                        if(userData.approved === true) {
-                            localStorage.setItem('isAdminLoggedIn', 'true');
-                            document.getElementById('auth-screen').style.display = 'none';
-                            document.getElementById('dashboard-content').style.display = 'block';
-                            initDashboard();
-                        } else {
-                            msg.style.color = 'orange';
-                            msg.innerText = "⏳ حسابك قيد الانتظار، بانتظار موافقة الآدمن.";
-                        }
+                    let userData; snap.forEach(d => userData = d.data());
+                    if(userData.password === pass && userData.approved) {
+                        localStorage.setItem('isAdminLoggedIn', 'true');
+                        document.getElementById('auth-screen').style.display = 'none';
+                        document.getElementById('dashboard-content').style.display = 'block';
+                        initDashboard();
+                        showToast("تم تسجيل الدخول بنجاح!");
                     } else {
-                        msg.style.color = 'red';
-                        msg.innerText = "❌ كلمة المرور غير صحيحة!";
+                        msg.innerText = userData.approved ? "كلمة المرور خطأ" : "الحساب قيد الانتظار";
                     }
-                } else {
-                    msg.style.color = 'red';
-                    msg.innerText = "❌ اسم المستخدم غير موجود!";
-                }
-            } catch(e) {
-                msg.style.color = 'red';
-                msg.innerText = "حدث خطأ في الاتصال!";
-            }
+                } else { msg.innerText = "المستخدم غير موجود"; }
+            } catch(e) { msg.innerText = "خطأ في الاتصال"; }
         };
 
-        // 3. طلب حساب جديد
         window.handleRegisterRequest = async function() {
             const user = document.getElementById('reg-user').value.trim();
             const pass = document.getElementById('reg-pass').value.trim();
             const msg = document.getElementById('auth-msg');
-
-            if(!user || !pass) {
-                msg.style.color = 'red';
-                msg.innerText = "يرجى ملء جميع الحقول لاسترشاد الحساب!";
-                return;
-            }
-
-            msg.style.color = '#2563eb';
-            msg.innerText = "جاري إرسال طلب الحساب...";
-
+            if(!user || !pass) return msg.innerText = "املأ كافة الحقول";
+            
             try {
-                const q = query(collection(db, "admin_users"), where("username", "==", user));
-                const snap = await getDocs(q);
-
-                if(!snap.empty) {
-                    msg.style.color = 'red';
-                    msg.innerText = "❌ اسم المستخدم مستخدم مسبقاً، اختر اسماً آخر!";
-                } else {
-                    await addDoc(collection(db, "admin_users"), {
-                        username: user,
-                        password: pass,
-                        approved: false,
-                        createdAt: new Date()
-                    });
-                    msg.style.color = 'green';
-                    msg.innerText = "✅ تم إرسال طلب إنشاء الحساب بنجاح! انتظر موافقة الآدمن.";
-                }
-            } catch(e) {
-                msg.style.color = 'red';
-                msg.innerText = "حدث خطأ في إرسال الطلب!";
-            }
+                await addDoc(collection(db, "admin_users"), { username: user, password: pass, approved: false });
+                msg.style.color = "green";
+                msg.innerText = "✅ تم إرسال الطلب بنجاح!";
+            } catch(e) { msg.innerText = "حدث خطأ"; }
         };
 
-        // مراقبة طلبات الحسابات المعلقة للآدمن الرئيسي
         onSnapshot(collection(db, "admin_users"), (snapshot) => {
             const list = document.getElementById('pending-users-list');
             if(!list) return;
-            list.innerHTML = "";
-            let count = 0;
-
-            snapshot.forEach(docSnap => {
-                const data = docSnap.data();
-                const id = docSnap.id;
-                if(data.approved === false) {
+            list.innerHTML = ""; let count = 0;
+            snapshot.forEach(d => {
+                const data = d.data(), id = d.id;
+                if(!data.approved) {
                     count++;
-                    list.innerHTML += `
-                        <div class="item-row">
-                            <span>👤 اسم المستخدم: <strong>${data.username}</strong></span>
-                            <div>
-                                <button onclick="approveUser('${id}', true)" style="background:#10b981; padding:6px 12px; width:auto;">موافقة ✅</button>
-                                <button onclick="approveUser('${id}', false)" class="delete-btn">رفض وحذف ❌</button>
-                            </div>
-                        </div>
-                    `;
+                    list.innerHTML += `<div class="item-row"><span>👤 ${data.username}</span><div><button onclick="approveUser('${id}', true)" style="background:#10b981; padding:4px 10px; width:auto;">موافقة</button> <button onclick="approveUser('${id}', false)" class="delete-btn">رفض</button></div></div>`;
                 }
             });
-
-            if(count === 0) {
-                list.innerHTML = "لا توجد طلبات حسابات جديدة معلقة حالياً.";
-            }
+            document.getElementById('stat-pending').innerText = count;
+            if(count === 0) list.innerHTML = "لا توجد طلبات معلقة.";
         });
 
-        window.approveUser = async function(id, isApproved) {
-            if(isApproved) {
-                await updateDoc(doc(db, "admin_users", id), { approved: true });
-                alert("تمت الموافقة على الحساب بنجاح!");
-            } else {
-                await deleteDoc(doc(db, "admin_users", id));
-                alert("تم رفض وحذف الطلب.");
-            }
+        window.approveUser = async (id, isApp) => {
+            if(isApp) { await updateDoc(doc(db, "admin_users", id), { approved: true }); showToast("تم قبول الحساب!"); }
+            else { await deleteDoc(doc(db, "admin_users", id)); showToast("تم حذف الطلب", "#ef4444"); }
         };
 
         function initDashboard() {
             let currentOrdersData = [];
+            let allProductsCache = [];
 
-            window.saveStoreSettings = async function() {
+            window.saveStoreSettings = async () => {
                 const storeName = document.getElementById('setting-store-name').value;
                 const announcement = document.getElementById('setting-announcement').value;
                 const primaryColor = document.getElementById('setting-primary-color').value;
-
                 await setDoc(doc(db, "settings", "general"), { storeName, announcement, primaryColor });
-                alert("تم حفظ إعدادات المتجر بنجاح! ✨");
+                showToast("تم حفظ الإعدادات بنجاح!");
             };
 
             document.getElementById('add-btn').addEventListener('click', async () => {
@@ -371,69 +328,80 @@
                 const stock = document.getElementById('p-stock').value;
                 const category = document.getElementById('p-category').value;
                 const image = document.getElementById('p-img').value;
+                if(!name || !price) return alert("أدخل اسم المنتج والسعر");
 
-                if(!name || !price) return alert("يرجى إدخال اسم المنتج والسعر!");
-
-                await addDoc(collection(db, "products"), { name, price: Number(price), stock: Number(stock) || 10, category, image, rating: 5.0 });
-                alert("تمت إضافة المنتج بنجاح!");
+                await addDoc(collection(db, "products"), { name, price: Number(price), stock: Number(stock)||10, category, image });
+                showToast("تمت إضافة المنتج بنجاح!");
                 document.getElementById('p-name').value = '';
                 document.getElementById('p-price').value = '';
                 document.getElementById('p-img').value = '';
             });
 
             onSnapshot(collection(db, "products"), (snapshot) => {
+                allProductsCache = [];
+                snapshot.forEach(d => allProductsCache.push({ id: d.id, ...d.data() }));
+                renderProductsList(allProductsCache);
+                document.getElementById('stat-products').innerText = allProductsCache.length;
+            });
+
+            function renderProductsList(products) {
                 const list = document.getElementById('admin-products-list');
                 list.innerHTML = "";
-                document.getElementById('stat-products').innerText = snapshot.size;
-                snapshot.forEach(documentDoc => {
-                    const item = documentDoc.data();
-                    const id = documentDoc.id;
+                products.forEach(item => {
                     list.innerHTML += `
                         <div class="item-row">
-                            <span><strong>${item.name}</strong> (${item.category || 'عام'}) - ${item.price} ج.م | مخزون: ${item.stock ?? 10}</span>
-                            <button class="delete-btn" onclick="deleteProduct('${id}')">حذف ❌</button>
+                            <span><strong>${item.name}</strong> (${item.category}) - <strong>${item.price} ج.م</strong> | مخزون: ${item.stock}</span>
+                            <div>
+                                <button onclick="quickStock('${item.id}', ${item.stock + 5})" style="background:#10b981; padding:4px 8px; width:auto; font-size:11px;">+5 مخزون</button>
+                                <button class="delete-btn" onclick="deleteProduct('${item.id}')">حذف</button>
+                            </div>
                         </div>
                     `;
                 });
-            });
+            }
 
-            let previousOrdersCount = null;
+            window.filterAdminProducts = function() {
+                const term = document.getElementById('search-product-input').value.toLowerCase();
+                const filtered = allProductsCache.filter(p => p.name.toLowerCase().includes(term));
+                renderProductsList(filtered);
+            };
+
+            window.quickStock = async (id, newStock) => {
+                await updateDoc(doc(db, "products", id), { stock: newStock });
+                showToast("تم تحديث المخزون!");
+            };
+
+            let prevCount = null;
             onSnapshot(collection(db, "orders"), (snapshot) => {
                 const list = document.getElementById('orders-list');
-                list.innerHTML = "";
-                currentOrdersData = [];
+                list.innerHTML = ""; currentOrdersData = [];
                 document.getElementById('stat-orders').innerText = snapshot.size;
 
-                if (previousOrdersCount !== null && snapshot.size > previousOrdersCount) {
+                if(prevCount !== null && snapshot.size > prevCount) {
                     const audio = document.getElementById('alert-sound');
-                    if(audio) audio.play().catch(e => console.log(e));
+                    if(audio) audio.play().catch(e=>{});
+                    showToast("🚨 طلب جديد وصل للمتجر!", "#f59e0b");
                 }
-                previousOrdersCount = snapshot.size;
+                prevCount = snapshot.size;
 
                 let totalSales = 0;
-                if(snapshot.empty) {
-                    list.innerHTML = `<tr><td colspan="6">لا توجد طلبات حالياً</td></tr>`;
-                    document.getElementById('stat-sales').innerText = "0";
-                    return;
-                }
+                if(snapshot.empty) { list.innerHTML = `<tr><td colspan="6">لا توجد طلبات</td></tr>`; document.getElementById('stat-sales').innerText = "0"; return; }
 
-                snapshot.forEach(documentDoc => {
-                    const order = documentDoc.data();
-                    const id = documentDoc.id;
+                snapshot.forEach(d => {
+                    const order = d.data(), id = d.id;
                     currentOrdersData.push(order);
                     totalSales += (Number(order.totalPrice) || 0);
-
                     list.innerHTML += `
                         <tr>
                             <td><strong>${order.customerName}</strong></td>
-                            <td>${order.customerPhone}<br><small style="color:#64748b;">${order.customerAddress || ''}</small></td>
+                            <td>${order.customerPhone}<br><small>${order.customerAddress||''}</small></td>
                             <td>${order.items ? order.items.join(', ') : ''}</td>
                             <td><strong>${order.totalPrice || 0} ج.م</strong></td>
                             <td>
                                 <select class="status-select" onchange="updateOrderStatus('${id}', this.value)">
                                     <option value="جديد" ${order.status === 'جديد' ? 'selected' : ''}>جديد 🟡</option>
-                                    <option value="قيد الشحن" ${order.status === 'قيد الشحن' ? 'selected' : ''}>قيد الشحن 🚚</option>
-                                    <option value="تم التسليم" ${order.status === 'تم التسليم' ? 'selected' : ''}>تم التسليم ✅</option>
+                                    <option value="قيد الشحن" ${order.status === 'قيد الشحن' ? 'selected' : ''}>شحن 🚚</option>
+                                    <option value="تم التسليم" ${order.status === 'تم التسليم' ? 'selected' : ''}>تم ✅</option>
                                     <option value="ملغي" ${order.status === 'ملغي' ? 'selected' : ''}>ملغي ❌</option>
                                 </select>
                             </td>
@@ -445,68 +413,50 @@
             });
 
             window.exportOrdersCSV = function() {
-                if(currentOrdersData.length === 0) return alert("لا توجد طلبات لتصديرها!");
+                if(currentOrdersData.length === 0) return alert("لا توجد طلبات");
                 let csv = "data:text/csv;charset=utf-8,\uFEFFالاسم,الهاتف,العنوان,المنتجات,المبلغ,الحالة\n";
-                currentOrdersData.forEach(o => {
-                    csv += `"${o.customerName}","${o.customerPhone}","${o.customerAddress}","${o.items ? o.items.join(' - ') : ''}","${o.totalPrice}","${o.status}"\n`;
-                });
+                currentOrdersData.forEach(o => { csv += `"${o.customerName}","${o.customerPhone}","${o.customerAddress}","${o.items ? o.items.join(' - ') : ''}","${o.totalPrice}","${o.status}"\n`; });
                 const link = document.createElement("a");
                 link.setAttribute("href", encodeURI(csv));
-                link.setAttribute("download", "orders_report.csv");
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                link.setAttribute("download", "orders.csv");
+                document.body.appendChild(link); link.click(); link.remove();
+                showToast("تم تصدير ملف الإكسل بنجاح!");
             };
 
-            window.updateOrderStatus = async (id, status) => { await updateDoc(doc(db, "orders", id), { status }); };
-            window.deleteProduct = async (id) => { if(confirm("هل تريد حذف هذا المنتج؟")) await deleteDoc(doc(db, "products", id)); };
-            window.deleteOrder = async (id) => { if(confirm("هل تريد حذف هذا الطلب؟")) await deleteDoc(doc(db, "orders", id)); };
+            window.updateOrderStatus = async (id, status) => { await updateDoc(doc(db, "orders", id), { status }); showToast("تم تحديث حالة الطلب"); };
+            window.deleteProduct = async (id) => { if(confirm("حذف المنتج؟")) { await deleteDoc(doc(db, "products", id)); showToast("تم الحذف", "#ef4444"); } };
+            window.deleteOrder = async (id) => { if(confirm("حذف الطلب؟")) { await deleteDoc(doc(db, "orders", id)); showToast("تم حذف الطلب", "#ef4444"); } };
 
-            let activeCustomerId = null;
-            let allChats = [];
-
+            let activeCust = null, allChats = [];
             onSnapshot(collection(db, "chats"), (snapshot) => {
-                allChats = [];
-                const usersSet = new Set();
-                snapshot.forEach(doc => {
-                    const d = doc.data();
-                    allChats.push(d);
-                    if(d.customerId) usersSet.add(d.customerId);
+                allChats = []; const users = new Set();
+                snapshot.forEach(d => { allChats.push(d.data()); if(d.data().customerId) users.add(d.data().customerId); });
+                const uList = document.getElementById('admin-chat-users'); uList.innerHTML = "";
+                users.forEach(uid => {
+                    uList.innerHTML += `<div onclick="selectUser('${uid}')" style="padding:10px; cursor:pointer; border-bottom:1px solid rgba(0,0,0,0.1); background:${uid===activeCust?'rgba(0,0,0,0.05)':'none'}; font-weight:600;">👤 العميل: ${uid.substring(0,8)}</div>`;
                 });
-
-                const usersList = document.getElementById('admin-chat-users');
-                usersList.innerHTML = "";
-                usersSet.forEach(userId => {
-                    usersList.innerHTML += `
-                        <div onclick="selectUser('${userId}')" style="padding: 10px; cursor: pointer; border-bottom: 1px solid #e2e8f0; background: ${userId === activeCustomerId ? '#e2e8f0' : 'none'}; font-weight:600;">
-                            👤 عميل: ${userId.substring(0, 8)}
-                        </div>
-                    `;
-                });
-                if(activeCustomerId) renderAdminChat();
+                if(activeCust) renderChat();
             });
 
-            window.selectUser = (userId) => { activeCustomerId = userId; renderAdminChat(); };
-
-            function renderAdminChat() {
-                const body = document.getElementById('admin-chat-body');
-                body.innerHTML = "";
-                const msgs = allChats.filter(m => m.customerId === activeCustomerId);
-                msgs.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+            window.selectUser = (uid) => { activeCust = uid; renderChat(); };
+            function renderChat() {
+                const body = document.getElementById('admin-chat-body'); body.innerHTML = "";
+                const msgs = allChats.filter(m => m.customerId === activeCust);
+                msgs.sort((a,b)=>(a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
                 msgs.forEach(m => {
                     const align = m.sender === 'admin' ? 'left' : 'right';
                     const bg = m.sender === 'admin' ? '#d1e7dd' : '#ffffff';
-                    body.innerHTML += `<div style="text-align:${align}; margin-bottom:8px;"><span style="background:${bg}; padding:6px 12px; border-radius:8px; display:inline-block;">${m.text}</span></div>`;
+                    body.innerHTML += `<div style="text-align:${align}; margin-bottom:6px;"><span style="background:${bg}; color:#0f172a; padding:6px 12px; border-radius:8px; display:inline-block; font-size:13px;">${m.text}</span></div>`;
                 });
                 body.scrollTop = body.scrollHeight;
             }
 
-            window.sendAdminReply = async function() {
+            window.sendAdminReply = async () => {
                 const input = document.getElementById('admin-chat-input');
                 const text = input.value.trim();
-                if(!text || !activeCustomerId) return;
+                if(!text || !activeCust) return;
                 input.value = '';
-                await addDoc(collection(db, "chats"), { customerId: activeCustomerId, sender: 'admin', text, createdAt: new Date() });
+                await addDoc(collection(db, "chats"), { customerId: activeCust, sender: 'admin', text, createdAt: new Date() });
             };
         }
     </script>
