@@ -298,14 +298,15 @@
     import { getFirestore, collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     // إعدادات Firebase التلقائية المربوطة بالأدمن
-    let firebaseConfig = JSON.parse(localStorage.getItem('alnoor_firebase_config')) || {
-      apiKey: "AIzaSyDummyKeyForAlNoorApp",
-      authDomain: "alnoorstore-app.firebaseapp.com",
-      projectId: "alnoorstore-app",
-      storageBucket: "alnoorstore-app.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:123456789:web:abcdef"
-    };
+   const firebaseConfig = {
+  apiKey: "AIzaSyDsvNr5yJs4jMzAVwqc7g_Kti-_r3ntQa0",
+  authDomain: "alnoorstore.firebaseapp.com",
+  projectId: "alnoorstore",
+  storageBucket: "alnoorstore.firebasestorage.app",
+  messagingSenderId: "817663342597",
+  appId: "1:817663342597:web:524594c402e7860b9f446c",
+  measurementId: "G-07VZE5CQJG"
+};
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
