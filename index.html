@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر النور للتميز</title>
+    <style>
+        :root { --primary: #feee00; --text-dark: #111; --accent: #ff3b30; --bg: #f7f7f7; }
+        * { box-sizing: border-box; font-family: Tahoma, sans-serif; margin: 0; padding: 0; }
+        body { background: var(--bg); direction: rtl; padding-bottom: 80px; }
+        header { background: var(--primary); padding: 15px; text-align: center; font-weight: bold; font-size: 20px; border-bottom: 3px solid #000; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; }
+        @media (min-width: 600px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+        .card { background: #fff; border-radius: 10px; padding: 10px; text-align: center; border: 1px solid #ddd; display: flex; flex-direction: column; justify-content: space-between; }
+        .card img { width: 100%; height: 130px; object-fit: contain; }
+        .card h4 { font-size: 14px; margin: 8px 0; }
+        .price { color: var(--accent); font-weight: bold; margin-bottom: 8px; }
+        .btn { background: var(--primary); border: 1px solid #000; padding: 8px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--text-dark); color: var(--primary); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 3px solid var(--primary); }
+        .cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; justify-content: center; align-items: center; }
+        .cart-content { background: #fff; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto; }
+        .input-field { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<header>متجر النور للتميز ⚡</header>
+
+<div class="grid" id="products-grid">جاري تحميل المنتجات...</div>
+
+<div class="bottom-bar">
+    <span>🛒 السلة: <strong id="cart-count">0</strong> منتج</span>
+    <button class="btn" onclick="toggleCart(true)">عرض السلة وإتمام الطلب</button>
+</div>
+
+<!-- نافذة السلة -->
+<div class="cart-modal" id="cart-modal">
+    <div class="cart-content">
+        <h3>سلة الطلبات</h3>
+        <div id="cart-items" style="margin: 15px 0;"></div>
+        <p>الإجمالي: <strong id="cart-total">0</strong> ج.م</p>
+        <hr style="margin: 10px 0;">
+        <input type="text" id="cust-name" class="input-field" placeholder="اسم العميل">
+        <input type="tel" id="cust-phone" class="input-field" placeholder="رقم الهاتف">
+        <input type="text" id="cust-address" class="input-field" placeholder="العنوان المفصل">
+        <select id="cust-payment" class="input-field">
+            <option>الدفع عند الاستلام</option>
+            <option>فودافون كاش</option>
+        </select>
+        <button class="btn" style="width: 100%; background: #25d366; color: white; margin-top: 10px;" onclick="submitOrder()">إرسال الطلب للمتجر 🚀</button>
+        <button class="btn" style="width: 100%; background: #ccc; margin-top: 5px;" onclick="toggleCart(false)">إغلاق</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // ⚠️ استبدل المفاتيح التالية ببيانات مشروعك من Firebase
+    const firebaseConfig = {
+    apiKey: "AIzaSyDsvNr5yJs4jMzAVwqc7g_Kti-_r3ntQa0",
+    authDomain: "alnoorstore.firebaseapp.com",
+    projectId: "alnoorstore",
+    storageBucket: "alnoorstore.firebasestorage.app",
+    messagingSenderId: "817663342597",
+    appId: "1:817663342597:web:524594c402e7860b9f446c",
+    measurementId: "G-07VZE5CQJG"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let products = [];
+    let cart = [];
+
+    // جلب المنتجات فوراً عند تغييرها من لوحة التحكم
+    onSnapshot(collection(db, "products"), (snapshot) => {
+        products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderProducts();
+    });
+
+    function renderProducts() {
+        const grid = document.getElementById('products-grid');
+        grid.innerHTML = products.map(p => `
+            <div class="card">
+                <img src="${p.img}" alt="${p.title}">
+                <h4>${p.title}</h4>
+                <div class="price">${p.price} ج.م</div>
+                <button class="btn" onclick="addToCart('${p.id}')">إضافة للسلة +</button>
+            </div>
+        `).join('');
+    }
+
+    window.addToCart = (id) => {
+        const item = products.find(p => p.id === id);
+        cart.push(item);
+        updateCart();
+    };
+
+    function updateCart() {
+        document.getElementById('cart-count').innerText = cart.length;
+        const itemsContainer = document.getElementById('cart-items');
+        let total = 0;
+        itemsContainer.innerHTML = cart.map((item, index) => {
+            total += Number(item.price);
+            return `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <span>${item.title}</span>
+                <span>${item.price} ج.م</span>
+            </div>`;
+        }).join('');
+        document.getElementById('cart-total').innerText = total;
+    }
+
+    window.toggleCart = (show) => {
+        document.getElementById('cart-modal').style.display = show ? 'flex' : 'none';
+    };
+
+    window.submitOrder = async () => {
+        const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
+        const address = document.getElementById('cust-address').value;
+        const payment = document.getElementById('cust-payment').value;
+
+        if (!name || !phone || cart.length === 0) {
+            alert('يرجى ملء البيانات وإضافة منتجات للسلة');
+            return;
+        }
+
+        const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
+
+        try {
+            await addDoc(collection(db, "orders"), {
+                customer: { name, phone, address, payment },
+                items: cart,
+                total: total,
+                status: "جديد 🟡",
+                createdAt: serverTimestamp()
+            });
+            alert('تم إرسال طلبك بنجاح وسيتواصل معك المتجر فوراً!');
+            cart = [];
+            updateCart();
+            toggleCart(false);
+        } catch (e) {
+            alert('حدث خطأ أثناء إرسال الطلب، حاول مرة أخرى');
+        }
+    };
+</script>
+</body>
+</html>
