@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم - متجر النور</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #eef2f5; max-width: 500px; margin: auto; }
-        .form-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        body { font-family: sans-serif; padding: 20px; background: #eef2f5; max-width: 800px; margin: auto; }
+        .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
         input, button { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; }
         button { background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #218838; }
+        .delete-btn { background: #dc3545; padding: 5px 10px; width: auto; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding: 10px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+        th { background: #f4f4f9; }
     </style>
 </head>
 <body>
 
-    <div class="form-box">
+    <div class="box">
         <h2>➕ إضافة منتج جديد</h2>
         <input type="text" id="p-name" placeholder="اسم المنتج">
         <input type="number" id="p-price" placeholder="السعر بالجنيه">
@@ -22,9 +26,31 @@
         <button id="add-btn">إضافة المنتج للمتجر</button>
     </div>
 
+    <div class="box">
+        <h2>🛍️ المنتجات الحالية (حذف المنتجات)</h2>
+        <div id="admin-products-list">جاري التحميل...</div>
+    </div>
+
+    <div class="box">
+        <h2>📥 الطلبات الواردة من العملاء</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>الهاتف</th>
+                    <th>المنتجات</th>
+                    <th>حذف</th>
+                </tr>
+            </thead>
+            <tbody id="orders-list">
+                <tr><td colspan="4">لا توجد طلبات حالياً</td></tr>
+            </tbody>
+        </table>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDsvNr5yJs4jMzAVwqc7g_Kti-_r3ntQa0",
@@ -39,30 +65,72 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // إضافة منتج
         document.getElementById('add-btn').addEventListener('click', async () => {
             const name = document.getElementById('p-name').value;
             const price = document.getElementById('p-price').value;
             const image = document.getElementById('p-img').value;
 
-            if(!name || !price) {
-                alert("يرجى كتابة اسم المنتج والسعر!");
+            if(!name || !price) return alert("يرجى إدخال اسم المنتج والسعر!");
+
+            await addDoc(collection(db, "products"), { name, price, image });
+            alert("تمت الإضافة بنجاح!");
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-price').value = '';
+            document.getElementById('p-img').value = '';
+        });
+
+        // عرض المنتجات وحذفها
+        onSnapshot(collection(db, "products"), (snapshot) => {
+            const list = document.getElementById('admin-products-list');
+            list.innerHTML = "";
+            snapshot.forEach(document => {
+                const item = document.data();
+                const id = document.id;
+                list.innerHTML += `
+                    <div class="item-row">
+                        <span><strong>${item.name || item.title || 'منتج'}</strong> - ${item.price || 0} جنيه</span>
+                        <button class="delete-btn" onclick="deleteProduct('${id}')">حذف ❌</button>
+                    </div>
+                `;
+            });
+        });
+
+        // عرض طلبات العملاء
+        onSnapshot(collection(db, "orders"), (snapshot) => {
+            const list = document.getElementById('orders-list');
+            list.innerHTML = "";
+            if(snapshot.empty) {
+                list.innerHTML = `<tr><td colspan="4">لا توجد طلبات حالياً</td></tr>`;
                 return;
             }
-
-            try {
-                await addDoc(collection(db, "products"), {
-                    name: name,
-                    price: price,
-                    image: image
-                });
-                alert("تمت إضافة المنتج بنجاح! 🎉");
-                document.getElementById('p-name').value = '';
-                document.getElementById('p-price').value = '';
-                document.getElementById('p-img').value = '';
-            } catch(e) {
-                alert("حدث خطأ أثناء الإضافة: " + e.message);
-            }
+            snapshot.forEach(document => {
+                const order = document.data();
+                const id = document.id;
+                list.innerHTML += `
+                    <tr>
+                        <td>${order.customerName}</td>
+                        <td>${order.customerPhone}</td>
+                        <td>${order.items.join(', ')}</td>
+                        <td><button class="delete-btn" onclick="deleteOrder('${id}')">حذف ❌</button></td>
+                    </tr>
+                `;
+            });
         });
+
+        // دالة حذف منتج
+        window.deleteProduct = async (id) => {
+            if(confirm("هل أنت تأكد من حذف هذا المنتج؟")) {
+                await deleteDoc(doc(db, "products", id));
+            }
+        };
+
+        // دالة حذف طلب
+        window.deleteOrder = async (id) => {
+            if(confirm("هل تريد حذف هذا الطلب؟")) {
+                await deleteDoc(doc(db, "orders", id));
+            }
+        };
     </script>
 </body>
 </html>
