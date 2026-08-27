@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة إدارة متجر النور</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; padding: 20px; background: #f0f2f5; direction: rtl; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .box { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 10px; }
+        input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .order-card { border-right: 5px solid #ffc107; background: #fff8e1; padding: 15px; margin-bottom: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🛠️ لوحة إدارة متجر النور</h2>
+    <hr style="margin: 15px 0;">
+
+    <!-- قسم إضافة بضاعة جديدة -->
+    <div class="box">
+        <h3>➕ إضافة منتج جديد للمتجر</h3>
+        <div class="input-group"><input type="text" id="p-title" placeholder="اسم المنتج"></div>
+        <div class="input-group"><input type="number" id="p-price" placeholder="السعر (ج.م)"></div>
+        <div class="input-group"><input type="text" id="p-img" placeholder="رابط صورة المنتج (URL)"></div>
+        <button onclick="addProduct()">نشر المنتج في المتجر 🚀</button>
+    </div>
+
+    <!-- قسم استقبال الطلبات الحية -->
+    <div class="box">
+        <h3>🔔 الطلبات الواردة (تحديث مباشر)</h3>
+        <div id="orders-list">في انتظار الطلبات الجديد...</div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // ⚠️ استبدل بنفس مفاتيح Firebase المستخدمة في المتجر
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // صوت التنبيه للطلبات الجديدة
+    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+
+    // إضافة منتج جديد
+    window.addProduct = async () => {
+        const title = document.getElementById('p-title').value;
+        const price = document.getElementById('p-price').value;
+        const img = document.getElementById('p-img').value;
+
+        if(!title || !price || !img) return alert('يرجى إكمال بيانات المنتج');
+
+        await addDoc(collection(db, "products"), { title, price, img });
+        alert('تم نشر المنتج بنجاح وظهر للزبائن الآن!');
+        document.getElementById('p-title').value = '';
+        document.getElementById('p-price').value = '';
+        document.getElementById('p-img').value = '';
+    };
+
+    // التسمع على الطلبات الجديدة لحظة بلحظة
+    let isFirstLoad = true;
+    const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+    
+    onSnapshot(q, (snapshot) => {
+        const ordersList = document.getElementById('orders-list');
+        
+        if(!isFirstLoad && snapshot.docChanges().some(change => change.type === "added")) {
+            audio.play(); // تشغيل صوت التنبيه عند وصول طلب جديد
+        }
+        isFirstLoad = false;
+
+        ordersList.innerHTML = snapshot.docs.map(doc => {
+            const data = doc.data();
+            const items = data.items ? data.items.map(i => i.title).join(', ') : '';
+            return `
+                <div class="order-card">
+                    <h4>العميل: ${data.customer.name} - 📞 ${data.customer.phone}</h4>
+                    <p><strong>العنوان:</strong> ${data.customer.address}</p>
+                    <p><strong>طريقة الدفع:</strong> ${data.customer.payment}</p>
+                    <p><strong>المنتجات:</strong> ${items}</p>
+                    <p><strong>الإجمالي:</strong> <span style="color:red; font-weight:bold;">${data.total} ج.م</span></p>
+                </div>
+            `;
+        }).join('');
+    });
+</script>
+</body>
+</html>
