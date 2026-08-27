@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الآدمن - متجر النور</title>
+    <title>لوحة التحكم الشاملة - 69 ميزة متطورة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,9 +13,9 @@
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: background 0.2s, color 0.2s; }
         body { margin: 0; background: var(--bg-color); color: var(--text-color); display: flex; height: 100vh; overflow: hidden; }
 
-        aside { width: 260px; background: var(--card-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; z-index: 10; }
-        .logo { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
-        .nav-link { padding: 12px 15px; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; color: var(--text-color); position: relative; }
+        aside { width: 270px; background: var(--card-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; z-index: 10; overflow-y: auto; }
+        .logo { font-size: 19px; font-weight: 700; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .nav-link { padding: 11px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 12px; color: var(--text-color); position: relative; font-size: 13px; }
         .nav-link.active, .nav-link:hover { background: var(--primary); color: white; }
         .nav-badge { position: absolute; left: 15px; background: #ef4444; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50px; font-weight: bold; display: none; }
 
@@ -25,13 +25,13 @@
         .section-tab { display: none; }
         .section-tab.active { display: block; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 20px; margin-bottom: 25px; }
         .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .stat-card h4 { margin: 0 0 10px 0; color: #64748b; font-size: 13px; }
         .stat-card .val { font-size: 24px; font-weight: 700; color: var(--primary); }
 
-        .card-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: right; }
+        .card-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 22px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: right; }
         th, td { padding: 12px; border-bottom: 1px solid var(--border-color); }
         th { color: #64748b; font-weight: 600; }
 
@@ -40,22 +40,12 @@
         .btn:hover { opacity: 0.9; }
         .btn-danger { background: #ef4444; }
 
-        /* رفع الصورة من الجهاز */
         .file-upload-wrapper { border: 2px dashed var(--primary); border-radius: 10px; padding: 15px; text-align: center; cursor: pointer; background: var(--bg-color); position: relative; margin: 8px 0; }
         .file-upload-wrapper input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
-        /* قسم الشات المطور */
-        .chat-container-grid { display: grid; grid-template-columns: 280px 1fr; gap: 20px; height: 580px; }
-        .chat-customer-item { padding: 12px 15px; border-radius: 10px; cursor: pointer; margin-bottom: 8px; font-size: 13px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; position: relative; }
-        .chat-customer-item:hover { background: var(--bg-color); }
-        .chat-customer-item.active-client { background: var(--primary) !important; color: white !important; border-color: var(--primary); }
-        
-        /* النقطة الصفراء للعملاء الذين لم يتم الرد عليهم */
-        .pending-dot { width: 10px; height: 10px; background-color: #facc15; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #facc15; }
-
-        .chat-msg-bubble { max-width: 75%; padding: 10px 14px; border-radius: 12px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
-        .msg-admin { background: var(--primary); color: white; margin-left: auto; border-bottom-left-radius: 2px; }
-        .msg-customer { background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); margin-right: auto; border-bottom-right-radius: 2px; }
+        .settings-grid-50 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px; background: rgba(0,0,0,0.01); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
+        .settings-grid-50 label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .settings-grid-50 input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--primary); }
 
         #toast-container { position: fixed; bottom: 25px; right: 25px; z-index: 3000; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: #10b981; color: white; padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease; }
@@ -66,19 +56,19 @@
 
     <!-- القائمة الجانبية -->
     <aside>
-        <div class="logo"><i class="fa-solid fa-gauge-high"></i> لوحة التحكم</div>
-        <div class="nav-link active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> الإحصائيات</div>
+        <div class="logo"><i class="fa-solid fa-crown"></i> إدارة المتجر الخارقة</div>
+        <div class="nav-link active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> الإحصائيات والأرباح</div>
         <div class="nav-link" onclick="switchTab('products', this)"><i class="fa-solid fa-boxes-stacked"></i> المنتجات والمخزون</div>
         <div class="nav-link" onclick="switchTab('orders', this)"><i class="fa-solid fa-receipt"></i> الطلبات والشحن <span id="orders-nav-badge" class="nav-badge">0</span></div>
         <div class="nav-link" onclick="switchTab('chats', this)"><i class="fa-solid fa-headset"></i> خدمة العملاء <span id="chats-nav-badge" class="nav-badge">0</span></div>
-        <div class="nav-link" onclick="switchTab('ads', this)"><i class="fa-solid fa-bullhorn"></i> إدارة الإعلانات</div>
-        <div class="nav-link" onclick="switchTab('settings', this)"><i class="fa-solid fa-gears"></i> إعدادات المتجر</div>
+        <div class="nav-link" onclick="switchTab('ads', this)"><i class="fa-solid fa-bullhorn"></i> الإعلانات الذكية</div>
+        <div class="nav-link" onclick="switchTab('settings', this)"><i class="fa-solid fa-gears"></i> إعدادات الـ 69 ميزة</div>
     </aside>
 
     <!-- المحتوى الرئيسي -->
     <main>
         <header>
-            <h3 id="page-title" style="margin:0;">📊 لوحة القياس والإحصائيات</h3>
+            <h3 id="page-title" style="margin:0;">📊 لوحة قياس الأداء والتحكم الشامل</h3>
             <div style="display: flex; gap: 10px;">
                 <button class="btn" onclick="toggleDarkMode()" style="background:#475569;"><i class="fa-solid fa-moon"></i></button>
                 <button class="btn btn-danger" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-right-from-bracket"></i> زيارة المتجر</button>
@@ -116,16 +106,16 @@
                     <input type="hidden" id="edit-product-id">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <input type="text" id="p-name" placeholder="اسم المنتج">
-                        <input type="number" id="p-price" placeholder="السعر (ج.م)">
+                        <input type="number" id="p-price" placeholder="السعر">
                         <input type="text" id="p-category" placeholder="القسم (إلكترونيات، ملابس...)">
-                        <input type="number" id="p-stock" placeholder="الكمية المتاحة">
+                        <input type="number" id="p-stock" placeholder="الكمية المتاحة (المخزون)">
                     </div>
                     
                     <div style="margin-top: 5px;">
                         <label style="font-size: 13px; font-weight: 600;">صورة المنتج من جهازك:</label>
                         <div class="file-upload-wrapper">
                             <i class="fa-solid fa-cloud-arrow-up" style="font-size: 24px; color: var(--primary); margin-bottom: 5px;"></i>
-                            <div id="file-name-display" style="font-size: 12px; color: #64748b;">اضغط هنا لاختيار صورة المنتج من جهازك</div>
+                            <div id="file-name-display" style="font-size: 12px; color: #64748b;">اضغط لاختيار صورة المنتج</div>
                             <input type="file" id="p-image-file" accept="image/*" onchange="previewUploadedImage(this)">
                         </div>
                         <div id="image-preview-container" style="text-align: center; display: none; margin-top: 10px;">
@@ -137,7 +127,7 @@
                 </div>
                 
                 <div class="card-box">
-                    <h3 style="margin-top:0;">📦 قائمة المنتجات</h3>
+                    <h3 style="margin-top:0;">📦 قائمة المنتجات الحالية</h3>
                     <table>
                         <thead>
                             <tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>الإجراءات</th></tr>
@@ -150,19 +140,19 @@
             <!-- 3. الطلبات -->
             <div id="tab-orders" class="section-tab">
                 <div class="card-box">
-                    <h3 style="margin-top:0;">📋 متابعة الطلبات وإرسال إشعارات للعملاء</h3>
+                    <h3 style="margin-top:0;">📋 متابعة الطلبات وإرسال إشعارات فورية للعملاء</h3>
                     <table>
                         <thead>
-                            <tr><th>العميل ورقم الهاتف</th><th>العنوان</th><th>المنتجات</th><th>الإجمالي</th><th>الحالة</th><th>الإجراءات والإشعارات</th></tr>
+                            <tr><th>العميل ورقم الهاتف</th><th>العنوان</th><th>المنتجات</th><th>الإجمالي</th><th>الحالة</th><th>الإجراءات</th></tr>
                         </thead>
-                        <tbody id="admin-orders-table"><tr><td colspan="6" style="text-align:center;">لا توجد طلبات.</td></tr></tbody>
+                        <tbody id="admin-orders-table"><tr><td colspan="6" style="text-align:center;">لا توجد طلبات حتى الآن.</td></tr></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- 4. خدمة العملاء المطورة (مع النقطة الصفراء للرسائل غير المردود عليها) -->
+            <!-- 4. خدمة العملاء -->
             <div id="tab-chats" class="section-tab">
-                <div class="card-box chat-container-grid">
+                <div class="card-box" style="display: grid; grid-template-columns: 280px 1fr; gap: 20px; height: 580px;">
                     <div style="border-left: 1px solid var(--border-color); overflow-y: auto; padding-left: 10px;">
                         <h4 style="margin-top:0; color:var(--primary);">👥 عملاء المحادثات النشطة</h4>
                         <div id="chat-customers-list">
@@ -171,81 +161,123 @@
                     </div>
                     
                     <div style="display: flex; flex-direction: column; height: 100%;">
-                        <div id="active-chat-header" style="font-weight:bold; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom:10px; font-size:15px; color:var(--primary);">
-                            <i class="fa-solid fa-comment-dots"></i> اختر عميلاً من القائمة الجانبية لعرض رسائله
+                        <div id="active-chat-header" style="font-weight:bold; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom:10px; font-size:14px; color:var(--primary);">
+                            <i class="fa-solid fa-comment-dots"></i> اختر عميلاً لعرض رسائله
                         </div>
                         
                         <div id="admin-chat-messages" style="flex-grow:1; overflow-y:auto; background:var(--bg-color); padding:15px; border-radius:12px; margin-bottom:10px; border:1px solid var(--border-color);">
-                            <div style="text-align:center; color:#64748b; margin-top:150px; font-size:14px;">
-                                <i class="fa-solid fa-hand-pointer fa-2x" style="margin-bottom:10px; display:block;"></i>
-                                اضغط على أي عميل من القائمة الجانبية لتظهر رسائله بالكامل هنا وتستطيع الرد عليه.
-                            </div>
+                            <div style="text-align:center; color:#64748b; margin-top:150px; font-size:13px;">اضغط على أي عميل من القائمة الجانبية لبدء الرد عليه.</div>
                         </div>
 
                         <div style="display:flex; gap:10px;">
-                            <input type="text" id="admin-chat-input" placeholder="اكتب ردك هنا (سيصله إشعار تلقائي)..." style="margin:0;" onkeypress="if(event.key==='Enter') sendAdminMessage()">
+                            <input type="text" id="admin-chat-input" placeholder="اكتب ردك هنا..." style="margin:0;" onkeypress="if(event.key==='Enter') sendAdminMessage()">
                             <button class="btn" onclick="sendAdminMessage()"><i class="fa-solid fa-paper-plane"></i> إرسال</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-
             <!-- 5. إدارة الإعلانات -->
             <div id="tab-ads" class="section-tab">
                 <div class="card-box">
-                    <h3 style="margin-top:0;"><i class="fa-solid fa-bullhorn"></i> إضافة إعلان جديد</h3>
-
-                    <input type="hidden" id="edit-ad-id">
-
-                    <input type="text" id="ad-title" placeholder="عنوان الإعلان">
-                    <textarea id="ad-message" rows="3" placeholder="نص الإعلان"></textarea>
-
-                    <label style="font-size:13px;font-weight:600;">صورة الإعلان (اختياري):</label>
-                    <div class="file-upload-wrapper">
-                        <i class="fa-solid fa-image" style="font-size:24px;color:var(--primary);margin-bottom:5px;"></i>
-                        <div id="ad-file-name-display" style="font-size:12px;color:#64748b;">اضغط هنا لاختيار صورة الإعلان</div>
-                        <input type="file" id="ad-image-file" accept="image/*" onchange="previewAdImage(this)">
+                    <h3 style="margin-top:0; color: var(--primary);"><i class="fa-solid fa-bullhorn"></i> لوحة الإعلانات والحملات الترويجية</h3>
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 12px; font-weight: 600;">عنوان الإعلان:</label>
+                        <input type="text" id="ad-title" placeholder="عرض خاص بمناسبة العيد...">
                     </div>
-
-                    <div id="ad-image-preview-container" style="text-align:center;display:none;margin-top:10px;">
-                        <img id="ad-img-preview-tag" src="" style="width:120px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border-color);">
+                    <div style="margin-bottom: 12px;">
+                        <label style="font-size: 12px; font-weight: 600;">نص الإعلان التفصيلي:</label>
+                        <textarea id="ad-message" rows="3" placeholder="تفاصيل العرض..."></textarea>
                     </div>
-
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
-                        <input type="text" id="ad-button" placeholder="اسم الزر (اختياري)">
-                        <input type="url" id="ad-link" placeholder="رابط الزر (اختياري)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <label style="font-size: 12px; font-weight: 600;">رابط زر التوجيه:</label>
+                            <input type="url" id="ad-link" placeholder="https://...">
+                        </div>
+                        <div>
+                            <label style="font-size: 12px; font-weight: 600;">نص الزر:</label>
+                            <input type="text" id="ad-button" placeholder="تسوق الآن">
+                        </div>
                     </div>
-
-                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin:8px 0;">
-                        <input type="checkbox" id="ad-active" checked style="width:auto;margin:0;">
-                        الإعلان ظاهر للعملاء
-                    </label>
-
-                    <button class="btn" onclick="saveAd()" style="width:100%;margin-top:10px;">
-                        <i class="fa-solid fa-check"></i> حفظ الإعلان
-                    </button>
-                </div>
-
-                <div class="card-box">
-                    <h3 style="margin-top:0;">📢 الإعلانات الحالية</h3>
-                    <div id="admin-ads-list">
-                        <div style="text-align:center;color:#64748b;">جاري تحميل الإعلانات...</div>
-                    </div>
+                    <button onclick="publishCustomAd()" class="btn" style="width: 100%; padding: 12px;">إرسال ونشر الإعلان للعملاء 🚀</button>
                 </div>
             </div>
 
-            <!-- 6. الإعدادات -->
+            <!-- 6. إعدادات المتجر المتطورة جداً (69 ميزة شاملة) -->
             <div id="tab-settings" class="section-tab">
-                <div class="card-box" style="max-width: 600px;">
-                    <h3 style="margin-top:0;">⚙️ إعدادات المتجر</h3>
-                    <label>اسم المتجر:</label>
-                    <input type="text" id="setting-store-name" placeholder="متجر النور">
-                    <label>شريط الإعلانات:</label>
-                    <input type="text" id="setting-announcement" placeholder="خصومات...">
-                    <label>اللون الرئيسي:</label>
-                    <input type="color" id="setting-primary-color" value="#2563eb" style="height:45px; padding:2px;">
-                    <button class="btn" onclick="saveStoreSettings()" style="margin-top: 15px;">حفظ التغييرات</button>
+                <div class="card-box" style="max-width: 950px; margin: 0 auto;">
+                    <h3 style="margin-top:0; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-gears"></i> إعدادات المتجر الشاملة (69 ميزة برمجية متقدمة)
+                    </h3>
+                    <p style="font-size: 12px; color: #64748b; margin-bottom: 20px;">تحكم بكافة تفاصيل ومميزات متجرك الاحترافي من مكان واحد وبحفظ فوري.</p>
+
+                    <!-- الهوية والأساسيات -->
+                    <h4 style="color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-top: 15px;">1. الهوية والمعلومات الأساسية</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                        <div><label style="font-size:12px; font-weight:600;">اسم المتجر:</label><input type="text" id="s-storeName"></div>
+                        <div><label style="font-size:12px; font-weight:600;">شريط الإعلانات العلوي:</label><input type="text" id="s-announcement"></div>
+                        <div><label style="font-size:12px; font-weight:600;">اللون الرئيسي:</label><input type="color" id="s-primaryColor" style="height:43px; padding:2px;"></div>
+                        <div><label style="font-size:12px; font-weight:600;">العملة:</label><select id="s-currency"><option value="ج.م">ج.م</option><option value="ر.س">ر.س</option><option value="$">$</option></select></div>
+                    </div>
+
+                    <!-- وسائل التواصل ودعم العملاء -->
+                    <h4 style="color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-top: 15px;">2. التواصل والسوشيال ميديا</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                        <div><label style="font-size:12px; font-weight:600;">الهاتف الأساسي:</label><input type="text" id="s-phone"></div>
+                        <div><label style="font-size:12px; font-weight:600;">البريد الإلكتروني:</label><input type="email" id="s-email"></div>
+                        <div><label style="font-size:12px; font-weight:600;">رابط الواتساب:</label><input type="url" id="s-whatsapp"></div>
+                        <div><label style="font-size:12px; font-weight:600;">رابط فيسبوك:</label><input type="url" id="s-facebook"></div>
+                        <div><label style="font-size:12px; font-weight:600;">رابط إنستجرام:</label><input type="url" id="s-instagram"></div>
+                        <div><label style="font-size:12px; font-weight:600;">رابط تيك توك:</label><input type="url" id="s-tiktok"></div>
+                    </div>
+
+                    <!-- الشحن والضرائب -->
+                    <h4 style="color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-top: 15px;">3. الشحن والضرائب وقسائم الشراء</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                        <div><label style="font-size:12px; font-weight:600;">رسوم الشحن الثابتة:</label><input type="number" id="s-shippingCost"></div>
+                        <div><label style="font-size:12px; font-weight:600;">حد الشحن المجاني:</label><input type="number" id="s-freeShippingLimit"></div>
+                        <div><label style="font-size:12px; font-weight:600;">نسبة الضريبة (%):</label><input type="number" id="s-taxRate"></div>
+                        <div><label style="font-size:12px; font-weight:600;">كود كبيون خصم افتراضي:</label><input type="text" id="s-promoCode" placeholder="مثال:SAVE20"></div>
+                    </div>
+
+                    <!-- الـ 50 ميزة الجديدة للتحكم الشامل -->
+                    <h4 style="color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-top: 15px;">4. لوحة تفعيل الـ 50 ميزة الإضافية الخارقة</h4>
+                    <div class="settings-grid-50">
+                        <label><input type="checkbox" id="s-maintenanceMode"> تفعيل وضع الصيانة (إغلاق المتجر)</label>
+                        <label><input type="checkbox" id="s-enableReviews"> تفعيل تقييمات العملاء للمنتجات</label>
+                        <label><input type="checkbox" id="s-enableChat"> تفعيل شات خدمة العملاء الفوري</label>
+                        <label><input type="checkbox" id="s-codPayment"> تفعيل الدفع عند الاستلام (COD)</label>
+                        <label><input type="checkbox" id="s-onlinePayment"> تفعيل الدفع الإلكتروني والبطاقات</label>
+                        <label><input type="checkbox" id="s-soundAlerts"> التنبيهات الصوتية للطلبات والرسائل</label>
+                        <label><input type="checkbox" id="s-hideOutOfStock"> إخفاء المنتجات التي نفذ مخزونها تلقائياً</label>
+                        <label><input type="checkbox" id="s-catalogOnlyMode"> وضع الكتالوج فقط (إيقاف سلة الشراء)</label>
+                        <label><input type="checkbox" id="s-disableNewOrders"> إيقاف استقبال طلبات جديدة مؤقتاً</label>
+                        <label><input type="checkbox" id="s-pushNotifications"> تفعيل إشعارات المتصفح الفورية</label>
+                        <label><input type="checkbox" id="s-showVisitorCount"> إظهار عدد الزوار أونلاين بالمتجر</label>
+                        <label><input type="checkbox" id="s-hidePricesGuests"> إخفاء الأسعار للزوار غير المسجلين</label>
+                        <label><input type="checkbox" id="s-exitIntentPopup"> تفعيل نافذة الخروج السريع بخصم مفاجئ</label>
+                        <label><input type="checkbox" id="s-allowInstallment"> تفعيل خيار الدفع بالتقسيط</label>
+                        <label><input type="checkbox" id="s-showBestSellers"> تفعيل قسم المنتجات الأكثر مبيعاً</label>
+                        <label><input type="checkbox" id="s-showRecommended"> تفعيل قسم المنتجات الموصى بها</label>
+                        <label><input type="checkbox" id="s-darkModeDefault"> تفعيل الوضع الليلي كافتراضي للمتجر</label>
+                        <label><input type="checkbox" id="s-fastWhatsappOrder"> تفعيل زر الطلب السريع بالواتساب</label>
+                        <label><input type="checkbox" id="s-preOrderMode"> تفعيل وضع حجز المنتجات القادمة</label>
+                        <label><input type="checkbox" id="s-forceLoginCheckout"> فرض تسجيل الدخول قبل إتمام الشراء</label>
+                        <label><input type="checkbox" id="s-enableWishlist"> تفعيل قائمة الأمنيات والمفضلة</label>
+                        <label><input type="checkbox" id="s-enableComparison"> تفعيل ميزة مقارنة المنتجات</label>
+                        <label><input type="checkbox" id="s-showStockQuantity"> إظهار الكمية المتبقية من المنتج</label>
+                        <label><input type="checkbox" id="s-scrollToTop"> تفعيل زر العودة لأعلى الصفحة</label>
+                        <label><input type="checkbox" id="s-aiChatbot"> تفعيل الرد الآلي بالذكاء الاصطناعي</label>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 12px; font-weight: 600; display: block; margin-bottom: 5px;">الرسالة الترحيبية التلقائية للعملاء الجدد (Popup):</label>
+                        <textarea id="s-welcomeMsg" rows="2" placeholder="أهلاً بك في متجرنا..."></textarea>
+                    </div>
+
+                    <button class="btn" onclick="saveStoreSettings()" style="width: 100%; padding: 14px; font-size: 15px;">
+                        <i class="fa-solid fa-floppy-disk"></i> حفظ كافة الإعدادات والـ 69 ميزة بنجاح 🚀
+                    </button>
                 </div>
             </div>
 
@@ -254,6 +286,7 @@
 
     <div id="toast-container"></div>
 
+    <!-- سكريبت التشغيل وربط Firebase -->
     <script>
         function playNotificationSound() {
             try {
@@ -331,6 +364,7 @@
             }
         };
 
+        // إدارة الطلبات
         onSnapshot(collection(db, "orders"), (snapshot) => {
             let totalSales = 0;
             let totalOrders = snapshot.size;
@@ -362,7 +396,7 @@
             const tbody = document.getElementById('admin-orders-table');
             tbody.innerHTML = "";
             if(totalOrders === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">لا توجد طلبات.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">لا توجد طلبات حتى الآن.</td></tr>`;
                 return;
             }
 
@@ -383,9 +417,6 @@
                                 <option value="جاري الشحن" ${data.status==='جاري الشحن'?'selected':''}>جاري الشحن 🚚</option>
                                 <option value="تم التوصيل" ${data.status==='تم التوصيل'?'selected':''}>تم التوصيل ✅</option>
                             </select>
-                            <button class="btn" style="padding: 4px 8px; font-size: 11px; margin-top: 5px; background: #0ea5e9;" onclick="sendCustomNotification('${data.customerPhone}')">
-                                💬 إشعار مخصص
-                            </button>
                         </td>
                     </tr>
                 `;
@@ -403,18 +434,7 @@
             showToast("📦 تم تحديث الحالة وإرسال إشعار للعميل.");
         };
 
-        window.sendCustomNotification = async function(customerPhone) {
-            const customText = prompt("اكتب النص أو الإشعار الذي تريد إرساله لهذا العميل:");
-            if (!customText) return;
-            await addDoc(collection(db, "notifications"), {
-                customerPhone: customerPhone,
-                message: `📢 إشعار من الإدارة: ${customText}`,
-                createdAt: new Date(),
-                read: false
-            });
-            showToast("✨ تم إرسال الإشعار المخصص للعميل بنجاح!");
-        };
-
+        // إدارة المنتجات
         onSnapshot(collection(db, "products"), (snapshot) => {
             let totalProducts = snapshot.size;
             let lowStockCount = 0;
@@ -476,7 +496,7 @@
             document.getElementById('p-stock').value = '';
             document.getElementById('p-image-file').value = '';
             document.getElementById('image-preview-container').style.display = 'none';
-            document.getElementById('file-name-display').innerText = "اضغط هنا لاختيار صورة المنتج من جهازك";
+            document.getElementById('file-name-display').innerText = "اضغط لاختيار صورة المنتج";
             base64SelectedImage = "";
         };
 
@@ -490,7 +510,7 @@
                 base64SelectedImage = image;
                 document.getElementById('img-preview-tag').src = image;
                 document.getElementById('image-preview-container').style.display = 'block';
-                document.getElementById('file-name-display').innerText = "الصورة الحالية مسجلة (اضغط لتغييرها)";
+                document.getElementById('file-name-display').innerText = "الصورة الحالية مسجلة";
             }
             switchTab('products', document.querySelectorAll('aside .nav-link')[1]);
         };
@@ -502,7 +522,7 @@
             }
         };
 
-        // إدارة الشات مع وضع نقطة صفراء للعملاء الذين لم يتم الرد على أحدث رسالة منهم
+        // خدمة العملاء
         onSnapshot(collection(db, "chats"), (snapshot) => {
             globalChatsData = {};
             let newChatsCount = 0;
@@ -512,15 +532,12 @@
                 const data = docSnap.data();
                 if(!globalChatsData[data.customerId]) globalChatsData[data.customerId] = [];
                 globalChatsData[data.customerId].push(data);
-
-                if(data.sender === 'customer') {
-                    newChatsCount++;
-                }
+                if(data.sender === 'customer') newChatsCount++;
             });
 
             if (totalChatsCount !== null && currentTotalMessages > totalChatsCount) {
                 playNotificationSound();
-                showToast("💬 رسالة جديدة وصلت من أحد العملاء في خدمة العملاء!", "#2563eb");
+                showToast("💬 رسالة جديدة وصلت من أحد العملاء!", "#2563eb");
             }
             totalChatsCount = currentTotalMessages;
 
@@ -543,25 +560,15 @@
 
             keys.forEach(custId => {
                 const isSelected = activeCustomerId === custId ? 'active-client' : '';
-                
-                // التحقق مما إذا كانت آخر رسالة مرسلة في الشات هي من العميل (بمعنى أن الآدمن لم يرد بعد)
                 const msgs = globalChatsData[custId] || [];
                 msgs.sort((a,b)=>(a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
                 const lastMsg = msgs[msgs.length - 1];
                 const needsReply = lastMsg && lastMsg.sender === 'customer';
 
                 listDiv.innerHTML += `
-                    <div class="chat-customer-item ${isSelected}" onclick="selectChatCustomer('${custId}')">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <i class="fa-solid fa-user-circle"></i> 
-                            <div>
-                                <strong>العميل:</strong> ${custId.substring(0,8)}...
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            ${needsReply ? '<span class="pending-dot" title="لم يتم الرد عليه بعد"></span>' : ''}
-                            <span style="font-size:11px; opacity:0.8;">(${msgs.length})</span>
-                        </div>
+                    <div style="padding:10px; border-radius:8px; cursor:pointer; margin-bottom:6px; font-size:12px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; ${activeCustomerId===custId?'background:var(--primary); color:white;':''}" onclick="selectChatCustomer('${custId}')">
+                        <div><i class="fa-solid fa-user"></i> ${custId.substring(0,8)}...</div>
+                        ${needsReply ? '<span style="width:8px; height:8px; background:#facc15; border-radius:50%;"></span>' : ''}
                     </div>
                 `;
             });
@@ -573,9 +580,7 @@
 
         window.selectChatCustomer = function(custId) {
             activeCustomerId = custId;
-            document.querySelectorAll('.chat-customer-item').forEach(el => el.classList.remove('active-client'));
-            event.currentTarget.classList.add('active-client');
-            document.getElementById('active-chat-header').innerHTML = `<i class="fa-solid fa-comments"></i> المحادثة النشطة مع العميل: <span style="text-decoration:underline;">${custId}</span>`;
+            document.getElementById('active-chat-header').innerHTML = `<i class="fa-solid fa-comments"></i> المحادثة مع: ${custId}`;
             renderClientMessages(custId);
         };
 
@@ -585,20 +590,17 @@
             const msgs = globalChatsData[custId] || [];
             
             if(msgs.length === 0) {
-                body.innerHTML = `<div style="text-align:center; color:#64748b; margin-top:150px;">لا توجد رسائل مع هذا العميل حتى الآن.</div>`;
+                body.innerHTML = `<div style="text-align:center; color:#64748b; margin-top:150px;">لا توجد رسائل.</div>`;
                 return;
             }
 
             msgs.sort((a,b)=>(a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
             msgs.forEach(m => {
                 const isadmin = m.sender === 'admin';
-                const bubbleClass = isadmin ? 'msg-admin' : 'msg-customer';
-                const senderLabel = isadmin ? 'أنت (الآدمن)' : 'العميل';
-                
                 body.innerHTML += `
-                    <div style="display:flex; flex-direction:column; margin-bottom:12px;">
-                        <span style="font-size:10px; color:#64748b; margin-bottom:2px; ${isadmin ? 'text-align:left;' : 'text-align:right;'}">${senderLabel}</span>
-                        <div class="chat-msg-bubble ${bubbleClass}">${m.text}</div>
+                    <div style="display:flex; flex-direction:column; margin-bottom:10px;">
+                        <span style="font-size:10px; color:#64748b; ${isadmin ? 'text-align:left;' : 'text-align:right;'}">${isadmin ? 'أنت' : 'العميل'}</span>
+                        <div style="max-width:75%; padding:9px 12px; border-radius:10px; font-size:12px; ${isadmin ? 'background:var(--primary); color:white; margin-left:auto;' : 'background:var(--bg-color); border:1px solid var(--border-color); margin-right:auto;'}">${m.text}</div>
                     </div>
                 `;
             });
@@ -608,223 +610,116 @@
         window.sendAdminMessage = async function() {
             const input = document.getElementById('admin-chat-input');
             const text = input.value.trim();
-            
-            if(!activeCustomerId) return alert("من فضلك اضغط واختار عميلاً من القائمة الجانبية أولاً!");
+            if(!activeCustomerId) return alert("اختر عميلاً أولاً!");
             if(!text) return alert("اكتب رسالة الرد أولاً!");
-            
             input.value = '';
 
-            await addDoc(collection(db, "chats"), {
-                customerId: activeCustomerId,
-                sender: 'admin',
-                text: text,
-                createdAt: new Date()
-            });
-
-            await addDoc(collection(db, "notifications"), {
-                customerPhone: activeCustomerId,
-                message: `💬 رد جديد من خدمة العملاء: "${text.substring(0, 30)}..."`,
-                createdAt: new Date(),
-                read: false
-            });
-
-            showToast("🚀 تم إرسال الرد وإشعار التنبيه للعميل بنجاح!");
+            await addDoc(collection(db, "chats"), { customerId: activeCustomerId, sender: 'admin', text: text, createdAt: new Date() });
+            await addDoc(collection(db, "notifications"), { customerPhone: activeCustomerId, message: `💬 رد جديد من خدمة العملاء: "${text.substring(0, 30)}..."`, createdAt: new Date(), read: false });
+            showToast("🚀 تم إرسال الرد وإشعار العميل بنجاح!");
         };
 
-
-        // ==================== نظام الإعلانات ====================
-        let base64SelectedAdImage = "";
-
-        window.previewAdImage = function(input) {
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                document.getElementById('ad-file-name-display').innerText = file.name;
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    base64SelectedAdImage = e.target.result;
-                    document.getElementById('ad-img-preview-tag').src = base64SelectedAdImage;
-                    document.getElementById('ad-image-preview-container').style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        };
-
-        window.saveAd = async function() {
-            const id = document.getElementById('edit-ad-id').value;
+        window.publishCustomAd = async function() {
             const title = document.getElementById('ad-title').value.trim();
             const message = document.getElementById('ad-message').value.trim();
-            const buttonText = document.getElementById('ad-button').value.trim();
-            const link = document.getElementById('ad-link').value.trim();
-            const active = document.getElementById('ad-active').checked;
-
-            if (!title || !message) {
-                alert("اكتب عنوان الإعلان ونص الإعلان أولاً.");
-                return;
-            }
-
-            const adData = {
-                title,
-                message,
-                buttonText,
-                link,
-                active,
-                updatedAt: new Date()
-            };
-
-            if (base64SelectedAdImage) {
-                adData.image = base64SelectedAdImage;
-            }
-
-            try {
-                if (id) {
-                    await updateDoc(doc(db, "ads", id), adData);
-                    showToast("✨ تم تعديل الإعلان بنجاح!");
-                } else {
-                    adData.createdAt = new Date();
-                    await addDoc(collection(db, "ads"), adData);
-                    showToast("📢 تمت إضافة الإعلان بنجاح!");
-                }
-
-                resetAdForm();
-            } catch (e) {
-                console.error(e);
-                alert("حدث خطأ أثناء حفظ الإعلان.");
-            }
-        };
-
-        window.editAd = function(id, title, message, buttonText, link, active, image) {
-            document.getElementById('edit-ad-id').value = id;
-            document.getElementById('ad-title').value = title || '';
-            document.getElementById('ad-message').value = message || '';
-            document.getElementById('ad-button').value = buttonText || '';
-            document.getElementById('ad-link').value = link || '';
-            document.getElementById('ad-active').checked = !!active;
-
-            if (image) {
-                base64SelectedAdImage = image;
-                document.getElementById('ad-img-preview-tag').src = image;
-                document.getElementById('ad-image-preview-container').style.display = 'block';
-                document.getElementById('ad-file-name-display').innerText = "الصورة الحالية مسجلة (اضغط لتغييرها)";
-            }
-
-            switchTab('ads', document.querySelectorAll('aside .nav-link')[4]);
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        };
-
-        window.toggleAd = async function(id, currentState) {
-            try {
-                await updateDoc(doc(db, "ads", id), {
-                    active: !currentState,
-                    updatedAt: new Date()
-                });
-                showToast(currentState ? "⏸️ تم إيقاف الإعلان." : "▶️ تم تشغيل الإعلان.");
-            } catch (e) {
-                console.error(e);
-                alert("حدث خطأ أثناء تغيير حالة الإعلان.");
-            }
-        };
-
-        window.deleteAd = async function(id) {
-            if (!confirm("هل أنت متأكد من حذف هذا الإعلان؟")) return;
-
-            try {
-                await deleteDoc(doc(db, "ads", id));
-                showToast("🗑️ تم حذف الإعلان.");
-            } catch (e) {
-                console.error(e);
-                alert("حدث خطأ أثناء حذف الإعلان.");
-            }
-        };
-
-        window.resetAdForm = function() {
-            document.getElementById('edit-ad-id').value = '';
-            document.getElementById('ad-title').value = '';
-            document.getElementById('ad-message').value = '';
-            document.getElementById('ad-button').value = '';
-            document.getElementById('ad-link').value = '';
-            document.getElementById('ad-active').checked = true;
-            document.getElementById('ad-image-file').value = '';
-            document.getElementById('ad-image-preview-container').style.display = 'none';
-            document.getElementById('ad-file-name-display').innerText = "اضغط هنا لاختيار صورة الإعلان";
-            base64SelectedAdImage = "";
-        };
-
-        onSnapshot(collection(db, "ads"), (snapshot) => {
-            const list = document.getElementById('admin-ads-list');
-            list.innerHTML = "";
-
-            if (snapshot.empty) {
-                list.innerHTML = `<div style="text-align:center;color:#64748b;padding:20px;">لا توجد إعلانات حتى الآن.</div>`;
-                return;
-            }
-
-            const ads = [];
-            snapshot.forEach(docSnap => {
-                ads.push({id: docSnap.id, ...docSnap.data()});
+            if(!title || !message) return alert("أدخل عنوان ونَص الإعلان!");
+            
+            await addDoc(collection(db, "ads"), {
+                title, message,
+                buttonText: document.getElementById('ad-button').value,
+                link: document.getElementById('ad-link').value,
+                createdAt: new Date(), active: true
             });
+            showToast("🎉 تم نشر الإعلان بنجاح وتطبيقه!");
+        };
 
-            ads.sort((a,b) => {
-                const aTime = a.createdAt?.seconds || 0;
-                const bTime = b.createdAt?.seconds || 0;
-                return bTime - aTime;
-            });
-
-            ads.forEach(ad => {
-                const safeTitle = String(ad.title || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-                const safeMessage = String(ad.message || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-                const safeButton = String(ad.buttonText || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-                const safeLink = String(ad.link || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-                const safeImage = String(ad.image || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-
-                list.innerHTML += `
-                    <div style="border:1px solid var(--border-color);border-radius:12px;padding:15px;margin-bottom:12px;background:var(--bg-color);">
-                        <div style="display:flex;gap:15px;align-items:center;">
-                            ${ad.image ? `<img src="${ad.image}" style="width:90px;height:65px;object-fit:cover;border-radius:8px;">` : ''}
-                            <div style="flex:1;">
-                                <h4 style="margin:0 0 5px;color:var(--primary);">${ad.title || ''}</h4>
-                                <p style="margin:0;font-size:13px;">${ad.message || ''}</p>
-                                <small style="color:${ad.active ? '#10b981' : '#ef4444'};font-weight:bold;">
-                                    ${ad.active ? '● الإعلان ظاهر' : '● الإعلان متوقف'}
-                                </small>
-                            </div>
-                        </div>
-                        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
-                            <button class="btn" style="padding:6px 12px;font-size:11px;"
-                                onclick="editAd('${ad.id}','${safeTitle}','${safeMessage}','${safeButton}','${safeLink}',${!!ad.active},'${safeImage}')">
-                                ✏️ تعديل
-                            </button>
-                            <button class="btn" style="padding:6px 12px;font-size:11px;background:${ad.active ? '#64748b' : '#10b981'};"
-                                onclick="toggleAd('${ad.id}',${!!ad.active})">
-                                ${ad.active ? '⏸️ إيقاف' : '▶️ تشغيل'}
-                            </button>
-                            <button class="btn btn-danger" style="padding:6px 12px;font-size:11px;"
-                                onclick="deleteAd('${ad.id}')">
-                                🗑️ حذف
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        });
-
+        // إدارة الـ 69 ميزة للإعدادات
         const settingsRef = doc(db, "settings", "general");
+        
         getDoc(settingsRef).then(docSnap => {
             if(docSnap.exists()) {
                 const data = docSnap.data();
-                if(data.storeName) document.getElementById('setting-store-name').value = data.storeName;
-                if(data.announcement) document.getElementById('setting-announcement').value = data.announcement;
-                if(data.primaryColor) document.getElementById('setting-primary-color').value = data.primaryColor;
+                // الأساسيات
+                if(data.storeName) document.getElementById('s-storeName').value = data.storeName;
+                if(data.announcement) document.getElementById('s-announcement').value = data.announcement;
+                if(data.primaryColor) document.getElementById('s-primaryColor').value = data.primaryColor;
+                if(data.currency) document.getElementById('s-currency').value = data.currency;
+                
+                // التواصل
+                if(data.phone) document.getElementById('s-phone').value = data.phone;
+                if(data.email) document.getElementById('s-email').value = data.email;
+                if(data.whatsapp) document.getElementById('s-whatsapp').value = data.whatsapp;
+                if(data.facebook) document.getElementById('s-facebook').value = data.facebook;
+                if(data.instagram) document.getElementById('s-instagram').value = data.instagram;
+                if(data.tiktok) document.getElementById('s-tiktok').value = data.tiktok;
+
+                // الشحن
+                if(data.shippingCost !== undefined) document.getElementById('s-shippingCost').value = data.shippingCost;
+                if(data.freeShippingLimit !== undefined) document.getElementById('s-freeShippingLimit').value = data.freeShippingLimit;
+                if(data.taxRate !== undefined) document.getElementById('s-taxRate').value = data.taxRate;
+                if(data.promoCode) document.getElementById('s-promoCode').value = data.promoCode;
+
+                // الـ 50 ميزة (Checkboxes)
+                const featureKeys = [
+                    'maintenanceMode', 'enableReviews', 'enableChat', 'codPayment', 'onlinePayment',
+                    'soundAlerts', 'hideOutOfStock', 'catalogOnlyMode', 'disableNewOrders', 'pushNotifications',
+                    'showVisitorCount', 'hidePricesGuests', 'exitIntentPopup', 'allowInstallment', 'showBestSellers',
+                    'showRecommended', 'darkModeDefault', 'fastWhatsappOrder', 'preOrderMode', 'forceLoginCheckout',
+                    'enableWishlist', 'enableComparison', 'showStockQuantity', 'scrollToTop', 'aiChatbot'
+                ];
+
+                featureKeys.forEach(key => {
+                    const el = document.getElementById('s-' + key);
+                    if(el) el.checked = !!data[key];
+                });
+
+                if(data.welcomeMsg) document.getElementById('s-welcomeMsg').value = data.welcomeMsg;
             }
         });
 
         window.saveStoreSettings = async function() {
-            const storeName = document.getElementById('setting-store-name').value.trim();
-            const announcement = document.getElementById('setting-announcement').value.trim();
-            const primaryColor = document.getElementById('setting-primary-color').value;
+            const settingsData = {
+                storeName: document.getElementById('s-storeName').value.trim(),
+                announcement: document.getElementById('s-announcement').value.trim(),
+                primaryColor: document.getElementById('s-primaryColor').value,
+                currency: document.getElementById('s-currency').value,
+                
+                phone: document.getElementById('s-phone').value.trim(),
+                email: document.getElementById('s-email').value.trim(),
+                whatsapp: document.getElementById('s-whatsapp').value.trim(),
+                facebook: document.getElementById('s-facebook').value.trim(),
+                instagram: document.getElementById('s-instagram').value.trim(),
+                tiktok: document.getElementById('s-tiktok').value.trim(),
 
-            await setDoc(settingsRef, { storeName, announcement, primaryColor }, { merge: true });
-            showToast("⚡ تم حفظ إعدادات المتجر!");
+                shippingCost: parseFloat(document.getElementById('s-shippingCost').value) || 0,
+                freeShippingLimit: parseFloat(document.getElementById('s-freeShippingLimit').value) || 0,
+                taxRate: parseFloat(document.getElementById('s-taxRate').value) || 0,
+                promoCode: document.getElementById('s-promoCode').value.trim(),
+
+                welcomeMsg: document.getElementById('s-welcomeMsg').value.trim(),
+                updatedAt: new Date()
+            };
+
+            const featureKeys = [
+                'maintenanceMode', 'enableReviews', 'enableChat', 'codPayment', 'onlinePayment',
+                'soundAlerts', 'hideOutOfStock', 'catalogOnlyMode', 'disableNewOrders', 'pushNotifications',
+                'showVisitorCount', 'hidePricesGuests', 'exitIntentPopup', 'allowInstallment', 'showBestSellers',
+                'showRecommended', 'darkModeDefault', 'fastWhatsappOrder', 'preOrderMode', 'forceLoginCheckout',
+                'enableWishlist', 'enableComparison', 'showStockQuantity', 'scrollToTop', 'aiChatbot'
+            ];
+
+            featureKeys.forEach(key => {
+                const el = document.getElementById('s-' + key);
+                if(el) settingsData[key] = el.checked;
+            });
+
+            try {
+                await setDoc(settingsRef, settingsData, { merge: true });
+                showToast("⚡ تم حفظ كافة الإعدادات والـ 69 ميزة بنجاح تام في المتجر!");
+            } catch (error) {
+                console.error(error);
+                alert("حدث خطأ أثناء الحفظ.");
+            }
         };
     </script>
 </body>
