@@ -71,6 +71,7 @@
         <div class="nav-link" onclick="switchTab('products', this)"><i class="fa-solid fa-boxes-stacked"></i> المنتجات والمخزون</div>
         <div class="nav-link" onclick="switchTab('orders', this)"><i class="fa-solid fa-receipt"></i> الطلبات والشحن <span id="orders-nav-badge" class="nav-badge">0</span></div>
         <div class="nav-link" onclick="switchTab('chats', this)"><i class="fa-solid fa-headset"></i> خدمة العملاء <span id="chats-nav-badge" class="nav-badge">0</span></div>
+        <div class="nav-link" onclick="switchTab('ads', this)"><i class="fa-solid fa-bullhorn"></i> إدارة الإعلانات</div>
         <div class="nav-link" onclick="switchTab('settings', this)"><i class="fa-solid fa-gears"></i> إعدادات المتجر</div>
     </aside>
 
@@ -189,7 +190,52 @@
                 </div>
             </div>
 
-            <!-- 5. الإعدادات -->
+
+            <!-- 5. إدارة الإعلانات -->
+            <div id="tab-ads" class="section-tab">
+                <div class="card-box">
+                    <h3 style="margin-top:0;"><i class="fa-solid fa-bullhorn"></i> إضافة إعلان جديد</h3>
+
+                    <input type="hidden" id="edit-ad-id">
+
+                    <input type="text" id="ad-title" placeholder="عنوان الإعلان">
+                    <textarea id="ad-message" rows="3" placeholder="نص الإعلان"></textarea>
+
+                    <label style="font-size:13px;font-weight:600;">صورة الإعلان (اختياري):</label>
+                    <div class="file-upload-wrapper">
+                        <i class="fa-solid fa-image" style="font-size:24px;color:var(--primary);margin-bottom:5px;"></i>
+                        <div id="ad-file-name-display" style="font-size:12px;color:#64748b;">اضغط هنا لاختيار صورة الإعلان</div>
+                        <input type="file" id="ad-image-file" accept="image/*" onchange="previewAdImage(this)">
+                    </div>
+
+                    <div id="ad-image-preview-container" style="text-align:center;display:none;margin-top:10px;">
+                        <img id="ad-img-preview-tag" src="" style="width:120px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border-color);">
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+                        <input type="text" id="ad-button" placeholder="اسم الزر (اختياري)">
+                        <input type="url" id="ad-link" placeholder="رابط الزر (اختياري)">
+                    </div>
+
+                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin:8px 0;">
+                        <input type="checkbox" id="ad-active" checked style="width:auto;margin:0;">
+                        الإعلان ظاهر للعملاء
+                    </label>
+
+                    <button class="btn" onclick="saveAd()" style="width:100%;margin-top:10px;">
+                        <i class="fa-solid fa-check"></i> حفظ الإعلان
+                    </button>
+                </div>
+
+                <div class="card-box">
+                    <h3 style="margin-top:0;">📢 الإعلانات الحالية</h3>
+                    <div id="admin-ads-list">
+                        <div style="text-align:center;color:#64748b;">جاري تحميل الإعلانات...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. الإعدادات -->
             <div id="tab-settings" class="section-tab">
                 <div class="card-box" style="max-width: 600px;">
                     <h3 style="margin-top:0;">⚙️ إعدادات المتجر</h3>
@@ -584,6 +630,183 @@
 
             showToast("🚀 تم إرسال الرد وإشعار التنبيه للعميل بنجاح!");
         };
+
+
+        // ==================== نظام الإعلانات ====================
+        let base64SelectedAdImage = "";
+
+        window.previewAdImage = function(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                document.getElementById('ad-file-name-display').innerText = file.name;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    base64SelectedAdImage = e.target.result;
+                    document.getElementById('ad-img-preview-tag').src = base64SelectedAdImage;
+                    document.getElementById('ad-image-preview-container').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        window.saveAd = async function() {
+            const id = document.getElementById('edit-ad-id').value;
+            const title = document.getElementById('ad-title').value.trim();
+            const message = document.getElementById('ad-message').value.trim();
+            const buttonText = document.getElementById('ad-button').value.trim();
+            const link = document.getElementById('ad-link').value.trim();
+            const active = document.getElementById('ad-active').checked;
+
+            if (!title || !message) {
+                alert("اكتب عنوان الإعلان ونص الإعلان أولاً.");
+                return;
+            }
+
+            const adData = {
+                title,
+                message,
+                buttonText,
+                link,
+                active,
+                updatedAt: new Date()
+            };
+
+            if (base64SelectedAdImage) {
+                adData.image = base64SelectedAdImage;
+            }
+
+            try {
+                if (id) {
+                    await updateDoc(doc(db, "ads", id), adData);
+                    showToast("✨ تم تعديل الإعلان بنجاح!");
+                } else {
+                    adData.createdAt = new Date();
+                    await addDoc(collection(db, "ads"), adData);
+                    showToast("📢 تمت إضافة الإعلان بنجاح!");
+                }
+
+                resetAdForm();
+            } catch (e) {
+                console.error(e);
+                alert("حدث خطأ أثناء حفظ الإعلان.");
+            }
+        };
+
+        window.editAd = function(id, title, message, buttonText, link, active, image) {
+            document.getElementById('edit-ad-id').value = id;
+            document.getElementById('ad-title').value = title || '';
+            document.getElementById('ad-message').value = message || '';
+            document.getElementById('ad-button').value = buttonText || '';
+            document.getElementById('ad-link').value = link || '';
+            document.getElementById('ad-active').checked = !!active;
+
+            if (image) {
+                base64SelectedAdImage = image;
+                document.getElementById('ad-img-preview-tag').src = image;
+                document.getElementById('ad-image-preview-container').style.display = 'block';
+                document.getElementById('ad-file-name-display').innerText = "الصورة الحالية مسجلة (اضغط لتغييرها)";
+            }
+
+            switchTab('ads', document.querySelectorAll('aside .nav-link')[4]);
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+
+        window.toggleAd = async function(id, currentState) {
+            try {
+                await updateDoc(doc(db, "ads", id), {
+                    active: !currentState,
+                    updatedAt: new Date()
+                });
+                showToast(currentState ? "⏸️ تم إيقاف الإعلان." : "▶️ تم تشغيل الإعلان.");
+            } catch (e) {
+                console.error(e);
+                alert("حدث خطأ أثناء تغيير حالة الإعلان.");
+            }
+        };
+
+        window.deleteAd = async function(id) {
+            if (!confirm("هل أنت متأكد من حذف هذا الإعلان؟")) return;
+
+            try {
+                await deleteDoc(doc(db, "ads", id));
+                showToast("🗑️ تم حذف الإعلان.");
+            } catch (e) {
+                console.error(e);
+                alert("حدث خطأ أثناء حذف الإعلان.");
+            }
+        };
+
+        window.resetAdForm = function() {
+            document.getElementById('edit-ad-id').value = '';
+            document.getElementById('ad-title').value = '';
+            document.getElementById('ad-message').value = '';
+            document.getElementById('ad-button').value = '';
+            document.getElementById('ad-link').value = '';
+            document.getElementById('ad-active').checked = true;
+            document.getElementById('ad-image-file').value = '';
+            document.getElementById('ad-image-preview-container').style.display = 'none';
+            document.getElementById('ad-file-name-display').innerText = "اضغط هنا لاختيار صورة الإعلان";
+            base64SelectedAdImage = "";
+        };
+
+        onSnapshot(collection(db, "ads"), (snapshot) => {
+            const list = document.getElementById('admin-ads-list');
+            list.innerHTML = "";
+
+            if (snapshot.empty) {
+                list.innerHTML = `<div style="text-align:center;color:#64748b;padding:20px;">لا توجد إعلانات حتى الآن.</div>`;
+                return;
+            }
+
+            const ads = [];
+            snapshot.forEach(docSnap => {
+                ads.push({id: docSnap.id, ...docSnap.data()});
+            });
+
+            ads.sort((a,b) => {
+                const aTime = a.createdAt?.seconds || 0;
+                const bTime = b.createdAt?.seconds || 0;
+                return bTime - aTime;
+            });
+
+            ads.forEach(ad => {
+                const safeTitle = String(ad.title || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+                const safeMessage = String(ad.message || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+                const safeButton = String(ad.buttonText || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+                const safeLink = String(ad.link || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+                const safeImage = String(ad.image || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+                list.innerHTML += `
+                    <div style="border:1px solid var(--border-color);border-radius:12px;padding:15px;margin-bottom:12px;background:var(--bg-color);">
+                        <div style="display:flex;gap:15px;align-items:center;">
+                            ${ad.image ? `<img src="${ad.image}" style="width:90px;height:65px;object-fit:cover;border-radius:8px;">` : ''}
+                            <div style="flex:1;">
+                                <h4 style="margin:0 0 5px;color:var(--primary);">${ad.title || ''}</h4>
+                                <p style="margin:0;font-size:13px;">${ad.message || ''}</p>
+                                <small style="color:${ad.active ? '#10b981' : '#ef4444'};font-weight:bold;">
+                                    ${ad.active ? '● الإعلان ظاهر' : '● الإعلان متوقف'}
+                                </small>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+                            <button class="btn" style="padding:6px 12px;font-size:11px;"
+                                onclick="editAd('${ad.id}','${safeTitle}','${safeMessage}','${safeButton}','${safeLink}',${!!ad.active},'${safeImage}')">
+                                ✏️ تعديل
+                            </button>
+                            <button class="btn" style="padding:6px 12px;font-size:11px;background:${ad.active ? '#64748b' : '#10b981'};"
+                                onclick="toggleAd('${ad.id}',${!!ad.active})">
+                                ${ad.active ? '⏸️ إيقاف' : '▶️ تشغيل'}
+                            </button>
+                            <button class="btn btn-danger" style="padding:6px 12px;font-size:11px;"
+                                onclick="deleteAd('${ad.id}')">
+                                🗑️ حذف
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        });
 
         const settingsRef = doc(db, "settings", "general");
         getDoc(settingsRef).then(docSnap => {
