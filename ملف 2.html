@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الآدمن الشاملة - إدارة المتجر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --bg-color: #f1f5f9; --card-bg: #ffffff; --text-color: #0f172a; --primary: #2563eb; --border-color: #e2e8f0; }
+        body.dark-mode { --bg-color: #0f172a; --card-bg: #1e293b; --text-color: #f8fafc; --border-color: #334155; }
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: background 0.2s, color 0.2s; }
+        body { margin: 0; background: var(--bg-color); color: var(--text-color); display: flex; height: 100vh; overflow: hidden; }
+
+        aside { width: 280px; background: var(--card-bg); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px; z-index: 10; overflow-y: auto; }
+        .logo { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .nav-link { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 12px; color: var(--text-color); position: relative; font-size: 13px; }
+        .nav-link.active, .nav-link:hover { background: var(--primary); color: white; }
+        .nav-badge { position: absolute; left: 15px; background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 50px; font-weight: bold; display: none; }
+
+        main { flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        header { background: var(--card-bg); padding: 15px 30px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .content-body { padding: 25px; flex-grow: 1; }
+        .section-tab { display: none; }
+        .section-tab.active { display: block; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .stat-card h4 { margin: 0 0 10px 0; color: #64748b; font-size: 13px; }
+        .stat-card .val { font-size: 22px; font-weight: 700; color: var(--primary); }
+
+        .card-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: right; }
+        th, td { padding: 10px; border-bottom: 1px solid var(--border-color); }
+        th { color: #64748b; font-weight: 600; }
+
+        input, select, textarea { width: 100%; padding: 10px; margin: 6px 0; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); outline: none; font-size: 13px; }
+        .btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn:hover { opacity: 0.9; }
+        .btn-danger { background: #ef4444; }
+
+        .feature-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-color); padding: 8px 12px; margin-bottom: 8px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 13px; }
+        .feature-row select { width: 130px; margin: 0; padding: 6px; }
+
+        .file-upload-wrapper { border: 2px dashed var(--primary); border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; background: var(--bg-color); position: relative; margin: 6px 0; }
+        .file-upload-wrapper input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+        .chat-container-grid { display: grid; grid-template-columns: 260px 1fr; gap: 20px; height: 520px; }
+        .chat-customer-item { padding: 10px 12px; border-radius: 10px; cursor: pointer; margin-bottom: 6px; font-size: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; }
+        .chat-customer-item:hover { background: var(--bg-color); }
+        .chat-customer-item.active-client { background: var(--primary) !important; color: white !important; border-color: var(--primary); }
+        .pending-dot { width: 8px; height: 8px; background-color: #facc15; border-radius: 50%; display: inline-block; }
+
+        .chat-msg-bubble { max-width: 75%; padding: 10px 14px; border-radius: 12px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+        .msg-admin { background: var(--primary); color: white; margin-left: auto; border-bottom-left-radius: 2px; }
+        .msg-customer { background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); margin-right: auto; border-bottom-right-radius: 2px; }
+
+        #toast-container { position: fixed; bottom: 25px; right: 25px; z-index: 3000; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: #10b981; color: white; padding: 12px 20px; border-radius: 10px; font-weight: bold; font-size: 13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="logo"><i class="fa-solid fa-gauge-high"></i> لوحة الإدارة الخارقة</div>
+        <div class="nav-link active" onclick="switchTab('dashboard', this)"><i class="fa-solid fa-chart-pie"></i> لوحة القياس والرسوم</div>
+        <div class="nav-link" onclick="switchTab('features60', this)"><i class="fa-solid fa-sliders"></i> التحكم في الـ 60 ميزة <span style="background:#22c55e; color:white; font-size:9px; padding:2px 6px; border-radius:4px;">مفعّل</span></div>
+        <div class="nav-link" onclick="switchTab('products', this)"><i class="fa-solid fa-boxes-stacked"></i> المنتجات والمخزون</div>
+        <div class="nav-link" onclick="switchTab('customers', this)"><i class="fa-solid fa-users-gear"></i> إدارة العملاء والحظر <span id="cust-nav-badge" class="nav-badge">0</span></div>
+        <div class="nav-link" onclick="switchTab('reviews', this)"><i class="fa-solid fa-star-half-stroke"></i> مراجعة تقييمات العملاء</div>
+        <div class="nav-link" onclick="switchTab('orders', this)"><i class="fa-solid fa-receipt"></i> الطلبات والفواتير <span id="orders-nav-badge" class="nav-badge">0</span></div>
+        <div class="nav-link" onclick="switchTab('marketing', this)"><i class="fa-solid fa-bullhorn"></i> الخصومات والإذاعة</div>
+        <div class="nav-link" onclick="switchTab('chats', this)"><i class="fa-solid fa-headset"></i> خدمة العملاء الحية <span id="chats-nav-badge" class="nav-badge">0</span></div>
+        <div class="nav-link" onclick="switchTab('settings', this)"><i class="fa-solid fa-gears"></i> إعدادات وحالة المتجر</div>
+    </aside>
+
+    <main>
+        <header>
+            <h3 id="page-title" style="margin:0;">📊 لوحة القياس والإحصائيات العامة</h3>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" onclick="toggleDarkMode()" style="background:#475569;"><i class="fa-solid fa-moon"></i></button>
+                <button class="btn btn-danger" onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-right-from-bracket"></i> زيارة المتجر</button>
+            </div>
+        </header>
+
+        <div class="content-body">
+            
+            <!-- لوحة القياس -->
+            <div id="tab-dashboard" class="section-tab active">
+                <div class="stats-grid">
+                    <div class="stat-card"><h4>إجمالي المبيعات</h4><div class="val" id="stat-total-sales">0 ج.م</div></div>
+                    <div class="stat-card"><h4>إجمالي الطلبات</h4><div class="val" id="stat-total-orders">0 طلب</div></div>
+                    <div class="stat-card"><h4>المنتجات المتاحة</h4><div class="val" id="stat-total-products">0 منتج</div></div>
+                    <div class="stat-card"><h4>العملاء المسجلين</h4><div class="val" id="stat-total-customers">0 عميل</div></div>
+                </div>
+                <div class="card-box">
+                    <h3 style="margin-top:0;">📈 نظرة عامة على أداء المبيعات</h3>
+                    <div style="height: 280px;"><canvas id="salesChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- إدارة الـ 60 ميزة (إظهار/إخفاء) -->
+            <div id="tab-features60" class="section-tab">
+                <div class="card-box">
+                    <h3 style="margin-top:0;"><i class="fa-solid fa-toggle-on"></i> نظام التحكم الكامل في الـ 60 ميزة بالمتجر</h3>
+                    <p style="font-size: 13px; color: #64748b;">قم بإظهار أو إخفاء أي ميزة أو عنصر في المتجر بضغطة زر واحدة لتحديث الواجهة فوراً:</p>
+                    <div id="features-admin-list" style="max-height: 420px; overflow-y: auto; margin-top: 15px; padding-left: 5px;">
+                        <!-- يتم توليد الـ 60 ميزة هنا تلقائياً -->
+                    </div>
+                    <button class="btn" onclick="saveAll60Features()" style="background: #10b981; margin-top: 15px; width: 100%;"><i class="fa-solid fa-floppy-disk"></i> حفظ إعدادات الـ 60 ميزة فوراً</button>
+                </div>
+            </div>
+
+            <!-- المنتجات والمخزون -->
+            <div id="tab-products" class="section-tab">
+                <div class="card-box">
+                    <h3 style="margin-top:0;"><i class="fa-solid fa-plus-circle"></i> إضافة أو تعديل منتج</h3>
+                    <input type="hidden" id="edit-product-id">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <input type="text" id="p-name" placeholder="اسم المنتج">
+                        <input type="number" id="p-price" placeholder="السعر (ج.م)">
+                        <input type="text" id="p-category" placeholder="القسم (إلكترونيات، ملابس...)">
+                        <input type="number" id="p-stock" placeholder="الكمية المتاحة بالمخزن">
+                    </div>
+                    <div style="margin-top: 5px;">
+                        <label style="font-size: 13px; font-weight: 600;">صورة المنتج من جهازك:</label>
+                        <div class="file-upload-wrapper">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 20px; color: var(--primary);"></i>
+                            <div id="file-name-display" style="font-size: 11px; color: #64748b;">اختر صورة المنتج</div>
+                            <input type="file" id="p-image-file" accept="image/*" onchange="previewUploadedImage(this)">
+                        </div>
+                        <div id="image-preview-container" style="text-align: center; display: none; margin-top: 8px;">
+                            <img id="img-preview-tag" src="" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color);">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="saveProduct()" style="margin-top: 12px; width: 100%;"><i class="fa-solid fa-check"></i> حفظ المنتج في المتجر</button>
+                </div>
+                <div class="card-box">
+                    <h3 style="margin-top:0;">📦 قائمة المنتجات المسجلة</h3>
+                    <table>
+                        <thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>الإجراءات</th></tr></thead>
+                        <tbody id="admin-products-table"><tr><td colspan="5" style="text-align:center;">جاري التحميل...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- العملاء والحظر -->
+            <div id="tab-customers" class="section-tab">
+                <div class="card-box">
+                    <h3 style="margin-top:0;"><i class="fa-solid fa-users"></i> قائمة العملاء المسجلين وصلاحيات الشراء</h3>
+                    <table>
+                        <thead><tr><th>رقم الهاتف</th><th>تاريخ التسجيل</th><th>حالة الشراء</th><th>تحكم الآدمن</th></tr></thead>
+                        <tbody id="admin-customers-table"><tr><td colspan="4" style="text-align:center;">جاري التحميل...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- تقييمات العملاء -->
+            <div id="tab-reviews" class="section-tab">
+                <div class="card-box">
+                    <h3 style="margin-top:0;"><i class="fa-solid fa-star"></i> تقييمات وآراء العملاء (بانتظار الموافقة)</h3>
+                    <table>
+                        <thead><tr><th>العميل</th><th>رقم الهاتف</th><th>التقييم</th><th>التعليق/الدردشة</th><th>الإجراء</th></tr></thead>
+                        <tbody id="admin-reviews-table"><tr><td colspan="5" style="text-align:center;">لا توجد تقييمات جديدة.</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- الطلبات -->
+            <div id="tab-orders" class="section-tab">
+                <div class="card-box">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin:0;">📋 متابعة الطلبات وفواتير الشحن</h3>
+                        <button class="btn" onclick="exportOrdersCSV()" style="background:#10b981;"><i class="fa-solid fa-file-excel"></i> تصدير الطلبات لـ CSV</button>
+                    </div>
+                    <table>
+                        <thead><tr><th>العميل ورقم الهاتف</th><th>العنوان والمدينة</th><th>المنتجات وملاحظات</th><th>الإجمالي</th><th>الحالة</th><th>الإجراءات والفاتورة</th></tr></thead>
+                        <tbody id="admin-orders-table"><tr><td colspan="6" style="text-align:center;">لا توجد طلبات.</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- الخصومات والإذاعة -->
+            <div id="tab-marketing" class="section-tab">
+                <div class="card-box" style="margin-bottom: 20px;">
+                    <h3 style="margin-top:0; color:var(--primary);"><i class="fa-solid fa-tags"></i> إنشاء كود خصم جديد</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <input type="text" id="coupon-code" placeholder="كود الخصم (مثال: EGYPT20)">
+                        <input type="number" id="coupon-discount" placeholder="نسبة الخصم % (مثال: 20)">
+                    </div>
+                    <button class="btn" onclick="saveCoupon()" style="margin-top: 10px; width: 100%;">حفظ وإصدار الكود 🏷️</button>
+                </div>
+
+                <div class="card-box">
+                    <h3 style="margin-top:0; color:var(--primary);"><i class="fa-solid fa-bullhorn"></i> نظام الإذاعة العامة (إرسال إشعار لكل العملاء)</h3>
+                    <textarea id="broadcast-msg-text" placeholder="اكتب نص الإعلان أو الإشعار لجميع العملاء..." rows="3"></textarea>
+                    <button class="btn" onclick="sendBroadcast()" style="margin-top: 10px; width: 100%;">إرسال الإشعار الفوري للجميع 🚀</button>
+                </div>
+            </div>
+
+            <!-- خدمة العملاء الحية -->
+            <div id="tab-chats" class="section-tab">
+                <div class="card-box chat-container-grid">
+                    <div style="border-left: 1px solid var(--border-color); overflow-y: auto; padding-left: 10px;">
+                        <h4 style="margin-top:0; color:var(--primary);">👥 محادثات العملاء</h4>
+                        <div id="chat-customers-list"><div style="font-size:12px; color:#64748b; text-align:center; padding:15px;">جاري التحميل...</div></div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; height: 100%;">
+                        <div id="active-chat-header" style="font-weight:bold; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom:10px; font-size:14px; color:var(--primary);">
+                            <i class="fa-solid fa-comment-dots"></i> اختر عميلاً لعرض رسائله
+                        </div>
+                        <div id="admin-chat-messages" style="flex-grow:1; overflow-y:auto; background:var(--bg-color); padding:12px; border-radius:10px; margin-bottom:10px; border:1px solid var(--border-color);">
+                            <div style="text-align:center; color:#64748b; margin-top:130px; font-size:13px;">اضغط على أي عميل من القائمة الجانبية.</div>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <input type="text" id="admin-chat-input" placeholder="اكتب ردك..." style="margin:0;" onkeypress="if(event.key==='Enter') sendAdminMessage()">
+                            <button class="btn" onclick="sendAdminMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- إعدادات المتجر -->
+            <div id="tab-settings" class="section-tab">
+                <div class="card-box" style="max-width: 600px;">
+                    <h3 style="margin-top:0;">⚙️ إعدادات المتجر الشاملة</h3>
+                    <label style="font-weight:bold; color:var(--primary); display:block; margin-top:10px;">حالة المتجر:</label>
+                    <select id="setting-store-status">
+                        <option value="open">🟢 المتجر مفتوح ويعمل بشكل طبيعي</option>
+                        <option value="closed">🔴 إغلاق المتجر (عرض صفحة الصيانة للزوار)</option>
+                    </select>
+                    <label style="margin-top:12px; display:block;">اسم المتجر:</label>
+                    <input type="text" id="setting-store-name" placeholder="متجر النور">
+                    <label>شريط الإعلانات المتحرك:</label>
+                    <input type="text" id="setting-announcement" placeholder="خصومات...">
+                    <label>اللون الرئيسي للمتجر:</label>
+                    <input type="color" id="setting-primary-color" value="#2563eb" style="height:40px; padding:2px;">
+                    <button class="btn" onclick="saveStoreSettings()" style="margin-top: 15px; width:100%;">💾 حفظ وتطبيق التغييرات فوراً</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="toast-container"></div>
+
+    <script>
+        let salesChartInstance = null;
+        function playNotificationSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.3);
+            } catch(e) {}
+        }
+        function initChart(salesData) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            if(salesChartInstance) salesChartInstance.destroy();
+            salesChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+                    datasets: [{ label: 'المبيعات (ج.م)', data: salesData, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.1)', fill: true, tension: 0.3 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, setDoc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+       const firebaseConfig = {
+  apiKey: "AIzaSyDsvNr5yJs4jMzAVwqc7g_Kti-_r3ntQa0",
+  authDomain: "alnoorstore.firebaseapp.com",
+  projectId: "alnoorstore",
+  storageBucket: "alnoorstore.firebasestorage.app",
+  messagingSenderId: "817663342597",
+  appId: "1:817663342597:web:affe2ea107b1389e9f446c",
+  measurementId: "G-YSVP69L9N6"
+};
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let activeCustomerId = null;
+        let lastOrdersCount = null;
+        let totalChatsCount = null;
+        let globalChatsData = {};
+        let base64SelectedImage = "";
+        let allOrdersList = [];
+
+        // قائمة الـ 60 ميزة بالكامل للتحكم بها
+        const featuresData = [
+            { id: "feat_1", title: "جدول مقارنة المميزات الرئيسي" },
+            { id: "feat_2", title: "شريط الإعلانات المتحرك العلوي" },
+            { id: "feat_3", title: "زر الوضع الليلي والنهاري (Dark Mode)" },
+            { id: "feat_4", title: "زر سلة المشتريات السريعة" },
+            { id: "feat_5", title: "زر الإشعارات المباشرة للعميل" },
+            { id: "feat_6", title: "زر طلباتي السابقة للعميل" },
+            { id: "feat_7", title: "شات خدمة العملاء الفوري" },
+            { id: "feat_8", title: "تحدي النقرات للحصول على خصم" },
+            { id: "feat_9", title: "شريط البحث السريع عن المنتجات" },
+            { id: "feat_10", title: "نافذة إجبارية لإدخال رقم الهاتف عند الدخول" },
+            { id: "feat_11", title: "نظام تقييم المنتجات بالنجوم" },
+            { id: "feat_12", title: "إمكانية كتابة تعليقات وآراء العملاء" },
+            { id: "feat_13", title: "مراجعة تقييمات العملاء قبل نشرها" },
+            { id: "feat_14", title: "نظام تطبيق أكواد الكوبونات والخصومات" },
+            { id: "feat_15", title: "شاشة الصيانة وإغلاق المتجر المؤقت" },
+            { id: "feat_16", title: "زر التواصل المباشر عبر واتساب" },
+            { id: "feat_17", title: "زر التواصل عبر البريد الإلكتروني" },
+            { id: "feat_18", title: "زر مشاركة المنتجات على وسائل التواصل" },
+            { id: "feat_19", title: "عرض السعر الأصلي والسعر بعد الخصم" },
+            { id: "feat_20", title: "نظام حظر أرقام العملاء المخالفين" },
+            { id: "feat_21", title: "قسم عرض المنتجات الأكثر مبيعاً" },
+            { id: "feat_22", title: "قسم العروض اليومية المؤقتة (Flash Sale)" },
+            { id: "feat_23", title: "خاصية التكبير التلقائي لصورة المنتج" },
+            { id: "feat_24", title: "عرض حالة توفر المنتج (متوفر / نفذت)" },
+            { id: "feat_25", title: "نظام تتبع حالة الطلب للعميل" },
+            { id: "feat_26", title: "تنبيهات صوتية فورية للآدمن بالطلبات" },
+            { id: "feat_27", title: "زر تفريغ السلة بالكامل" },
+            { id: "feat_28", title: "تعديل كمية المنتجات داخل السلة (+ و -)" },
+            { id: "feat_29", title: "حفظ المنتجات في المفضلة (Wishlist)" },
+            { id: "feat_30", title: "إرسال إشعارات مخصصة لعميل معين" },
+            { id: "feat_31", title: "تغيير اسم المتجر من لوحة التحكم" },
+            { id: "feat_32", title: "تغيير لون المتجر الأساسي (Primary)" },
+            { id: "feat_33", title: "تعديل أو حذف المنتجات للآدمن" },
+            { id: "feat_34", title: "إضافة منتج جديد مع رفع الصورة" },
+            { id: "feat_35", title: "عرض إجمالي أرباح المتجر بالآدمين" },
+            { id: "feat_36", title: "عرض إجمالي عدد الطلبات الكلي" },
+            { id: "feat_37", title: "عرض إجمالي عدد العملاء المسجلين" },
+            { id: "feat_38", title: "تصفية المنتجات حسب التصنيفات والأقسام" },
+            { id: "feat_39", title: "تثبيت الهيدر أثناء التمرير" },
+            { id: "feat_40", title: "زر نسخ رابط المنتج للمشاركة" },
+            { id: "feat_41", title: "عرض سياسة الاسترجاع والاستبدال" },
+            { id: "feat_42", title: "قسم من نحن (نبذة عن المتجر)" },
+            { id: "feat_43", title: "عداد زوار المتجر الحي (Live)" },
+            { id: "feat_44", title: "زر العودة لأعلى الصفحة (Scroll Up)" },
+            { id: "feat_45", title: "إرفاق ملاحظات مع الطلب" },
+            { id: "feat_46", title: "تأكيد الطلب برقم هاتف العميل المسجل" },
+            { id: "feat_47", title: "نظام تحديد مدينة الشحن والتوصيل" },
+            { id: "feat_48", title: "حساب تكلفة الشحن تلقائياً" },
+            { id: "feat_49", title: "إلغاء الطلب من قبل العميل (إذا جديد)" },
+            { id: "feat_50", title: "عرض شعار المتجر (Logo)" },
+            { id: "feat_51", title: "تفعيل الدفع عند الاستلام" },
+            { id: "feat_52", title: "تفعيل بوابات الدفع الإلكتروني" },
+            { id: "feat_53", title: "عرض أسئلة شائعة (FAQ) للعملاء" },
+            { id: "feat_54", title: "التحكم في أيقونة واتساب المعلقة" },
+            { id: "feat_55", title: "رسالة ترحيبية تلقائية للعميل الجديد" },
+            { id: "feat_56", title: "نظام النقاط ومكافآت الولاء" },
+            { id: "feat_57", title: "تصدير تقارير المبيعات لـ Excel" },
+            { id: "feat_58", title: "عرض خريطة فرع المتجر أو العنوان" },
+            { id: "feat_59", title: "تفعيل وضع الكتالوج فقط (بدون طلبات)" },
+            { id: "feat_60", title: "الحماية المتقدمة ضد السبام والبوتات" }
+        ];
+
+        function renderAdminFeaturesCheckboxes() {
+            const container = document.getElementById('features-admin-list');
+            if(!container) return;
+            let html = "";
+            featuresData.forEach(f => {
+                html += `
+                    <div class="feature-row">
+                        <span><strong>${f.title}</strong> <small style="color:#64748b;">(${f.id})</small></span>
+                        <select id="sel-${f.id}">
+                            <option value="show">🟢 إظهار</option>
+                            <option value="hide">🔴 إخفاء</option>
+                        </select>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            loadSavedFeaturesStatus();
+        }
+
+        async function loadSavedFeaturesStatus() {
+            const docSnap = await getDoc(doc(db, "settings", "features_control"));
+            if(docSnap.exists()) {
+                const data = docSnap.data();
+                featuresData.forEach(f => {
+                    const selectEl = document.getElementById(`sel-${f.id}`);
+                    if(selectEl && data[f.id]) selectEl.value = data[f.id];
+                });
+            }
+        }
+
+        window.saveAll60Features = async function() {
+            let settingsObj = {};
+            featuresData.forEach(f => {
+                const selectEl = document.getElementById(`sel-${f.id}`);
+                if(selectEl) settingsObj[f.id] = selectEl.value;
+            });
+            await setDoc(doc(db, "settings", "features_control"), settingsObj);
+            showToast("✨ تم حفظ وتطبيق إعدادات الـ 60 ميزة بنجاح!");
+        };
+
+        window.showToast = function(text, color = "#10b981") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.background = color;
+            toast.innerText = text;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 4000);
+        };
+
+        window.toggleDarkMode = function() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        };
+        if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
+
+        window.switchTab = function(tabId, element) {
+            document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            element.classList.add('active');
+        };
+
+        window.previewUploadedImage = function(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                document.getElementById('file-name-display').innerText = file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 600;
+                        const MAX_HEIGHT = 600;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                        } else {
+                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        base64SelectedImage = canvas.toDataURL('image/jpeg', 0.7);
+                        document.getElementById('img-preview-tag').src = base64SelectedImage;
+                        document.getElementById('image-preview-container').style.display = 'block';
+                    };
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // إدارة وحظر العملاء
+        onSnapshot(collection(db, "customers"), (snapshot) => {
+            const tbody = document.getElementById('admin-customers-table');
+            tbody.innerHTML = "";
+            let count = snapshot.size;
+            document.getElementById('stat-total-customers').innerText = count + " عميل";
+            
+            if(count === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">لا توجد عملاء مسجلين بعد.</td></tr>`;
+                return;
+            }
+
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                const phone = docSnap.id;
+                const isBanned = data.banned === true;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${phone}</strong></td>
+                        <td>${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString('ar-EG') : 'حديث'}</td>
+                        <td><span style="color:${isBanned ? '#ef4444' : '#10b981'}; font-weight:bold;">${isBanned ? 'محظور (ممنوع من الشراء)' : 'نشط (يستطيع الشراء)'}</span></td>
+                        <td>
+                            <button class="btn ${isBanned ? '' : 'btn-danger'}" style="padding:5px 12px; font-size:11px;" onclick="toggleCustomerBan('${phone}', ${!isBanned})">
+                                ${isBanned ? 'إلغاء الحظر ✅' : 'حظر العميل 🚫'}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+
+        window.toggleCustomerBan = async function(phone, banStatus) {
+            await setDoc(doc(db, "customers", phone), { banned: banStatus }, { merge: true });
+            showToast(banStatus ? `🚫 تم حظر العميل ${phone} بنجاح.` : `✅ تم فك الحظر عن العميل ${phone}.`, banStatus ? "#ef4444" : "#10b981");
+        };
+
+        // مراجعة تقييمات العملاء
+        onSnapshot(collection(db, "reviews"), (snapshot) => {
+            const tbody = document.getElementById('admin-reviews-table');
+            tbody.innerHTML = "";
+            let pendingReviewsCount = 0;
+
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                if(data.approved !== true) {
+                    pendingReviewsCount++;
+                    const id = docSnap.id;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${data.customerName || 'عميل'}</td>
+                            <td>${data.customerPhone}</td>
+                            <td>⭐ ${data.stars} / 5</td>
+                            <td>${data.comment}</td>
+                            <td>
+                                <button class="btn" style="padding:4px 8px; font-size:10px;" onclick="approveReview('${id}')">موافقة ونشر ✅</button>
+                                <button class="btn btn-danger" style="padding:4px 8px; font-size:10px;" onclick="deleteReview('${id}')">حذف 🗑️</button>
+                            </td>
+                        </tr>
+                    `;
+                }
+            });
+            if(pendingReviewsCount === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">لا توجد تقييمات بانتظار الموافقة.</td></tr>`;
+            }
+        });
+
+        window.approveReview = async function(id) {
+            await updateDoc(doc(db, "reviews", id), { approved: true });
+            showToast("✅ تم اعتماد ونشر التقييم في المتجر!");
+        };
+
+        window.deleteReview = async function(id) {
+            if(confirm("هل أنت متأكد من حذف هذا التقييم نهائياً؟")) {
+                await deleteDoc(doc(db, "reviews", id));
+                showToast("🗑️ تم حذف التقييم بنجاح.");
+            }
+        };
+
+        // متابعة الطلبات
+        onSnapshot(collection(db, "orders"), (snapshot) => {
+            let totalSales = 0;
+            let totalOrders = snapshot.size;
+            let newOrdersCount = 0;
+            allOrdersList = [];
+            let chartValues = [1200, 2100, 1800, 2400, 3100, 4200, 0];
+
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                allOrdersList.push({ id: docSnap.id, ...data });
+                totalSales += (data.totalPrice || 0);
+                if(data.status === 'جديد') newOrdersCount++;
+            });
+            chartValues[6] = totalSales;
+            initChart(chartValues);
+
+            if (lastOrdersCount !== null && totalOrders > lastOrdersCount) {
+                playNotificationSound();
+                showToast("🔔 تنبيه! طلب جديد وصل للمتجر الآن!", "#2563eb");
+            }
+            lastOrdersCount = totalOrders;
+            const badge = document.getElementById('orders-nav-badge');
+            if(newOrdersCount > 0) { badge.innerText = newOrdersCount; badge.style.display = 'inline-block'; } else { badge.style.display = 'none'; }
+            document.getElementById('stat-total-sales').innerText = totalSales + " ج.م";
+            document.getElementById('stat-total-orders').innerText = totalOrders + " طلب";
+
+            const tbody = document.getElementById('admin-orders-table');
+            tbody.innerHTML = "";
+            if(totalOrders === 0) { tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">لا توجد طلبات.</td></tr>`; return; }
+
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                const id = docSnap.id;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${data.customerName}</strong><br><small>${data.customerPhone}</small></td>
+                        <td>${data.customerAddress} <br><small style="color:var(--primary);">${data.city || ''}</small></td>
+                        <td>${data.items.join(', ')} ${data.notes ? '<br><small>ملاحظة: '+data.notes+'</small>' : ''}</td>
+                        <td><strong>${data.totalPrice} ج.م</strong></td>
+                        <td><span style="color:#2563eb; font-weight:bold;">${data.status}</span></td>
+                        <td>
+                            <div style="display:flex; gap:5px; align-items:center;">
+                                <select onchange="updateOrderStatus('${id}', this.value, '${data.customerPhone}')" style="margin:0; padding:6px;">
+                                    <option value="جديد" ${data.status==='جديد'?'selected':''}>جديد</option>
+                                    <option value="قيد التجهيز" ${data.status==='قيد التجهيز'?'selected':''}>قيد التجهيز</option>
+                                    <option value="جاري الشحن" ${data.status==='جاري الشحن'?'selected':''}>جاري الشحن</option>
+                                    <option value="تم التوصيل" ${data.status==='تم التوصيل'?'selected':''}>تم التوصيل</option>
+                                    <option value="ملغي" ${data.status==='ملغي'?'selected':''}>ملغي</option>
+                                </select>
+                                <button class="btn" onclick="printInvoice('${id}')" style="padding:6px 10px; font-size:11px;" title="طباعة الفاتورة"><i class="fa-solid fa-print"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+
+        window.updateOrderStatus = async function(orderId, status, customerPhone) {
+            await updateDoc(doc(db, "orders", orderId), { status });
+            await addDoc(collection(db, "notifications"), { customerPhone: customerPhone, message: `📦 تم تحديث حالة طلبك لتصبح: "${status}"`, createdAt: new Date() });
+            showToast("📦 تم تحديث الحالة وإرسال إشعار للعميل.");
+        };
+
+        window.printInvoice = function(orderId) {
+            const order = allOrdersList.find(o => o.id === orderId);
+            if(!order) return;
+            const printWin = window.open('', '', 'width=700,height=600');
+            printWin.document.write(`
+                <html dir="rtl"><head><title>فاتورة شحن الطلب</title><style>body{font-family:'Cairo',sans-serif; padding:20px;} h2{color:#2563eb;}</style></head>
+                <body><h2>فاتورة متجر النور الإلكتروني</h2><hr>
+                <p><strong>اسم العميل:</strong> ${order.customerName}</p>
+                <p><strong>رقم الهاتف:</strong> ${order.customerPhone}</p>
+                <p><strong>عنوان الشحن:</strong> ${order.customerAddress} (${order.city || ''})</p>
+                <p><strong>المنتجات المطلوبة:</strong> ${order.items.join(', ')}</p>
+                <p><strong>إجمالي المبلغ:</strong> ${order.totalPrice} ج.م</p>
+                <p><strong>طريقة الدفع:</strong> ${order.paymentMethod || 'الدفع عند الاستلام'}</p>
+                <p><strong>حالة الطلب:</strong> ${order.status}</p><hr>
+                <p style="text-align:center; font-size:12px; color:#666;">شكراً لتسوقكم معنا!</p></body></html>
+            `);
+            printWin.document.close();
+            printWin.print();
+        };
+
+        window.exportOrdersCSV = function() {
+            let csvContent = "\uFEFFاسم العميل,رقم الهاتف,العنوان,المنتجات,الإجمالي,الحالة\r\n";
+            allOrdersList.forEach(o => { 
+                csvContent += `"${o.customerName || ''}","${o.customerPhone || ''}","${o.customerAddress || ''}","${(o.items || []).join(' - ')}",${o.totalPrice || 0},"${o.status || ''}"\r\n`; 
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "orders_report.csv");
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            showToast("📊 تم تصدير الطلبات بنجاح!");
+        };
+
+        window.saveCoupon = async function() {
+            const code = document.getElementById('coupon-code').value.trim().toUpperCase();
+            const discount = parseFloat(document.getElementById('coupon-discount').value);
+            if(!code || !discount) return alert("أدخل بيانات الكود والنسبة!");
+            await setDoc(doc(db, "coupons", code), { discount, active: true });
+            showToast(`🏷️ تم حفظ كود الخصم "${code}" بنجاح!`);
+            document.getElementById('coupon-code').value = '';
+            document.getElementById('coupon-discount').value = '';
+        };
+
+        window.sendBroadcast = async function() {
+            const text = document.getElementById('broadcast-msg-text').value.trim();
+            if(!text) return alert("اكتب رسالة الإذاعة أولاً!");
+            const querySnapshot = await getDocs(collection(db, "orders"));
+            let phonesSet = new Set();
+            querySnapshot.forEach(docSnap => { if(docSnap.data().customerPhone) phonesSet.add(docSnap.data().customerPhone); });
+            for(let phone of phonesSet) {
+                await addDoc(collection(db, "notifications"), { customerPhone: phone, message: `📢 إعلان هام: ${text}`, createdAt: new Date() });
+            }
+            showToast("🚀 تم إرسال الإذاعة لكل العملاء بنجاح!");
+            document.getElementById('broadcast-msg-text').value = '';
+        };
+
+        // إدارة المنتجات
+        onSnapshot(collection(db, "products"), (snapshot) => {
+            let totalProducts = snapshot.size;
+            document.getElementById('stat-total-products').innerText = totalProducts + " منتج";
+            const tbody = document.getElementById('admin-products-table');
+            tbody.innerHTML = "";
+            snapshot.forEach(docSnap => {
+                const p = docSnap.data();
+                const id = docSnap.id;
+                const stock = p.stock ?? 10;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><div style="display:flex; align-items:center; gap:8px;"><img src="${p.image || ''}" style="width:30px; height:30px; border-radius:4px; object-fit:cover;"> ${p.name}</div></td>
+                        <td>${p.category || 'عام'}</td>
+                        <td>${p.price} ج.م ${p.oldPrice ? '<small style="text-decoration:line-through; color:#94a3b8;">'+p.oldPrice+'</small>' : ''}</td>
+                        <td><strong>${stock}</strong></td>
+                        <td>
+                            <button class="btn" style="padding:4px 8px; font-size:10px;" onclick="editProduct('${id}', '${p.name}', ${p.price}, '${p.category || 'عام'}', ${stock}, '${p.image || ''}')">تعديل</button>
+                            <button class="btn btn-danger" style="padding:4px 8px; font-size:10px;" onclick="deleteProduct('${id}')">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+
+        window.saveProduct = async function() {
+            const id = document.getElementById('edit-product-id').value;
+            const name = document.getElementById('p-name').value.trim();
+            const price = parseFloat(document.getElementById('p-price').value);
+            const category = document.getElementById('p-category').value.trim();
+            const stock = parseInt(document.getElementById('p-stock').value) || 10;
+            if(!name || !price) return alert("أدخل اسم المنتج والسعر!");
+            const productData = { name, price, oldPrice: price * 1.25, category, stock };
+            if (base64SelectedImage) productData.image = base64SelectedImage;
+
+            if(id) {
+                await updateDoc(doc(db, "products", id), productData);
+                showToast("✨ تم تحديث المنتج بنجاح!");
+            } else {
+                if (!base64SelectedImage) return alert("اختر صورة المنتج من جهازك أولاً!");
+                await addDoc(collection(db, "products"), productData);
+                showToast("🚀 تمت إضافة المنتج بنجاح!");
+            }
+            document.getElementById('edit-product-id').value = '';
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-price').value = '';
+            document.getElementById('p-category').value = '';
+            document.getElementById('p-stock').value = '';
+            document.getElementById('p-image-file').value = '';
+            document.getElementById('image-preview-container').style.display = 'none';
+            base64SelectedImage = "";
+        };
+
+        window.editProduct = function(id, name, price, category, stock, image) {
+            document.getElementById('edit-product-id').value = id;
+            document.getElementById('p-name').value = name;
+            document.getElementById('p-price').value = price;
+            document.getElementById('p-category').value = category;
+            document.getElementById('p-stock').value = stock;
+            if(image) { base64SelectedImage = image; document.getElementById('img-preview-tag').src = image; document.getElementById('image-preview-container').style.display = 'block'; }
+            switchTab('products', document.querySelectorAll('aside .nav-link')[2]);
+        };
+
+        window.deleteProduct = async function(id) {
+            if(confirm("هل أنت متأكد من الحذف؟")) { await deleteDoc(doc(db, "products", id)); showToast("🗑️ تم حذف المنتج."); }
+        };
+
+        // خدمة العملاء
+        onSnapshot(collection(db, "chats"), (snapshot) => {
+            globalChatsData = {};
+            let newChatsCount = 0;
+            let currentTotalMessages = snapshot.size;
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                if(!globalChatsData[data.customerId]) globalChatsData[data.customerId] = [];
+                globalChatsData[data.customerId].push(data);
+                if(data.sender === 'customer') newChatsCount++;
+            });
+            if (totalChatsCount !== null && currentTotalMessages > totalChatsCount) {
+                playNotificationSound();
+                showToast("💬 رسالة جديدة وصلت من عميل!", "#2563eb");
+            }
+            totalChatsCount = currentTotalMessages;
+            const chatBadge = document.getElementById('chats-nav-badge');
+            if(newChatsCount > 0) { chatBadge.innerText = newChatsCount; chatBadge.style.display = 'inline-block'; } else { chatBadge.style.display = 'none'; }
+
+            const listDiv = document.getElementById('chat-customers-list');
+            listDiv.innerHTML = "";
+            const keys = Object.keys(globalChatsData);
+            if(keys.length === 0) { listDiv.innerHTML = `<div style="font-size:12px; color:#64748b; text-align:center; padding:15px;">لا توجد محادثات.</div>`; return; }
+
+            keys.forEach(custId => {
+                const isSelected = activeCustomerId === custId ? 'active-client' : '';
+                const msgs = globalChatsData[custId] || [];
+                const lastMsg = msgs[msgs.length - 1];
+                const needsReply = lastMsg && lastMsg.sender === 'customer';
+                listDiv.innerHTML += `
+                    <div class="chat-customer-item ${isSelected}" onclick="selectChatCustomer('${custId}')">
+                        <div><i class="fa-solid fa-user"></i> ${custId}</div>
+                        ${needsReply ? '<span class="pending-dot"></span>' : ''}
+                    </div>
+                `;
+            });
+            if(activeCustomerId && globalChatsData[activeCustomerId]) renderClientMessages(activeCustomerId);
+        });
+
+        window.selectChatCustomer = function(custId) {
+            activeCustomerId = custId;
+            document.querySelectorAll('.chat-customer-item').forEach(el => el.classList.remove('active-client'));
+            if(event && event.currentTarget) event.currentTarget.classList.add('active-client');
+            document.getElementById('active-chat-header').innerHTML = `<i class="fa-solid fa-comments"></i> المحادثة مع العميل: ${custId}`;
+            renderClientMessages(custId);
+        };
+
+        function renderClientMessages(custId) {
+            const body = document.getElementById('admin-chat-messages');
+            body.innerHTML = "";
+            const msgs = globalChatsData[custId] || [];
+            msgs.sort((a,b)=>(a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
+            msgs.forEach(m => {
+                const isadmin = m.sender === 'admin';
+                body.innerHTML += `
+                    <div style="display:flex; flex-direction:column; margin-bottom:10px;">
+                        <span style="font-size:9px; color:#64748b; ${isadmin ? 'text-align:left;' : 'text-align:right;'}">${isadmin ? 'أنت' : 'العميل'}</span>
+                        <div class="chat-msg-bubble ${isadmin ? 'msg-admin' : 'msg-customer'}">${m.text}</div>
+                    </div>
+                `;
+            });
+            body.scrollTop = body.scrollHeight;
+        }
+
+        window.sendAdminMessage = async function() {
+            const input = document.getElementById('admin-chat-input');
+            const text = input.value.trim();
+            if(!activeCustomerId || !text) return;
+            input.value = '';
+            await addDoc(collection(db, "chats"), { customerId: activeCustomerId, sender: 'admin', text: text, createdAt: new Date() });
+            await addDoc(collection(db, "notifications"), { customerPhone: activeCustomerId, message: `💬 رد جديد من خدمة العملاء`, createdAt: new Date() });
+            showToast("🚀 تم إرسال الرد!");
+        };
+
+        const settingsRef = doc(db, "settings", "general");
+        getDoc(settingsRef).then(docSnap => {
+            if(docSnap.exists()) {
+                const data = docSnap.data();
+                if(data.storeName) document.getElementById('setting-store-name').value = data.storeName;
+                if(data.announcement) document.getElementById('setting-announcement').value = data.announcement;
+                if(data.primaryColor) {
+                    document.getElementById('setting-primary-color').value = data.primaryColor;
+                    document.documentElement.style.setProperty('--primary', data.primaryColor);
+                }
+                if(data.storeStatus) document.getElementById('setting-store-status').value = data.storeStatus;
+            }
+        });
+
+        window.saveStoreSettings = async function() {
+            const storeName = document.getElementById('setting-store-name').value.trim();
+            const announcement = document.getElementById('setting-announcement').value.trim();
+            const primaryColor = document.getElementById('setting-primary-color').value;
+            const storeStatus = document.getElementById('setting-store-status').value;
+            document.documentElement.style.setProperty('--primary', primaryColor);
+            await setDoc(settingsRef, { storeName, announcement, primaryColor, storeStatus }, { merge: true });
+            showToast("⚡ تم حفظ إعدادات وتطبيقها على المتجر فوراً!");
+        };
+
+        // تحميل قائمة الـ 60 ميزة عند بدء التشغيل
+        setTimeout(renderAdminFeaturesCheckboxes, 600);
+    </script>
+</body>
+</html>
