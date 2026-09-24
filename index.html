@@ -107,7 +107,7 @@ nav {
     display: flex; align-items: center; justify-content: center;
 }
 
-/* ==================== CATEGORIES ==================== */
+/* ==================== CATEGories ==================== */
 .categories-bar {
     display: flex; gap: 12px; padding: 15px 5%;
     overflow-x: auto; border-bottom: 1px solid var(--border);
@@ -421,6 +421,25 @@ nav {
     border-color: var(--primary); box-shadow: 0 0 12px var(--glow);
 }
 
+/* ==================== ANNOUNCEMENT POPUP MODAL ==================== */
+.announcement-modal {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 30px;
+    max-width: 500px; width: 100%; position: relative;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    text-align: center;
+}
+.announcement-close {
+    position: absolute; top: 15px; left: 15px;
+    background: var(--bg-elev); border: 1px solid var(--border);
+    color: var(--text-main); width: 36px; height: 36px;
+    border-radius: 50%; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; font-size: 1rem;
+    transition: var(--transition);
+}
+.announcement-close:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+.announcement-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; }
+
 /* ==================== TOAST ==================== */
 .toast-container { position: fixed; top: 20px; left: 20px; z-index: 5000; display: flex; flex-direction: column; gap: 10px; }
 .toast {
@@ -571,6 +590,9 @@ footer { background: rgba(10,15,30,0.95); border-top: 1px solid var(--border); p
     </div>
 
     <div class="nav-actions">
+        <button class="nav-btn" onclick="openLoginModal()" title="تسجيل الدخول">
+            <i class="fa-solid fa-user" id="userIcon"></i>
+        </button>
         <button class="nav-btn" onclick="toggleTheme()" title="الوضع الليلي/النهاري">
             <i class="fa-solid fa-moon" id="themeIcon"></i>
         </button>
@@ -713,6 +735,42 @@ footer { background: rgba(10,15,30,0.95); border-top: 1px solid var(--border); p
     </div>
 </aside>
 
+<!-- ============ LOGIN MODAL (PHONE ONLY NO SMS) ============ -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal">
+        <h3><i class="fa-solid fa-phone" style="color: var(--primary-light);"></i> تسجيل الدخول برقم الهاتف</h3>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>الاسم الكامل *</label>
+                <input type="text" id="loginName" placeholder="أدخل اسمك الكريم" required>
+            </div>
+            <div class="form-group">
+                <label>رقم الهاتف *</label>
+                <input type="tel" id="loginPhone" placeholder="01xxxxxxxxx" required>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button type="button" class="btn-outline" style="flex: 1; justify-content: center;" onclick="closeModal('loginModal')">إلغاء</button>
+                <button type="submit" class="btn-primary" style="flex: 1; justify-content: center;">
+                    <i class="fa-solid fa-check"></i> حفظ الدخول
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ============ ANNOUNCEMENT POPUP MODAL ==================== -->
+<div class="modal-overlay" id="announcementModal">
+    <div class="announcement-modal">
+        <button class="announcement-close" onclick="closeAnnouncement()"><i class="fa-solid fa-xmark"></i></button>
+        <div id="announcementContent">
+            <img src="https://images.unsplash.com/photo-1556909212-d5b604d0c90d?w=800" class="announcement-img" alt="إعلان">
+            <h3 id="announcementTitle" style="font-size: 1.4rem; margin-bottom: 10px; color: var(--primary-light);">إعلان هام</h3>
+            <p id="announcementText" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">أهلاً بك في متجر النور. استمتع بأقوى العروض والخصومات الحصرية المتاحة اليوم!</p>
+            <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="closeAnnouncement()">تصفح العروض</button>
+        </div>
+    </div>
+</div>
+
 <!-- ============ QUICK VIEW MODAL ============ -->
 <div class="modal-overlay" id="quickViewModal">
     <div class="modal" style="max-width: 800px;">
@@ -828,13 +886,13 @@ footer { background: rgba(10,15,30,0.95); border-top: 1px solid var(--border); p
 <div class="toast-container" id="toastContainer"></div>
 
 <!-- ============================================================ -->
-<!-- ⚠️ هذا هو الجزء الأول (HTML + CSS كامل) -->
-<!-- سيتم إكمال JavaScript + Firebase في الرد التالي -->
-<!-- ============================================================ --><script type="module">
+<!-- كود جافاسكريبت وربط فايربيز -->
+<!-- ============================================================ -->
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
     getFirestore, collection, addDoc, getDocs, doc, getDoc,
-    serverTimestamp, query, orderBy, where
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 // ==================== FIREBASE CONFIG ====================
@@ -861,6 +919,7 @@ let perPage = 12;
 let appliedCoupon = null;
 let cart = JSON.parse(localStorage.getItem('alnoor_cart') || '[]');
 let wishlist = JSON.parse(localStorage.getItem('alnoor_wishlist') || '[]');
+let currentUser = JSON.parse(localStorage.getItem('alnoor_user') || 'null');
 let siteSettings = { freeShippingMin: 500, shippingCost: 50, coupons: {} };
 
 // ==================== TOAST ====================
@@ -875,7 +934,66 @@ window.showToast = function(msg, type = 'success') {
 
 // ==================== LOADER ====================
 window.addEventListener('load', () => {
-    setTimeout(() => document.getElementById('loader').classList.add('hide'), 500);
+    setTimeout(() => {
+        document.getElementById('loader').classList.add('hide');
+        checkAndShowAnnouncement(); // عرض الإشعار المنبثق عند التحميل
+    }, 500);
+});
+
+// ==================== ANNOUNCEMENT POPUP SYSTEM ====================
+window.showAnnouncement = function(title, text, imgSrc) {
+    if(title) document.getElementById('announcementTitle').textContent = title;
+    if(text) document.getElementById('announcementText').textContent = text;
+    if(imgSrc) document.querySelector('.announcement-img').src = imgSrc;
+    document.getElementById('announcementModal').classList.add('active');
+};
+
+window.closeAnnouncement = function() {
+    document.getElementById('announcementModal').classList.remove('active');
+};
+
+function checkAndShowAnnouncement() {
+    // عرض إشعار افتراضي عند الدخول (يمكن تعديله أو جلبه من فايربيز)
+    setTimeout(() => {
+        showAnnouncement(
+            "عرض خاص لفترة محدودة!", 
+            "استمتع بشحن مجاني عند طلبك بأكثر من 500 جنيه، وتفعيل كود الخصم NOOR20 على أول عملية شراء.",
+            "https://images.unsplash.com/photo-1556909212-d5b604d0c90d?w=800"
+        );
+    }, 1000);
+}
+
+// ==================== LOGIN (PHONE ONLY WITHOUT SMS) ====================
+window.openLoginModal = function() {
+    if(currentUser) {
+        showToast(`أهلاً بك مجدداً، ${currentUser.name} (${currentUser.phone})`, 'success');
+        return;
+    }
+    document.getElementById('loginModal').classList.add('active');
+};
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('loginName').value.trim();
+    const phone = document.getElementById('loginPhone').value.trim();
+    
+    if(!name || !phone) {
+        showToast('يرجى إدخال الاسم ورقم الهاتف', 'error');
+        return;
+    }
+
+    currentUser = { name, phone };
+    localStorage.setItem('alnoor_user', JSON.stringify(currentUser));
+    
+    // تعبئة بيانات نموذج الطلب تلقائياً إذا كانت فارغة
+    const orderNameEl = document.getElementById('orderName');
+    const orderPhoneEl = document.getElementById('orderPhone');
+    if(orderNameEl && !orderNameEl.value) orderNameEl.value = name;
+    if(orderPhoneEl && !orderPhoneEl.value) orderPhoneEl.value = phone;
+
+    showToast(`مرحباً بك ${name}, تم حفظ بياناتك بنجاح!`, 'success');
+    closeModal('loginModal');
+    this.reset();
 });
 
 // ==================== THEME TOGGLE ====================
@@ -889,7 +1007,6 @@ window.toggleTheme = function() {
     showToast(next === 'dark' ? 'الوضع الليلي مفعل' : 'الوضع النهاري مفعل', 'success');
 };
 
-// تحميل الثيم المحفوظ
 (function initTheme() {
     const saved = localStorage.getItem('alnoor_theme') || 'dark';
     document.documentElement.setAttribute('data-theme', saved);
@@ -1254,6 +1371,15 @@ window.closeModal = id => document.getElementById(id).classList.remove('active')
 window.openCheckout = () => {
     if (cart.length === 0) { showToast('السلة فارغة!', 'error'); return; }
     closeCart();
+    
+    // إذا كان العميل مسجلاً دخوله مسبقاً، نعبئ البيانات تلقائياً
+    if(currentUser) {
+        const orderNameEl = document.getElementById('orderName');
+        const orderPhoneEl = document.getElementById('orderPhone');
+        if(orderNameEl) orderNameEl.value = currentUser.name;
+        if(orderPhoneEl) orderPhoneEl.value = currentUser.phone;
+    }
+
     updateCheckoutTotals();
     document.getElementById('checkoutModal').classList.add('active');
 };
