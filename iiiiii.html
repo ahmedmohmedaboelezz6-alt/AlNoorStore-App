@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة الزبائن والإشعارات | متجر النور</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--primary:#f97316;--primary-dark:#ea580c;--primary-light:#fb923c;--gold:#f59e0b;--gold-light:#fbbf24;--bg:#0a0f1e;--bg-side:#131c31;--bg-card:#131c31;--bg-elev:#1a2540;--text:#f8fafc;--muted:#94a3b8;--border:rgba(255,255,255,0.08);--glow:rgba(249,115,22,0.25);--danger:#ef4444;--success:#10b981;--warning:#f59e0b;--t:all 0.3s ease}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+#loader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.5s}
+#loader.hide{opacity:0;pointer-events:none}
+.spinner{width:60px;height:60px;border:4px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 50%,rgba(249,115,22,0.15),transparent 70%)}
+.login-card{background:var(--bg-card);border:1px solid var(--border);border-radius:24px;padding:45px 35px;max-width:420px;width:100%;box-shadow:0 25px 60px rgba(0,0,0,0.5);animation:mIn 0.4s ease}
+@keyframes mIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+.login-icon{width:80px;height:80px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;font-size:2rem;color:#fff;box-shadow:0 15px 35px var(--glow)}
+.login-card h2{text-align:center;font-size:1.6rem;margin-bottom:8px;font-weight:900}
+.login-sub{text-align:center;color:var(--muted);font-size:0.9rem;margin-bottom:30px}
+.form-group{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.form-group label{font-size:0.85rem;color:var(--muted);font-weight:600}
+.form-group input,.form-group select,.form-group textarea{padding:12px 15px;background:var(--bg-elev);border:1px solid var(--border);border-radius:10px;color:#fff;outline:none;font-family:'Cairo',sans-serif;font-size:0.9rem;transition:var(--t);width:100%}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--primary);box-shadow:0 0 12px var(--glow)}
+.form-group small{font-size:0.72rem;color:var(--muted)}
+.btn{padding:12px 24px;border-radius:10px;font-weight:700;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:var(--t);font-size:0.9rem;font-family:'Cairo',sans-serif}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;box-shadow:0 4px 15px var(--glow)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--glow)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--bg)}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:#fff}
+.btn-ghost{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text)}
+.btn-full{width:100%;justify-content:center;padding:14px;font-size:1rem}
+.login-back{text-align:center;margin-top:20px}
+.login-back button{background:none;border:none;color:var(--muted);cursor:pointer;font-family:'Cairo',sans-serif;font-size:0.85rem;display:inline-flex;align-items:center;gap:6px}
+.dashboard{display:none;min-height:100vh}
+.dashboard.active{display:flex}
+aside{width:270px;background:var(--bg-side);border-left:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;right:0;bottom:0;z-index:100;transition:var(--t)}
+.sidebar-brand{padding:22px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.sidebar-brand i{font-size:1.7rem;color:var(--gold)}
+.sidebar-brand h3{font-size:1.05rem;font-weight:900;color:var(--primary-light)}
+.sidebar-brand span{font-size:0.72rem;color:var(--muted)}
+.sidebar-menu{list-style:none;padding:15px 0;flex:1;overflow-y:auto}
+.sidebar-menu li{cursor:pointer;border-right:4px solid transparent;transition:var(--t)}
+.sidebar-menu li a{display:flex;align-items:center;gap:12px;padding:13px 20px;color:var(--muted);font-weight:600;font-size:0.88rem;transition:var(--t)}
+.sidebar-menu li:hover a,.sidebar-menu li.active a{color:var(--primary-light);background:rgba(249,115,22,0.06)}
+.sidebar-menu li.active{border-right-color:var(--primary)}
+.sidebar-footer{padding:15px 20px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+.btn-side{padding:11px;border-radius:9px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.85rem;border:none}
+.btn-store{background:rgba(249,115,22,0.1);color:var(--primary-light);border:1px solid rgba(249,115,22,0.25)}
+.btn-exit{background:rgba(239,68,68,0.1);color:var(--danger);border:1px solid rgba(239,68,68,0.2)}
+.btn-exit:hover{background:var(--danger);color:#fff}
+main{flex:1;margin-right:270px;padding:25px 30px;min-height:100vh}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;background:var(--bg-card);padding:18px 25px;border-radius:15px;border:1px solid var(--border);flex-wrap:wrap;gap:15px}
+.topbar h1{font-size:1.25rem;font-weight:900}
+.topbar p{font-size:0.82rem;color:var(--muted)}
+.admin-user{display:flex;align-items:center;gap:12px}
+.admin-avatar{width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--bg);font-size:1.1rem}
+.admin-user h4{font-size:0.9rem}
+.admin-user .status{font-size:0.72rem;color:var(--success);display:flex;align-items:center;gap:5px}
+.admin-user .status::before{content:'';width:8px;height:8px;background:var(--success);border-radius:50%;box-shadow:0 0 8px var(--success)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-bottom:25px}
+.stat-card{background:var(--bg-card);padding:22px;border-radius:15px;border:1px solid var(--border);position:relative;overflow:hidden;transition:var(--t)}
+.stat-card:hover{transform:translateY(-5px);border-color:rgba(249,115,22,0.4)}
+.stat-card h3{font-size:0.85rem;color:var(--muted);margin-bottom:8px}
+.stat-card .num{font-size:1.9rem;font-weight:900;background:linear-gradient(135deg,var(--primary-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card .icon-bg{position:absolute;top:20px;left:20px;font-size:2.2rem;color:rgba(249,115,22,0.12)}
+.section{background:var(--bg-card);padding:25px 28px;border-radius:15px;border:1px solid var(--border);margin-bottom:25px;animation:fIn 0.4s ease}
+@keyframes fIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.section.hidden{display:none}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;padding-bottom:15px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px}
+.section-header h2{font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:10px}
+.section-header h2 i{color:var(--gold)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:18px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;text-align:right}
+th,td{padding:13px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+th{background:rgba(10,15,30,0.4);color:var(--muted);font-size:0.82rem;font-weight:700}
+td{font-size:0.88rem}
+.avatar-cell{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:1rem}
+.icon-btn{background:rgba(255,255,255,0.05);border:none;color:var(--text);width:33px;height:33px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:var(--t);font-size:0.85rem;margin-left:4px}
+.icon-btn:hover{background:var(--primary);color:#fff}
+.icon-btn.danger:hover{background:var(--danger)}
+.icon-btn.success:hover{background:var(--success)}
+.badge{padding:5px 12px;border-radius:20px;font-size:0.72rem;font-weight:700;display:inline-block}
+.badge-vip{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--bg)}
+.badge-regular{background:rgba(249,115,22,0.15);color:var(--primary-light)}
+.badge-new{background:rgba(16,185,129,0.15);color:var(--success)}
+.badge-info{background:rgba(14,165,233,0.15);color:#38bdf8}
+.badge-success{background:rgba(16,185,129,0.15);color:var(--success)}
+.badge-warn{background:rgba(245,158,11,0.15);color:var(--warning)}
+.badge-danger{background:rgba(239,68,68,0.15);color:var(--danger)}
+.filter-bar{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.filter-bar input,.filter-bar select{padding:10px 15px;background:var(--bg-elev);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Cairo',sans-serif;font-size:0.85rem;outline:none}
+.filter-bar input:focus,.filter-bar select:focus{border-color:var(--primary)}
+.filter-bar input{flex:1;min-width:200px}
+.notif-type-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.notif-type{padding:18px;background:var(--bg-elev);border:2px solid var(--border);border-radius:14px;cursor:pointer;text-align:center;transition:var(--t)}
+.notif-type:hover{border-color:var(--primary-light)}
+.notif-type.active{border-color:var(--primary);background:rgba(249,115,22,0.1)}
+.notif-type i{font-size:1.5rem;margin-bottom:8px;display:block;color:var(--primary-light)}
+.notif-type h4{font-size:0.9rem;margin-bottom:4px}
+.notif-type p{font-size:0.72rem;color:var(--muted)}
+.notif-item{background:var(--bg-elev);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px;display:flex;justify-content:space-between;gap:15px;align-items:start;transition:var(--t)}
+.notif-item:hover{border-color:rgba(249,115,22,0.3)}
+.notif-item .notif-icon{width:50px;height:50px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#fff;flex-shrink:0}
+.notif-item .notif-info{flex:1}
+.notif-item .notif-info h4{font-size:0.95rem;margin-bottom:5px}
+.notif-item .notif-info p{font-size:0.85rem;color:var(--muted);margin-bottom:8px;line-height:1.6}
+.notif-item .notif-meta{font-size:0.72rem;color:var(--muted);display:flex;gap:15px;flex-wrap:wrap}
+.toast-container{position:fixed;top:20px;left:20px;z-index:5000;display:flex;flex-direction:column;gap:10px}
+.toast{background:var(--bg-card);border:1px solid var(--border);border-right:4px solid var(--primary);padding:15px 20px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.3);min-width:280px;display:flex;align-items:center;gap:12px;font-size:0.9rem;font-weight:600;animation:sIn 0.3s ease}
+.toast.success{border-right-color:var(--success)}
+.toast.error{border-right-color:var(--danger)}
+.toast i{font-size:1.3rem}
+.toast.success i{color:var(--success)}
+.toast.error i{color:var(--danger)}
+@keyframes sIn{from{transform:translateX(-400px);opacity:0}to{transform:translateX(0);opacity:1}}
+.empty{text-align:center;padding:50px 20px;color:var(--muted)}
+.empty i{font-size:3rem;margin-bottom:15px;opacity:0.3}
+@media(max-width:992px){aside{width:70px}.sidebar-brand h3,.sidebar-brand span,.sidebar-menu li a span,.sidebar-footer span{display:none}.sidebar-brand{justify-content:center}.sidebar-menu li a{justify-content:center;padding:14px}main{margin-right:70px;padding:20px 15px}}
+@media(max-width:576px){.form-grid{grid-template-columns:1fr}.topbar{padding:15px}.stats-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="spinner"></div></div>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-card">
+        <div class="login-icon"><i class="fa-solid fa-users-gear"></i></div>
+        <h2>إدارة الزبائن</h2>
+        <p class="login-sub">متجر النور - إدارة الزبائن والإشعارات</p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="adminPassword" placeholder="••••••••" required autocomplete="off">
+                <small>نفس كلمة لوحة التحكم</small>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full"><i class="fa-solid fa-unlock"></i> دخول</button>
+        </form>
+        <div class="login-back">
+            <button onclick="location.href='admin.html'"><i class="fa-solid fa-arrow-right"></i> لوحة التحكم الرئيسية</button>
+        </div>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+    <aside>
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-users"></i>
+            <div><h3>إدارة الزبائن</h3><span>متجر النور</span></div>
+        </div>
+        <ul class="sidebar-menu" id="sidebarMenu">
+            <li class="active" data-section="dashboard-section"><a><i class="fa-solid fa-chart-pie"></i> <span>الإحصائيات</span></a></li>
+            <li data-section="customers-section"><a><i class="fa-solid fa-users"></i> <span>الزبائن</span></a></li>
+            <li data-section="notifications-section"><a><i class="fa-solid fa-bell"></i> <span>الإشعارات</span></a></li>
+            <li data-section="send-section"><a><i class="fa-solid fa-paper-plane"></i> <span>إرسال إشعار</span></a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <button class="btn-side btn-store" onclick="window.open('store.html','_blank')"><i class="fa-solid fa-store"></i> <span>المتجر</span></button>
+            <button class="btn-side btn-exit" onclick="logoutAdmin()"><i class="fa-solid fa-right-from-bracket"></i> <span>خروج</span></button>
+        </div>
+    </aside>
+
+    <main>
+        <div class="topbar">
+            <div><h1>إدارة الزبائن والإشعارات 👥</h1><p>تحكم كامل في الزبائن وإرسال الإشعارات وحظرهم</p></div>
+            <div class="admin-user">
+                <div class="admin-avatar"><i class="fa-solid fa-users-gear"></i></div>
+                <div><h4>المدير</h4><span class="status">متصل الآن</span></div>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <section class="section" id="dashboard-section">
+            <div class="stats-grid">
+                <div class="stat-card"><i class="fa-solid fa-users icon-bg"></i><h3>إجمالي الزبائن</h3><div class="num" id="statCustomers">0</div></div>
+                <div class="stat-card"><i class="fa-solid fa-crown icon-bg"></i><h3>زبائن VIP</h3><div class="num" id="statVip">0</div></div>
+                <div class="stat-card"><i class="fa-solid fa-bell icon-bg"></i><h3>إشعارات مرسلة</h3><div class="num" id="statNotifs">0</div></div>
+                <div class="stat-card"><i class="fa-solid fa-eye icon-bg"></i><h3>نسبة المشاهدة</h3><div class="num" id="statViews">0%</div></div>
+            </div>
+            <div class="section-header"><h2><i class="fa-solid fa-crown"></i> أفضل 5 زبائن</h2></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>الزبون</th><th>الهاتف</th><th>الطلبات</th><th>إجمالي الشراء</th></tr></thead>
+                    <tbody id="topCustomersBody"><tr><td colspan="4"><div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><p>جاري التحميل...</p></div></td></tr></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- CUSTOMERS -->
+        <section class="section hidden" id="customers-section">
+            <div class="section-header"><h2><i class="fa-solid fa-users"></i> قائمة الزبائن</h2>
+                <button class="btn btn-primary" onclick="loadCustomers()"><i class="fa-solid fa-rotate"></i> تحديث</button>
+            </div>
+            <div class="filter-bar">
+                <input type="text" id="custSearch" placeholder="🔍 ابحث بالاسم أو الرقم...">
+                <select id="custFilter">
+                    <option value="all">كل الزبائن</option>
+                    <option value="vip">VIP فقط</option>
+                    <option value="regular">عادي</option>
+                    <option value="new">جديد</option>
+                </select>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الزبون</th>
+                            <th>الهاتف</th>
+                            <th>الطلبات</th>
+                            <th>إجمالي الشراء</th>
+                            <th>آخر طلب / نشاط</th>
+                            <th>الفئة</th>
+                            <th>إجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersBody"><tr><td colspan="7"><div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><p>جاري التحميل...</p></div></td></tr></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- NOTIFICATIONS LIST -->
+        <section class="section hidden" id="notifications-section">
+            <div class="section-header"><h2><i class="fa-solid fa-bell"></i> الإشعارات المُرسلة</h2>
+                <button class="btn btn-primary" onclick="loadNotifications()"><i class="fa-solid fa-rotate"></i> تحديث</button>
+            </div>
+            <div id="notificationsList">
+                <div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><p>جاري التحميل...</p></div>
+            </div>
+        </section>
+
+        <!-- SEND NOTIFICATION -->
+        <section class="section hidden" id="send-section">
+            <div class="section-header"><h2><i class="fa-solid fa-paper-plane"></i> إرسال إشعار جديد</h2></div>
+
+            <label style="font-size:0.9rem;font-weight:700;margin-bottom:12px;display:block;">🎯 اختر نوع الإشعار:</label>
+            <div class="notif-type-grid">
+                <div class="notif-type active" data-target="all">
+                    <i class="fa-solid fa-globe"></i>
+                    <h4>لكل الزبائن</h4>
+                    <p>كل المسجلين بالمتجر</p>
+                </div>
+                <div class="notif-type" data-target="vip">
+                    <i class="fa-solid fa-crown"></i>
+                    <h4>زبائن VIP</h4>
+                    <p>مشتروات أكثر من 2000 ج.م</p>
+                </div>
+                <div class="notif-type" data-target="one">
+                    <i class="fa-solid fa-user"></i>
+                    <h4>زبون معين</h4>
+                    <p>اختر رقم أو اسم محدد</p>
+                </div>
+                <div class="notif-type" data-target="product">
+                    <i class="fa-solid fa-box"></i>
+                    <h4>مشتري منتج</h4>
+                    <p>من اشترى منتج معين</p>
+                </div>
+            </div>
+
+            <form id="sendNotifForm">
+                <input type="hidden" id="notifTarget" value="all">
+
+                <div class="form-group" id="targetPhoneGroup" style="display:none">
+                    <label>رقم هاتف الزبون</label>
+                    <input type="text" id="notifPhone" placeholder="0100 123 4567">
+                </div>
+
+                <div class="form-group" id="targetProductGroup" style="display:none">
+                    <label>اسم المنتج</label>
+                    <input type="text" id="notifProduct" placeholder="طقم أواني">
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>نوع الإشعار</label>
+                        <select id="notifType">
+                            <option value="info">📢 إعلان عام</option>
+                            <option value="offer">🎁 عرض خاص</option>
+                            <option value="discount">💸 خصم</option>
+                            <option value="new">✨ منتج جديد</option>
+                            <option value="warning">⚠️ تنبيه هام</option>
+                            <option value="order">📦 تحديث طلب</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>شكل الإشعار</label>
+                        <select id="notifStyle">
+                            <option value="popup">🪟 نافذة منبثقة (Popup)</option>
+                            <option value="topbar">📌 شريط علوي (Top Bar)</option>
+                            <option value="toast">💬 إشعار جانبي (Toast)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>عنوان الإشعار *</label>
+                    <input type="text" id="notifTitle" required placeholder="مثال: خصم 20% لفترة محدودة">
+                </div>
+
+                <div class="form-group">
+                    <label>نص الإشعار *</label>
+                    <textarea id="notifMessage" rows="3" required placeholder="تفاصيل الإشعار..."></textarea>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>كود الخصم (اختياري)</label>
+                        <input type="text" id="notifCoupon" placeholder="NOOR20" style="text-transform:uppercase">
+                    </div>
+                    <div class="form-group">
+                        <label>رابط الإجراء (اختياري)</label>
+                        <input type="url" id="notifLink" placeholder="https://... أو #products">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>مدة الإشعار (بالثواني)</label>
+                        <input type="number" id="notifDuration" value="10" min="3" max="60">
+                    </div>
+                    <div class="form-group">
+                        <label>الصلاحية (بالأيام)</label>
+                        <input type="number" id="notifExpiry" value="7" min="1" max="90">
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> إرسال الإشعار
+                    </button>
+                    <button type="reset" class="btn btn-ghost">
+                        <i class="fa-solid fa-eraser"></i> تفريغ
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCUNlhqT77N_3a0RsYI7S-9buOM-W3emaS8",
+    authDomain: "al-amair.firebaseapp.com",
+    projectId: "al-amair",
+    storageBucket: "al-amair.firebasestorage.app",
+    messagingSenderId: "167424721322",
+    appId: "1:167424721322:web:ea7e683eac5873ac2cebd3",
+    measurementId: "G-BZJYK0JVPT"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const DEFAULT_PASSWORD = 'alnoor2025';
+let allCustomers = [];
+let allOrders = [];
+let bannedPhones = new Map(); // خريطة لحفظ حالة الحظر للرقم
+
+// ==================== TOAST ====================
+function showToast(msg, type='success') {
+    const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark' };
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<i class="fa-solid ${icons[type]}"></i> ${msg}`;
+    document.getElementById('toastContainer').appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+// ==================== LOADER ====================
+window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('hide'), 500));
+
+// ==================== LOGIN ====================
+document.getElementById('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const pass = document.getElementById('adminPassword').value;
+    let validPass = DEFAULT_PASSWORD;
+    try {
+        const snap = await getDoc(doc(db, 'settings', 'admin_security'));
+        if (snap.exists() && snap.data().password) validPass = snap.data().password;
+    } catch(e) {}
+    if (pass === validPass) {
+        sessionStorage.setItem('alnoor_customers', '1');
+        showLoginSuccess();
+    } else {
+        showToast('كلمة المرور غير صحيحة', 'error');
+    }
+});
+
+function showLoginSuccess() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').classList.add('active');
+    initDashboard();
+}
+
+window.logoutAdmin = () => {
+    if (confirm('تأكيد الخروج؟')) {
+        sessionStorage.removeItem('alnoor_customers');
+        location.reload();
+    }
+};
+
+if (sessionStorage.getItem('alnoor_customers') === '1') {
+    setTimeout(showLoginSuccess, 600);
+}
+
+// ==================== SIDEBAR ====================
+document.querySelectorAll('#sidebarMenu li').forEach(li => {
+    li.addEventListener('click', () => {
+        document.querySelectorAll('#sidebarMenu li').forEach(x => x.classList.remove('active'));
+        li.classList.add('active');
+        const target = li.dataset.section;
+        document.querySelectorAll('main .section').forEach(s => s.classList.add('hidden'));
+        document.getElementById(target).classList.remove('hidden');
+        if (target === 'customers-section') loadCustomers();
+        if (target === 'notifications-section') loadNotifications();
+        if (target === 'dashboard-section') loadDashboard();
+    });
+});
+
+function initDashboard() {
+    loadDashboard();
+}
+
+// ==================== DASHBOARD & CUSTOMERS DATA ====================
+async function loadDashboard() {
+    try {
+        const ordersSnap = await getDocs(collection(db, 'orders'));
+        const notifsSnap = await getDocs(collection(db, 'notifications'));
+        const statusSnap = await getDocs(collection(db, 'customers_status'));
+
+        bannedPhones.clear();
+        statusSnap.forEach(d => {
+            if (d.data().isBanned) bannedPhones.set(d.id, true);
+        });
+
+        allOrders = [];
+        ordersSnap.forEach(d => allOrders.push({ id: d.id, ...d.data() }));
+
+        const customerMap = {};
+        
+        // دمج بيانات الزبائن من جدول حالات التسجيل المباشر
+        statusSnap.forEach(d => {
+            const data = d.data();
+            const phone = d.id;
+            customerMap[phone] = {
+                phone,
+                name: data.name || 'بدون اسم',
+                ordersCount: 0,
+                totalSpent: 0,
+                lastOrder: data.lastLogin || null,
+                isBanned: !!data.isBanned
+            };
+        });
+
+        // دمج الطلبات وحساب إجمالي الشراء
+        allOrders.forEach(o => {
+            const phone = (o.phone || '').trim();
+            if (!phone) return;
+            if (!customerMap[phone]) {
+                customerMap[phone] = {
+                    phone,
+                    name: o.customerName || 'بدون اسم',
+                    ordersCount: 0,
+                    totalSpent: 0,
+                    lastOrder: o.createdAt,
+                    isBanned: false
+                };
+            }
+            customerMap[phone].ordersCount++;
+            customerMap[phone].totalSpent += Number(o.totalAmount || o.requestedAmount || 0);
+            if (o.address) customerMap[phone].addresses = o.address;
+            const t = o.createdAt?.seconds || 0;
+            const last = customerMap[phone].lastOrder?.seconds || 0;
+            if (t > last) customerMap[phone].lastOrder = o.createdAt;
+        });
+
+        allCustomers = Object.values(customerMap);
+        const vipCount = allCustomers.filter(c => c.totalSpent >= 2000).length;
+
+        document.getElementById('statCustomers').textContent = allCustomers.length;
+        document.getElementById('statVip').textContent = vipCount;
+        document.getElementById('statNotifs').textContent = notifsSnap.size;
+
+        let totalViews = 0, totalSent = 0;
+        notifsSnap.forEach(d => {
+            const n = d.data();
+            totalViews += Number(n.views || 0);
+            totalSent += Number(n.recipients || allCustomers.length);
+        });
+        const viewRate = totalSent > 0 ? Math.round((totalViews / totalSent) * 100) : 0;
+        document.getElementById('statViews').textContent = viewRate + '%';
+
+        const top5 = allCustomers.slice().sort((a,b) => b.totalSpent - a.totalSpent).slice(0, 5);
+        const tb = document.getElementById('topCustomersBody');
+        if (top5.length === 0) {
+            tb.innerHTML = `<tr><td colspan="4"><div class="empty"><i class="fa-solid fa-users"></i><p>لا يوجد زبائن بعد</p></div></td></tr>`;
+        } else {
+            tb.innerHTML = top5.map(c => `
+                <tr>
+                    <td><strong>${c.name}</strong></td>
+                    <td style="direction:ltr;text-align:right">${c.phone}</td>
+                    <td>${c.ordersCount}</td>
+                    <td style="color:var(--primary-light);font-weight:700">${c.totalSpent.toLocaleString()} ج.م</td>
+                </tr>
+            `).join('');
+        }
+    } catch (e) { console.error(e); }
+}
+
+async function loadCustomers() {
+    const tb = document.getElementById('customersBody');
+    tb.innerHTML = `<tr><td colspan="7"><div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><p>جاري التحميل...</p></div></td></tr>`;
+    await loadDashboard(); // إعادة تحميل وسحب أحدث البيانات
+    renderCustomers();
+}
+
+function getCustomerTier(c) {
+    if (c.isBanned) return { label: 'محظور', cls: 'badge-danger' };
+    if (c.totalSpent >= 2000) return { label: 'VIP', cls: 'badge-vip' };
+    if (c.ordersCount >= 3) return { label: 'دائم', cls: 'badge-regular' };
+    if (c.ordersCount >= 1) return { label: 'عادي', cls: 'badge-info' };
+    return { label: 'مسجل جديد', cls: 'badge-success' };
+}
+
+function renderCustomers() {
+    const tb = document.getElementById('customersBody');
+    const search = document.getElementById('custSearch').value.trim().toLowerCase();
+    const filter = document.getElementById('custFilter').value;
+
+    let filtered = allCustomers.filter(c => {
+        const matchSearch = !search || c.name.toLowerCase().includes(search) || c.phone.includes(search);
+        let matchFilter = true;
+        if (filter === 'vip') matchFilter = c.totalSpent >= 2000;
+        else if (filter === 'regular') matchFilter = c.totalSpent < 2000 && c.ordersCount >= 3;
+        else if (filter === 'new') matchFilter = c.ordersCount <= 2;
+        return matchSearch && matchFilter;
+    });
+
+    if (filtered.length === 0) {
+        tb.innerHTML = `<tr><td colspan="7"><div class="empty"><i class="fa-solid fa-users"></i><p>لا يوجد زبائن مطابقة</p></div></td></tr>`;
+        return;
+    }
+
+    tb.innerHTML = filtered.map(c => {
+        const tier = getCustomerTier(c);
+        let lastOrderDate = '-';
+        if (c.lastOrder) {
+            if (c.lastOrder.seconds) {
+                lastOrderDate = new Date(c.lastOrder.seconds * 1000).toLocaleDateString('ar-EG');
+            } else {
+                lastOrderDate = 'نشط حديثاً';
+            }
+        }
+        return `
+            <tr>
+                <td>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <div class="avatar-cell">${c.name[0] || '?'}</div>
+                        <strong>${c.name}</strong>
+                    </div>
+                </td>
+                <td style="direction:ltr;text-align:right">${c.phone}</td>
+                <td>${c.ordersCount}</td>
+                <td style="color:var(--primary-light);font-weight:700">${c.totalSpent.toLocaleString()} ج.م</td>
+                <td style="font-size:0.82rem;color:var(--muted)">${lastOrderDate}</td>
+                <td><span class="badge ${tier.cls}">${tier.label}</span></td>
+                <td>
+                    <button class="icon-btn success" onclick="quickNotify('${c.phone}','${c.name}')" title="إرسال إشعار"><i class="fa-solid fa-bell"></i></button>
+                    <button class="icon-btn ${c.isBanned ? 'success' : 'danger'}" onclick="toggleBanCustomer('${c.phone}', ${c.isBanned ? true : false})" title="${c.isBanned ? 'إلغاء الحظر' : 'حظر الزبون'}">
+                        <i class="fa-solid ${c.isBanned ? 'fa-user-check' : 'fa-user-slash'}"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+document.getElementById('custSearch').addEventListener('input', renderCustomers);
+document.getElementById('custFilter').addEventListener('change', renderCustomers);
+
+// دالة حظر وإلغاء حظر الزبون
+window.toggleBanCustomer = async function(phone, currentBanStatus) {
+    const actionName = currentBanStatus ? 'إلغاء حظر' : 'حظر';
+    if (!confirm(`هل أنت متأكد من ${actionName} هذا الزبون (${phone})؟`)) return;
+
+    try {
+        const docRef = doc(db, 'customers_status', phone);
+        await setDoc(docRef, { isBanned: !currentBanStatus }, { merge: true });
+        showToast(`تم ${actionName} الزبون بنجاح`, 'success');
+        loadCustomers();
+    } catch (err) {
+        console.error(err);
+        showToast('حدث خطأ أثناء تنفيذ الطلب', 'error');
+    }
+};
+
+window.quickNotify = function(phone, name) {
+    document.querySelectorAll('#sidebarMenu li').forEach(x => x.classList.remove('active'));
+    document.querySelector('#sidebarMenu li[data-section="send-section"]').classList.add('active');
+    document.querySelectorAll('main .section').forEach(s => s.classList.add('hidden'));
+    document.getElementById('send-section').classList.remove('hidden');
+
+    document.querySelectorAll('.notif-type').forEach(x => x.classList.remove('active'));
+    document.querySelector('.notif-type[data-target="one"]').classList.add('active');
+    document.getElementById('notifTarget').value = 'one';
+    document.getElementById('targetPhoneGroup').style.display = 'flex';
+    document.getElementById('targetProductGroup').style.display = 'none';
+    document.getElementById('notifPhone').value = phone;
+    document.getElementById('notifTitle').value = `عرض خاص لك يا ${name}!`;
+    document.getElementById('notifTitle').focus();
+};
+
+document.querySelectorAll('.notif-type').forEach(item => {
+    item.addEventListener('click', () => {
+        document.querySelectorAll('.notif-type').forEach(x => x.classList.remove('active'));
+        item.classList.add('active');
+        const target = item.dataset.target;
+        document.getElementById('notifTarget').value = target;
+        document.getElementById('targetPhoneGroup').style.display = target === 'one' ? 'flex' : 'none';
+        document.getElementById('targetProductGroup').style.display = target === 'product' ? 'flex' : 'none';
+    });
+});
+
+document.getElementById('sendNotifForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const target = document.getElementById('notifTarget').value;
+    const title = document.getElementById('notifTitle').value.trim();
+    const message = document.getElementById('notifMessage').value.trim();
+
+    if (!title || !message) { showToast('املأ العنوان والنص', 'error'); return; }
+
+    let recipients = [];
+    if (target === 'all') {
+        recipients = allCustomers.map(c => c.phone);
+    } else if (target === 'vip') {
+        recipients = allCustomers.filter(c => c.totalSpent >= 2000).map(c => c.phone);
+    } else if (target === 'one') {
+        const phone = document.getElementById('notifPhone').value.trim();
+        if (!phone) { showToast('أدخل رقم الزبون', 'error'); return; }
+        recipients = [phone];
+    } else if (target === 'product') {
+        const prodName = document.getElementById('notifProduct').value.trim();
+        if (!prodName) { showToast('أدخل اسم المنتج', 'error'); return; }
+        const buyers = new Set();
+        allOrders.forEach(o => {
+            const items = o.items || [];
+            if (items.some(i => (i.name || '').includes(prodName))) {
+                if (o.phone) buyers.add(o.phone);
+            }
+        });
+        recipients = [...buyers];
+    }
+
+    if (recipients.length === 0) { showToast('لا يوجد مستهدفون', 'error'); return; }
+
+    const notif = {
+        target,
+        targetPhone: target === 'one' ? recipients[0] : null,
+        targetProduct: target === 'product' ? document.getElementById('notifProduct').value.trim() : null,
+        type: document.getElementById('notifType').value,
+        style: document.getElementById('notifStyle').value,
+        title,
+        message,
+        coupon: document.getElementById('notifCoupon').value.trim().toUpperCase(),
+        link: document.getElementById('notifLink').value.trim(),
+        duration: Number(document.getElementById('notifDuration').value) || 10,
+        expiryDays: Number(document.getElementById('notifExpiry').value) || 7,
+        recipients: recipients.length,
+        recipientPhones: recipients,
+        views: 0,
+        status: 'active',
+        createdAt: serverTimestamp()
+    };
+
+    try {
+        await addDoc(collection(db, 'notifications'), notif);
+        showToast(`تم إرسال الإشعار لـ ${recipients.length} زبون ✅`, 'success');
+        e.target.reset();
+        document.getElementById('notifTarget').value = 'all';
+        document.querySelectorAll('.notif-type').forEach(x => x.classList.remove('active'));
+        document.querySelector('.notif-type[data-target="all"]').classList.add('active');
+        document.getElementById('targetPhoneGroup').style.display = 'none';
+        document.getElementById('targetProductGroup').style.display = 'none';
+        loadDashboard();
+    } catch (err) {
+        console.error(err);
+        showToast('خطأ في الإرسال', 'error');
+    }
+});
+
+async function loadNotifications() {
+    const list = document.getElementById('notificationsList');
+    list.innerHTML = `<div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><p>جاري التحميل...</p></div>`;
+    try {
+        const snap = await getDocs(collection(db, 'notifications'));
+        if (snap.empty) {
+            list.innerHTML = `<div class="empty"><i class="fa-solid fa-bell-slash"></i><p>لا توجد إشعارات مرسلة</p></div>`;
+            return;
+        }
+        const notifs = [];
+        snap.forEach(d => notifs.push({ id: d.id, ...d.data() }));
+        notifs.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+        const typeIcons = {
+            info: 'fa-bullhorn', offer: 'fa-gift', discount: 'fa-percent',
+            new: 'fa-star', warning: 'fa-triangle-exclamation', order: 'fa-box'
+        };
+
+        list.innerHTML = notifs.map(n => {
+            const date = n.createdAt?.seconds ? new Date(n.createdAt.seconds * 1000).toLocaleString('ar-EG') : '-';
+            const targetLabels = { all: 'كل الزبائن', vip: 'VIP', one: 'زبون واحد', product: 'مشتري منتج' };
+            const styleLabels = { popup: 'نافذة منبثقة', topbar: 'شريط علوي', toast: 'إشعار جانبي' };
+            return `
+                <div class="notif-item">
+                    <div class="notif-icon"><i class="fa-solid ${typeIcons[n.type] || 'fa-bell'}"></i></div>
+                    <div class="notif-info">
+                        <h4>${n.title}</h4>
+                        <p>${n.message}</p>
+                        <div class="notif-meta">
+                            <span><i class="fa-solid fa-users"></i> ${targetLabels[n.target] || n.target} (${n.recipients})</span>
+                            <span><i class="fa-solid fa-eye"></i> ${n.views || 0} مشاهدة</span>
+                            <span><i class="fa-solid fa-window-restore"></i> ${styleLabels[n.style] || n.style}</span>
+                            ${n.coupon ? `<span><i class="fa-solid fa-ticket"></i> ${n.coupon}</span>` : ''}
+                            <span><i class="fa-solid fa-clock"></i> ${date}</span>
+                            <span class="badge ${n.status === 'active' ? 'badge-success' : 'badge-danger'}">${n.status === 'active' ? 'نشط' : 'موقوف'}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="icon-btn ${n.status === 'active' ? 'danger' : 'success'}" onclick="toggleNotifStatus('${n.id}', '${n.status}')" title="${n.status === 'active' ? 'إيقاف' : 'تفعيل'}">
+                            <i class="fa-solid ${n.status === 'active' ? 'fa-pause' : 'fa-play'}"></i>
+                        </button>
+                        <button class="icon-btn danger" onclick="deleteNotif('${n.id}')" title="حذف">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } catch (e) { console.error(e); }
+}
+
+window.toggleNotifStatus = async (id, current) => {
+    try {
+        await updateDoc(doc(db, 'notifications', id), {
+            status: current === 'active' ? 'inactive' : 'active'
+        });
+        showToast('تم التحديث', 'success');
+        loadNotifications();
+    } catch (e) { showToast('خطأ', 'error'); }
+};
+
+window.deleteNotif = async id => {
+    if (!confirm('حذف هذا الإشعار؟')) return;
+    try {
+        await deleteDoc(doc(db, 'notifications', id));
+        showToast('تم الحذف', 'success');
+        loadNotifications();
+        loadDashboard();
+    } catch (e) { showToast('خطأ', 'error'); }
+};
+</script>
+
+</body>
+</html>
