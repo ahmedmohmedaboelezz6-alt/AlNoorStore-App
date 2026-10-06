@@ -1,0 +1,5802 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>لوحة تحكم متجر النور</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+:root{
+
+    --primary:#f97316;
+    --primary2:#fb923c;
+    --gold:#f59e0b;
+
+    --bg:#080b12;
+    --sidebar:#0d121b;
+    --card:#121925;
+    --card2:#171f2d;
+
+    --text:#f8fafc;
+    --muted:#94a3b8;
+
+    --border:rgba(255,255,255,.08);
+
+    --green:#22c55e;
+    --red:#ef4444;
+    --blue:#3b82f6;
+    --purple:#a855f7;
+
+    --shadow:0 20px 60px rgba(0,0,0,.3);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:"Cairo",sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%,rgba(249,115,22,.06),transparent 30%),
+        var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button,
+input,
+textarea,
+select{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+input,
+textarea,
+select{
+    outline:none;
+}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+
+    width:270px;
+    background:rgba(13,18,27,.96);
+
+    border-left:1px solid var(--border);
+
+    position:fixed;
+    right:0;
+    top:0;
+    bottom:0;
+
+    z-index:5000;
+
+    display:flex;
+    flex-direction:column;
+
+    transition:.3s;
+}
+
+.logo{
+
+    padding:25px 20px;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.logo-icon{
+
+    width:48px;
+    height:48px;
+
+    border-radius:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--gold)
+    );
+
+    font-size:21px;
+
+    box-shadow:
+        0 10px 30px rgba(249,115,22,.25);
+}
+
+.logo-text strong{
+    display:block;
+    font-size:18px;
+}
+
+.logo-text small{
+    color:var(--muted);
+    font-size:10px;
+}
+
+.menu{
+
+    padding:18px 12px;
+
+    flex:1;
+
+    overflow:auto;
+}
+
+.menu-title{
+
+    color:#64748b;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    padding:10px 13px;
+
+    text-transform:uppercase;
+}
+
+.menu-item{
+
+    width:100%;
+
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    padding:13px 14px;
+
+    margin-bottom:5px;
+
+    border:1px solid transparent;
+
+    border-radius:13px;
+
+    background:transparent;
+
+    color:#94a3b8;
+
+    text-align:right;
+
+    transition:.25s;
+
+    position:relative;
+}
+
+.menu-item i{
+    width:20px;
+    text-align:center;
+}
+
+.menu-item:hover{
+
+    background:rgba(249,115,22,.07);
+
+    color:#fff;
+}
+
+.menu-item.active{
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(249,115,22,.18),
+            rgba(249,115,22,.04)
+        );
+
+    border-color:
+        rgba(249,115,22,.18);
+
+    color:#fff;
+}
+
+.menu-item.active::before{
+
+    content:"";
+
+    position:absolute;
+
+    right:-12px;
+
+    width:3px;
+
+    height:28px;
+
+    border-radius:5px;
+
+    background:var(--primary);
+}
+
+.menu-badge{
+
+    margin-right:auto;
+
+    min-width:21px;
+    height:21px;
+
+    padding:0 5px;
+
+    border-radius:20px;
+
+    background:var(--primary);
+
+    color:#fff;
+
+    font-size:10px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.sidebar-bottom{
+
+    padding:15px;
+
+    border-top:1px solid var(--border);
+}
+
+.admin-card{
+
+    padding:13px;
+
+    border-radius:15px;
+
+    background:#121925;
+
+    border:1px solid var(--border);
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.admin-avatar{
+
+    width:40px;
+    height:40px;
+
+    border-radius:12px;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--gold)
+    );
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.admin-card strong{
+    display:block;
+    font-size:12px;
+}
+
+.admin-card small{
+    color:var(--green);
+    font-size:9px;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+
+    margin-right:270px;
+
+    width:calc(100% - 270px);
+
+    min-height:100vh;
+}
+
+/* ================= HEADER ================= */
+
+.header{
+
+    height:75px;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 28px;
+
+    background:rgba(8,11,18,.84);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid var(--border);
+}
+
+.header-right,
+.header-left{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.page-title{
+
+    font-size:20px;
+    font-weight:900;
+}
+
+.header-button{
+
+    width:43px;
+    height:43px;
+
+    border-radius:13px;
+
+    border:1px solid var(--border);
+
+    background:#111824;
+
+    color:#fff;
+
+    position:relative;
+}
+
+.header-button:hover{
+    border-color:rgba(249,115,22,.4);
+}
+
+.notification-dot{
+
+    position:absolute;
+
+    width:9px;
+    height:9px;
+
+    background:#ef4444;
+
+    border-radius:50%;
+
+    top:7px;
+    left:7px;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+
+    padding:28px;
+}
+
+.page{
+
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* ================= CARDS ================= */
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:17px;
+
+    margin-bottom:25px;
+}
+
+.stat-card{
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    padding:20px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.stat-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:110px;
+    height:110px;
+
+    border-radius:50%;
+
+    left:-45px;
+    bottom:-50px;
+
+    background:
+        rgba(249,115,22,.08);
+}
+
+.stat-icon{
+
+    width:48px;
+    height:48px;
+
+    border-radius:15px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        rgba(249,115,22,.1);
+
+    color:var(--primary);
+
+    margin-bottom:15px;
+}
+
+.stat-card:nth-child(2)
+.stat-icon{
+
+    color:var(--green);
+
+    background:rgba(34,197,94,.1);
+}
+
+.stat-card:nth-child(3)
+.stat-icon{
+
+    color:var(--blue);
+
+    background:rgba(59,130,246,.1);
+}
+
+.stat-card:nth-child(4)
+.stat-icon{
+
+    color:var(--purple);
+
+    background:rgba(168,85,247,.1);
+}
+
+.stat-number{
+
+    font-size:28px;
+    font-weight:900;
+
+}
+
+.stat-label{
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    margin-top:4px;
+}
+
+/* ================= SECTION ================= */
+
+.panel{
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    margin-bottom:20px;
+
+    overflow:hidden;
+}
+
+.panel-header{
+
+    padding:18px 20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.panel-title{
+
+    font-weight:900;
+
+    font-size:16px;
+}
+
+.panel-subtitle{
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-top:4px;
+}
+
+.panel-body{
+    padding:20px;
+}
+
+/* ================= BUTTONS ================= */
+
+.btn{
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:11px 16px;
+
+    color:#fff;
+
+    font-weight:700;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:7px;
+
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-primary{
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--gold)
+        );
+
+}
+
+.btn-secondary{
+
+    background:#1b2534;
+
+    border:1px solid var(--border);
+
+}
+
+.btn-danger{
+    background:#7f1d1d;
+}
+
+.btn-success{
+    background:#166534;
+}
+
+.btn-blue{
+    background:#1d4ed8;
+}
+
+.btn-purple{
+    background:#7e22ce;
+}
+
+.btn-sm{
+
+    padding:8px 11px;
+
+    font-size:11px;
+
+}
+
+/* ================= TABLE ================= */
+
+.table-wrapper{
+    overflow:auto;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:700px;
+}
+
+th{
+
+    color:#64748b;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    text-align:right;
+
+    padding:14px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+td{
+
+    padding:14px;
+
+    border-bottom:1px solid var(--border);
+
+    font-size:12px;
+
+    color:#cbd5e1;
+}
+
+tr:hover td{
+    background:rgba(255,255,255,.015);
+}
+
+.product-mini{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.product-mini img{
+
+    width:46px;
+    height:46px;
+
+    border-radius:11px;
+
+    object-fit:cover;
+
+    background:#1b2534;
+}
+
+.product-mini strong{
+    display:block;
+    color:#fff;
+}
+
+.product-mini small{
+    color:#64748b;
+}
+
+.actions{
+
+    display:flex;
+
+    gap:6px;
+
+    flex-wrap:wrap;
+}
+
+/* ================= STATUS ================= */
+
+.status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    padding:5px 9px;
+
+    border-radius:20px;
+
+    font-size:10px;
+
+    font-weight:700;
+}
+
+.status.green{
+
+    color:#86efac;
+
+    background:rgba(34,197,94,.1);
+}
+
+.status.orange{
+
+    color:#fdba74;
+
+    background:rgba(249,115,22,.1);
+}
+
+.status.red{
+
+    color:#fca5a5;
+
+    background:rgba(239,68,68,.1);
+}
+
+.status.blue{
+
+    color:#93c5fd;
+
+    background:rgba(59,130,246,.1);
+}
+
+/* ================= FORMS ================= */
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:15px;
+}
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:7px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+
+    color:#cbd5e1;
+
+    font-size:12px;
+
+    font-weight:700;
+}
+
+.form-control{
+
+    width:100%;
+
+    height:47px;
+
+    background:#0e151f;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:0 13px;
+
+    color:#fff;
+}
+
+textarea.form-control{
+
+    height:110px;
+
+    padding:12px;
+
+    resize:vertical;
+}
+
+.form-control:focus{
+
+    border-color:
+        rgba(249,115,22,.55);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(249,115,22,.06);
+}
+
+.form-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    margin-top:20px;
+
+    grid-column:1/-1;
+}
+
+.check-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    color:#cbd5e1;
+
+    font-size:12px;
+}
+
+/* ================= SEARCH ================= */
+
+.search-box{
+
+    display:flex;
+
+    gap:8px;
+
+    margin-bottom:15px;
+}
+
+.search-box input{
+
+    flex:1;
+
+    height:44px;
+
+    background:#0e151f;
+
+    color:#fff;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:0 13px;
+}
+
+/* ================= DASHBOARD ================= */
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1.5fr 1fr;
+
+    gap:20px;
+}
+
+/* ================= AD PREVIEW ================= */
+
+.ad-preview{
+
+    min-height:210px;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border:1px solid rgba(249,115,22,.35);
+
+    background:
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(249,115,22,.2),
+            transparent 40%
+        ),
+        #111824;
+}
+
+.ad-preview img{
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    opacity:.25;
+}
+
+.ad-preview-content{
+
+    position:relative;
+
+    z-index:2;
+
+    max-width:70%;
+}
+
+.ad-preview h3{
+
+    font-size:25px;
+
+    margin:7px 0;
+}
+
+.ad-preview p{
+
+    color:#cbd5e1;
+
+    line-height:1.8;
+
+    font-size:12px;
+}
+
+/* ================= CUSTOMER CHAT ================= */
+
+.chat-layout{
+
+    display:grid;
+
+    grid-template-columns:280px 1fr;
+
+    min-height:600px;
+
+}
+
+.customers-list{
+
+    border-left:1px solid var(--border);
+
+    background:#0d131c;
+
+    overflow:auto;
+}
+
+.customer-item{
+
+    padding:13px;
+
+    display:flex;
+
+    gap:10px;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    border-bottom:1px solid var(--border);
+
+    transition:.2s;
+}
+
+.customer-item:hover{
+
+    background:#151e2b;
+}
+
+.customer-item.active{
+
+    background:
+        rgba(249,115,22,.1);
+}
+
+.customer-avatar{
+
+    width:40px;
+    height:40px;
+
+    flex:0 0 auto;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #334155,
+            #1e293b
+        );
+}
+
+.customer-info{
+
+    min-width:0;
+
+    flex:1;
+}
+
+.customer-info strong{
+
+    display:block;
+
+    font-size:12px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.customer-info small{
+
+    display:block;
+
+    color:#64748b;
+
+    font-size:9px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.chat-panel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-width:0;
+}
+
+.chat-admin-header{
+
+    padding:15px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+}
+
+.chat-admin-messages{
+
+    flex:1;
+
+    min-height:430px;
+
+    max-height:500px;
+
+    overflow:auto;
+
+    padding:20px;
+
+}
+
+.chat-msg{
+
+    max-width:70%;
+
+    padding:10px 13px;
+
+    border-radius:14px;
+
+    margin-bottom:10px;
+
+    font-size:12px;
+
+    line-height:1.7;
+}
+
+.chat-msg.customer{
+
+    margin-right:auto;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #ea580c
+        );
+
+    border-bottom-right-radius:3px;
+}
+
+.chat-msg.admin{
+
+    margin-left:auto;
+
+    background:#1b2636;
+
+    border-bottom-left-radius:3px;
+}
+
+.chat-msg small{
+
+    display:block;
+
+    opacity:.55;
+
+    font-size:8px;
+
+    margin-top:4px;
+}
+
+.chat-admin-input{
+
+    padding:12px;
+
+    border-top:1px solid var(--border);
+
+    display:flex;
+
+    gap:8px;
+}
+
+.chat-admin-input input{
+
+    flex:1;
+
+    height:45px;
+
+    background:#0d141e;
+
+    border:1px solid var(--border);
+
+    color:#fff;
+
+    border-radius:12px;
+
+    padding:0 12px;
+}
+
+/* ================= NOTIFICATIONS ================= */
+
+.notification-compose{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:15px;
+}
+
+.notification-compose .full{
+    grid-column:1/-1;
+}
+
+.send-target{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:10px;
+
+    margin-bottom:20px;
+}
+
+.target-card{
+
+    border:1px solid var(--border);
+
+    background:#0e151f;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.target-card.active{
+
+    border-color:
+        var(--primary);
+
+    background:
+        rgba(249,115,22,.08);
+}
+
+.target-card i{
+
+    color:var(--primary);
+
+    margin-left:5px;
+}
+
+.notification-item{
+
+    display:flex;
+
+    gap:12px;
+
+    padding:13px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.notification-icon{
+
+    width:42px;
+    height:42px;
+
+    flex:0 0 auto;
+
+    border-radius:13px;
+
+    background:
+        rgba(249,115,22,.1);
+
+    color:var(--primary);
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+}
+
+.notification-item strong{
+    display:block;
+    font-size:13px;
+}
+
+.notification-item p{
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+    line-height:1.7;
+
+    margin-top:3px;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:10000;
+
+    background:
+        rgba(0,0,0,.72);
+
+    backdrop-filter:blur(7px);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.25s;
+}
+
+.modal.show{
+
+    opacity:1;
+
+    visibility:visible;
+}
+
+.modal-box{
+
+    width:min(850px,100%);
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    background:#101722;
+
+    border:1px solid var(--border);
+
+    border-radius:22px;
+
+    box-shadow:var(--shadow);
+}
+
+.modal-header{
+
+    padding:18px 20px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.close{
+
+    width:40px;
+    height:40px;
+
+    border-radius:12px;
+
+    border:1px solid var(--border);
+
+    background:#171f2d;
+
+    color:#fff;
+}
+
+.modal-body{
+    padding:20px;
+}
+
+/* ================= TOAST ================= */
+
+.toast-container{
+
+    position:fixed;
+
+    left:20px;
+
+    top:90px;
+
+    z-index:20000;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+}
+
+.toast{
+
+    min-width:260px;
+
+    background:#151e2b;
+
+    border:1px solid var(--border);
+
+    border-right:4px solid var(--primary);
+
+    padding:13px 15px;
+
+    border-radius:13px;
+
+    box-shadow:var(--shadow);
+
+    font-size:12px;
+
+    animation:toast .3s ease;
+}
+
+.toast.success{
+    border-right-color:var(--green);
+}
+
+.toast.error{
+    border-right-color:var(--red);
+}
+
+@keyframes toast{
+
+    from{
+        opacity:0;
+        transform:translateX(-20px);
+    }
+
+}
+
+/* ================= MOBILE ================= */
+
+.mobile-menu{
+
+    display:none;
+
+}
+
+@media(max-width:1000px){
+
+    .sidebar{
+
+        transform:translateX(100%);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+
+        margin-right:0;
+
+        width:100%;
+    }
+
+    .mobile-menu{
+
+        display:flex;
+    }
+
+    .stats{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .dashboard-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .chat-layout{
+
+        grid-template-columns:220px 1fr;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .content{
+        padding:15px;
+    }
+
+    .header{
+        padding:0 15px;
+    }
+
+    .page-title{
+        font-size:16px;
+    }
+
+    .stats{
+
+        grid-template-columns:1fr 1fr;
+
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:14px;
+    }
+
+    .stat-number{
+        font-size:22px;
+    }
+
+    .form-grid,
+    .notification-compose{
+
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full,
+    .notification-compose .full{
+
+        grid-column:auto;
+    }
+
+    .send-target{
+
+        grid-template-columns:1fr;
+    }
+
+    .chat-layout{
+
+        grid-template-columns:1fr;
+    }
+
+    .customers-list{
+
+        max-height:220px;
+
+        border-left:none;
+
+        border-bottom:1px solid var(--border);
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            <i class="fa-solid fa-store"></i>
+        </div>
+
+        <div class="logo-text">
+
+            <strong>متجر النور</strong>
+
+            <small>
+                لوحة الإدارة
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="menu">
+
+        <div class="menu-title">
+            الرئيسية
+        </div>
+
+        <button
+            class="menu-item active"
+            data-page="dashboard">
+
+            <i class="fa-solid fa-chart-pie"></i>
+
+            الإحصائيات
+
+        </button>
+
+
+        <div class="menu-title">
+            المتجر
+        </div>
+
+        <button
+            class="menu-item"
+            data-page="products">
+
+            <i class="fa-solid fa-box"></i>
+
+            المنتجات والمخزون
+
+        </button>
+
+        <button
+            class="menu-item"
+            data-page="orders">
+
+            <i class="fa-solid fa-cart-shopping"></i>
+
+            الطلبات والشحن
+
+            <span
+                class="menu-badge"
+                id="ordersBadge">
+                0
+            </span>
+
+        </button>
+
+        <button
+            class="menu-item"
+            data-page="customers">
+
+            <i class="fa-solid fa-users"></i>
+
+            العملاء
+
+        </button>
+
+
+        <button
+            class="menu-item"
+            data-page="chat">
+
+            <i class="fa-solid fa-comments"></i>
+
+            خدمة العملاء
+
+            <span
+                class="menu-badge"
+                id="chatBadge">
+                0
+            </span>
+
+        </button>
+
+
+        <div class="menu-title">
+            التسويق
+        </div>
+
+        <button
+            class="menu-item"
+            data-page="ads">
+
+            <i class="fa-solid fa-bullhorn"></i>
+
+            الإعلانات
+
+        </button>
+
+
+        <button
+            class="menu-item"
+            data-page="coupons">
+
+            <i class="fa-solid fa-ticket"></i>
+
+            أكواد الخصم
+
+        </button>
+
+
+        <button
+            class="menu-item"
+            data-page="notifications">
+
+            <i class="fa-solid fa-bell"></i>
+
+            الإشعارات
+
+        </button>
+
+
+        <div class="menu-title">
+            أدوات
+        </div>
+
+        <button
+            class="menu-item"
+            onclick="visitStore()">
+
+            <i class="fa-solid fa-store"></i>
+
+            زيارة المتجر
+
+        </button>
+
+    </div>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="admin-card">
+
+            <div class="admin-avatar">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+
+            <div>
+
+                <strong>
+                    مدير المتجر
+                </strong>
+
+                <small>
+                    ● متصل
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+
+<header class="header">
+
+    <div class="header-right">
+
+        <button
+            class="header-button mobile-menu"
+            onclick="toggleSidebar()">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+        <div
+            class="page-title"
+            id="pageTitle">
+            الإحصائيات
+        </div>
+
+    </div>
+
+
+    <div class="header-left">
+
+        <button
+            class="header-button"
+            onclick="showPage('notifications')">
+
+            <i class="fa-solid fa-bell"></i>
+
+            <span
+                class="notification-dot"
+                id="headerNotificationDot">
+            </span>
+
+        </button>
+
+        <button
+            class="header-button"
+            onclick="visitStore()">
+
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="content">
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section
+    class="page active"
+    id="page-dashboard">
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-box"></i>
+            </div>
+
+            <div
+                class="stat-number"
+                id="statProducts">
+                0
+            </div>
+
+            <div class="stat-label">
+                إجمالي المنتجات
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+
+            <div
+                class="stat-number"
+                id="statOrders">
+                0
+            </div>
+
+            <div class="stat-label">
+                إجمالي الطلبات
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-users"></i>
+            </div>
+
+            <div
+                class="stat-number"
+                id="statCustomers">
+                0
+            </div>
+
+            <div class="stat-label">
+                العملاء
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fa-solid fa-money-bill-wave"></i>
+            </div>
+
+            <div
+                class="stat-number"
+                id="statSales">
+                0 ج.م
+            </div>
+
+            <div class="stat-label">
+                إجمالي المبيعات
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-title">
+                        آخر الطلبات
+                    </div>
+
+                    <div class="panel-subtitle">
+                        أحدث عمليات الشراء
+                    </div>
+
+                </div>
+
+                <button
+                    class="btn btn-secondary btn-sm"
+                    onclick="showPage('orders')">
+
+                    عرض الكل
+
+                </button>
+
+            </div>
+
+            <div
+                class="panel-body"
+                id="dashboardOrders">
+
+                جاري التحميل...
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-title">
+                        آخر العملاء
+                    </div>
+
+                    <div class="panel-subtitle">
+                        العملاء المسجلون حديثًا
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div
+                class="panel-body"
+                id="dashboardCustomers">
+
+                جاري التحميل...
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PRODUCTS ================= -->
+
+<section
+    class="page"
+    id="page-products">
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    المنتجات والمخزون
+                </div>
+
+                <div class="panel-subtitle">
+                    إدارة جميع منتجات المتجر
+                </div>
+
+            </div>
+
+            <button
+                class="btn btn-primary"
+                onclick="openProductForm()">
+
+                <i class="fa-solid fa-plus"></i>
+
+                إضافة منتج
+
+            </button>
+
+        </div>
+
+
+        <div class="panel-body">
+
+            <div class="search-box">
+
+                <input
+                    id="productSearch"
+                    placeholder="ابحث عن منتج..."
+                    oninput="renderProductsTable()">
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>المنتج</th>
+                            <th>القسم</th>
+                            <th>السعر</th>
+                            <th>المخزون</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="productsTable">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ORDERS ================= -->
+
+<section
+    class="page"
+    id="page-orders">
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    الطلبات والشحن
+                </div>
+
+                <div class="panel-subtitle">
+                    متابعة طلبات العملاء
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel-body">
+
+            <div class="search-box">
+
+                <input
+                    id="orderSearch"
+                    placeholder="ابحث بالاسم أو رقم الطلب..."
+                    oninput="renderOrders()">
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>العميل</th>
+                            <th>الطلب</th>
+                            <th>الإجمالي</th>
+                            <th>الكود</th>
+                            <th>الحالة</th>
+                            <th>التاريخ</th>
+                            <th>الإجراءات</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="ordersTable">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CUSTOMERS ================= -->
+
+<section
+    class="page"
+    id="page-customers">
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    العملاء
+                </div>
+
+                <div class="panel-subtitle">
+                    جميع العملاء المسجلين في المتجر
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel-body">
+
+            <div class="search-box">
+
+                <input
+                    id="customerSearch"
+                    placeholder="ابحث عن عميل..."
+                    oninput="renderCustomers()">
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>العميل</th>
+                            <th>المعرف</th>
+                            <th>آخر رسالة</th>
+                            <th>آخر نشاط</th>
+                            <th>الإجراءات</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="customersTable">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CHAT ================= -->
+
+<section
+    class="page"
+    id="page-chat">
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    خدمة العملاء والدردشة
+                </div>
+
+                <div class="panel-subtitle">
+                    محادثة منفصلة لكل عميل
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="chat-layout">
+
+            <div
+                class="customers-list"
+                id="chatCustomersList">
+
+                جاري تحميل العملاء...
+
+            </div>
+
+
+            <div class="chat-panel">
+
+                <div class="chat-admin-header">
+
+                    <div id="selectedCustomerInfo">
+
+                        اختر عميلًا لفتح المحادثة
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="chat-admin-messages"
+                    id="adminChatMessages">
+
+                    <div class="empty">
+
+                        <i class="fa-regular fa-comments"></i>
+
+                        <p>
+                            اختر عميلًا من القائمة
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="chat-admin-input">
+
+                    <input
+                        id="adminChatInput"
+                        placeholder="اكتب ردك للعميل..."
+                        onkeydown="adminChatKey(event)">
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="sendAdminMessage()">
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ADS ================= -->
+
+<section
+    class="page"
+    id="page-ads">
+
+    <div class="dashboard-grid">
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-title">
+                        إنشاء إعلان
+                    </div>
+
+                    <div class="panel-subtitle">
+                        الإعلان سيظهر مباشرة في صفحة العرض
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel-body">
+
+                <form
+                    id="adForm"
+                    class="form-grid">
+
+                    <input
+                        type="hidden"
+                        id="adId">
+
+                    <!-- تم استبدال حقل الرابط برفع ملف صورة وتحويله إلى Base64 -->
+                    <input
+                        type="hidden"
+                        id="adImage">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            عنوان الإعلان
+                        </label>
+
+                        <input
+                            class="form-control"
+                            id="adTitle"
+                            required
+                            placeholder="مثال: خصم خاص اليوم">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            ترتيب الإعلان
+                        </label>
+
+                        <input
+                            class="form-control"
+                            id="adPriority"
+                            type="number"
+                            value="0">
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            نص الإعلان
+                        </label>
+
+                        <textarea
+                            class="form-control"
+                            id="adMessage"
+                            required
+                            placeholder="اكتب تفاصيل الإعلان...">
+                        </textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            رفع صورة الإعلان
+                        </label>
+
+                        <input
+                            class="form-control"
+                            id="adImageFile"
+                            type="file"
+                            accept="image/*"
+                            onchange="handleAdImageUpload(event)"
+                            style="padding:10px;">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            نص الزر
+                        </label>
+
+                        <input
+                            class="form-control"
+                            id="adButtonText"
+                            value="اعرف المزيد">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            رابط الزر
+                        </label>
+
+                        <input
+                            class="form-control"
+                            id="adButtonLink"
+                            placeholder="#productsSection">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            الحالة
+                        </label>
+
+                        <select
+                            class="form-control"
+                            id="adActive">
+
+                            <option value="true">
+                                منشور
+                            </option>
+
+                            <option value="false">
+                                مخفي
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            onclick="resetAdForm()">
+
+                            إلغاء
+
+                        </button>
+
+                        <button
+                            class="btn btn-primary">
+
+                            <i class="fa-solid fa-paper-plane"></i>
+
+                            نشر الإعلان
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+                    معاينة الإعلان
+                </div>
+
+            </div>
+
+            <div class="panel-body">
+
+                <div
+                    class="ad-preview"
+                    id="adPreview">
+
+                    <div class="ad-preview-content">
+
+                        <small>
+                            إعلان متجر النور
+                        </small>
+
+                        <h3 id="previewTitle">
+                            عنوان الإعلان
+                        </h3>
+
+                        <p id="previewMessage">
+                            اكتب الإعلان لمشاهدة المعاينة
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div class="panel-title">
+                الإعلانات الحالية
+            </div>
+
+        </div>
+
+        <div class="panel-body">
+
+            <div
+                class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>العنوان</th>
+                            <th>الحالة</th>
+                            <th>الأولوية</th>
+                            <th>الإجراءات</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="adsTable">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= COUPONS ================= -->
+
+<section
+    class="page"
+    id="page-coupons">
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    أكواد الخصم
+                </div>
+
+                <div class="panel-subtitle">
+                    إنشاء وإدارة أكواد الخصم
+                </div>
+
+            </div>
+
+            <button
+                class="btn btn-primary"
+                onclick="openCouponForm()">
+
+                <i class="fa-solid fa-plus"></i>
+
+                كود جديد
+
+            </button>
+
+        </div>
+
+
+        <div class="panel-body">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>الكود</th>
+                            <th>نوع الخصم</th>
+                            <th>القيمة</th>
+                            <th>الحد الأدنى</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="couponsTable">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= NOTIFICATIONS ================= -->
+
+<section
+    class="page"
+    id="page-notifications">
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    إرسال الإشعارات
+                </div>
+
+                <div class="panel-subtitle">
+                    أرسل أي رسالة جديدة للعميل مباشرة
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel-body">
+
+            <div class="send-target">
+
+                <div
+                    class="target-card active"
+                    id="targetAll"
+                    onclick="selectNotificationTarget('all')">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    كل العملاء
+
+                </div>
+
+
+                <div
+                    class="target-card"
+                    id="targetCustomer"
+                    onclick="selectNotificationTarget('customer')">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    عميل محدد
+
+                </div>
+
+
+                <div
+                    class="target-card"
+                    id="targetAnnouncement"
+                    onclick="selectNotificationTarget('announcement')">
+
+                    <i class="fa-solid fa-bullhorn"></i>
+
+                    إشعار عام
+
+                </div>
+
+            </div>
+
+
+            <form
+                id="notificationForm"
+                class="notification-compose">
+
+                <div
+                    class="form-group"
+                    id="notificationCustomerGroup"
+                    style="display:none">
+
+                    <label>
+                        اختر العميل
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="notificationCustomer">
+
+                        <option value="">
+                            اختر العميل
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        نوع الإشعار
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="notificationType">
+
+                        <option value="general">
+                            إشعار عام
+                        </option>
+
+                        <option value="order">
+                            تحديث طلب
+                        </option>
+
+                        <option value="offer">
+                            عرض
+                        </option>
+
+                        <option value="important">
+                            مهم
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        عنوان الإشعار
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="notificationTitle"
+                        required
+                        placeholder="مثال: عرض جديد 🎉">
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        محتوى الإشعار
+                    </label>
+
+                    <textarea
+                        class="form-control"
+                        id="notificationMessage"
+                        required
+                        placeholder="اكتب أي شيء تريد إرساله للعميل...">
+                    </textarea>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        class="btn btn-primary">
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                        إرسال الإشعار
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <div class="panel-title">
+                    آخر الإشعارات
+                </div>
+
+            </div>
+
+        </div>
+
+        <div
+            class="panel-body"
+            id="notificationsList">
+
+            جاري التحميل...
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- ================= PRODUCT MODAL ================= -->
+
+<div
+    class="modal"
+    id="productModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <strong id="productModalTitle">
+                إضافة منتج
+            </strong>
+
+            <button
+                class="close"
+                onclick="closeModal('productModal')">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <form
+                id="productForm"
+                class="form-grid">
+
+                <input
+                    type="hidden"
+                    id="productId">
+
+                <!-- تم استبدال حقل الرابط برفع ملف صورة وتحويله إلى Base64 -->
+                <input
+                    type="hidden"
+                    id="productImage">
+
+
+                <div class="form-group">
+
+                    <label>
+                        اسم المنتج
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="productName"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        القسم
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="productCategory"
+                        required
+                        placeholder="أدوات منزلية">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        السعر
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="productPrice"
+                        type="number"
+                        min="0"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        السعر القديم
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="productOldPrice"
+                        type="number"
+                        min="0">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        المخزون
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="productStock"
+                        type="number"
+                        min="0"
+                        value="0">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        التقييم
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="productRating"
+                        type="number"
+                        min="0"
+                        max="5"
+                        step=".1"
+                        value="5">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        الشارة
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="productBadge"
+                        placeholder="الأكثر مبيعًا">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        صورة المنتج (رفع ملف)
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="productImageFile"
+                        type="file"
+                        accept="image/*"
+                        onchange="handleProductImageUpload(event)"
+                        style="padding:10px;">
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        وصف المنتج
+                    </label>
+
+                    <textarea
+                        class="form-control"
+                        id="productDescription"
+                        required>
+                    </textarea>
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label class="check-row">
+
+                        <input
+                            id="productFeatured"
+                            type="checkbox">
+
+                        منتج مميز
+
+                    </label>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal('productModal')">
+
+                        إلغاء
+
+                    </button>
+
+                    <button
+                        class="btn btn-primary">
+
+                        <i class="fa-solid fa-save"></i>
+
+                        حفظ المنتج
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= COUPON MODAL ================= -->
+
+<div
+    class="modal"
+    id="couponModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <strong>
+                إنشاء كود خصم
+            </strong>
+
+            <button
+                class="close"
+                onclick="closeModal('couponModal')">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <form
+                id="couponForm"
+                class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        كود الخصم
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="couponCode"
+                        required
+                        placeholder="NOOR20">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        نوع الخصم
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="couponType">
+
+                        <option value="percent">
+                            نسبة مئوية %
+                        </option>
+
+                        <option value="fixed">
+                            مبلغ ثابت
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        قيمة الخصم
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="couponValue"
+                        type="number"
+                        min="0"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        الحد الأدنى للطلب
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="couponMinOrder"
+                        type="number"
+                        min="0"
+                        value="0">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        أقصى خصم
+                    </label>
+
+                    <input
+                        class="form-control"
+                        id="couponMaxDiscount"
+                        type="number"
+                        min="0"
+                        value="0">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        الحالة
+                    </label>
+
+                    <select
+                        class="form-control"
+                        id="couponActive">
+
+                        <option value="true">
+                            مفعل
+                        </option>
+
+                        <option value="false">
+                            متوقف
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal('couponModal')">
+
+                        إلغاء
+
+                    </button>
+
+                    <button
+                        class="btn btn-primary">
+
+                        حفظ الكود
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
+<div
+    class="toast-container"
+    id="toastContainer">
+</div>
+
+
+<!-- ================= FIREBASE ================= -->
+
+<script type="module">
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    doc,
+    addDoc,
+    setDoc,
+    updateDoc,
+    deleteDoc,
+    onSnapshot,
+    query,
+    orderBy,
+    serverTimestamp,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+
+/* =========================================================
+   ضع Firebase Config الكامل لمشروعك هنا
+========================================================= */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCUNlhqT77N_3a0RsYI7S-9buOM-W3emaS8",
+    authDomain: "al-amair.firebaseapp.com",
+    projectId: "al-amair",
+    storageBucket: "al-amair.firebasestorage.app",
+    messagingSenderId: "167424721322",
+    appId: "1:167424721322:web:ea7e683eac5873ac2cebd3",
+    measurementId: "G-BZJYK0JVPT"
+};
+
+
+/* ========================================================= */
+
+const app =
+    initializeApp(firebaseConfig);
+
+const db =
+    getFirestore(app);
+
+
+/* ================= STATE ================= */
+
+let products = [];
+
+let orders = [];
+
+let customers = [];
+
+let ads = [];
+
+let coupons = [];
+
+let selectedCustomer = null;
+
+let chatUnsubscribe = null;
+
+let notificationTarget = "all";
+
+
+/* ================= HELPERS ================= */
+
+window.money = function(value){
+
+    return Number(value || 0)
+        .toLocaleString("ar-EG") +
+        " ج.م";
+
+};
+
+
+window.escapeHTML = function(text){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text ?? "";
+
+    return div.innerHTML;
+
+};
+
+
+window.toast = function(message,type="success"){
+
+    const container =
+        document.getElementById(
+            "toastContainer"
+        );
+
+    const el =
+        document.createElement("div");
+
+    el.className =
+        "toast " + type;
+
+    el.innerHTML =
+        message;
+
+    container.appendChild(el);
+
+    setTimeout(()=>{
+        el.remove();
+    },3500);
+
+};
+
+
+/* ================= FILE UPLOAD HELPERS ================= */
+
+window.handleProductImageUpload = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById("productImage").value = e.target.result;
+        toast("تم رفع صورة المنتج بنجاح");
+    };
+    reader.readAsDataURL(file);
+};
+
+window.handleAdImageUpload = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById("adImage").value = e.target.result;
+        updateAdPreview();
+        toast("تم رفع صورة الإعلان بنجاح");
+    };
+    reader.readAsDataURL(file);
+};
+
+
+/* ================= NAVIGATION ================= */
+
+const pageNames = {
+
+    dashboard:"الإحصائيات",
+
+    products:"المنتجات والمخزون",
+
+    orders:"الطلبات والشحن",
+
+    customers:"العملاء",
+
+    chat:"خدمة العملاء",
+
+    ads:"الإعلانات",
+
+    coupons:"أكواد الخصم",
+
+    notifications:"الإشعارات"
+
+};
+
+
+document
+.querySelectorAll(".menu-item[data-page]")
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        ()=>{
+
+            showPage(
+                button.dataset.page
+            );
+
+            document
+                .querySelectorAll(".menu-item")
+                .forEach(x=>
+                    x.classList.remove("active")
+                );
+
+            button.classList.add("active");
+
+            document
+                .getElementById("sidebar")
+                .classList.remove("open");
+
+        }
+    );
+
+});
+
+
+window.showPage = function(page){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(el=>
+            el.classList.remove("active")
+        );
+
+    const target =
+        document.getElementById(
+            "page-" + page
+        );
+
+    if(target)
+        target.classList.add("active");
+
+    document.getElementById("pageTitle")
+        .textContent =
+        pageNames[page] || page;
+
+};
+
+
+window.toggleSidebar = function(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+};
+
+
+window.visitStore = function(){
+
+    window.open(
+        "index.html",
+        "_blank"
+    );
+
+};
+
+
+window.closeModal = function(id){
+
+    document
+        .getElementById(id)
+        .classList.remove("show");
+
+};
+
+
+/* ================= PRODUCTS ================= */
+
+function subscribeProducts(){
+
+    onSnapshot(
+        collection(db,"products"),
+        snapshot=>{
+
+            products =
+                snapshot.docs.map(
+                    d=>({
+                        id:d.id,
+                        ...d.data()
+                    })
+                );
+
+            renderProductsTable();
+
+            updateStats();
+
+        }
+    );
+
+}
+
+
+window.openProductForm = function(product=null){
+
+    document
+        .getElementById("productModal")
+        .classList.add("show");
+
+    if(product){
+
+        document.getElementById("productModalTitle")
+            .textContent =
+            "تعديل المنتج";
+
+        document.getElementById("productId")
+            .value =
+            product.id;
+
+        document.getElementById("productName")
+            .value =
+            product.name || "";
+
+        document.getElementById("productCategory")
+            .value =
+            product.category || "";
+
+        document.getElementById("productPrice")
+            .value =
+            product.price || 0;
+
+        document.getElementById("productOldPrice")
+            .value =
+            product.oldPrice || 0;
+
+        document.getElementById("productStock")
+            .value =
+            product.stock || 0;
+
+        document.getElementById("productRating")
+            .value =
+            product.rating || 5;
+
+        document.getElementById("productBadge")
+            .value =
+            product.badge || "";
+
+        document.getElementById("productImage")
+            .value =
+            product.image || "";
+
+        document.getElementById("productImageFile")
+            .value = "";
+
+        document.getElementById("productDescription")
+            .value =
+            product.description || "";
+
+        document.getElementById("productFeatured")
+            .checked =
+            Boolean(product.featured);
+
+    }else{
+
+        resetProductForm();
+
+    }
+
+};
+
+
+function resetProductForm(){
+
+    document
+        .getElementById("productForm")
+        .reset();
+
+    document.getElementById("productId")
+        .value = "";
+
+    document.getElementById("productImage")
+        .value = "";
+
+    document.getElementById("productRating")
+        .value = 5;
+
+}
+
+
+document
+.getElementById("productForm")
+.addEventListener(
+    "submit",
+    async event=>{
+
+        event.preventDefault();
+
+        const id =
+            document
+                .getElementById("productId")
+                .value;
+
+        const data = {
+
+            name:
+                document
+                .getElementById("productName")
+                .value.trim(),
+
+            category:
+                document
+                .getElementById("productCategory")
+                .value.trim(),
+
+            price:
+                Number(
+                    document
+                    .getElementById("productPrice")
+                    .value
+                ),
+
+            oldPrice:
+                Number(
+                    document
+                    .getElementById("productOldPrice")
+                    .value
+                ),
+
+            stock:
+                Number(
+                    document
+                    .getElementById("productStock")
+                    .value
+                ),
+
+            rating:
+                Number(
+                    document
+                    .getElementById("productRating")
+                    .value
+                ),
+
+            badge:
+                document
+                .getElementById("productBadge")
+                .value.trim(),
+
+            image:
+                document
+                .getElementById("productImage")
+                .value.trim(),
+
+            description:
+                document
+                .getElementById("productDescription")
+                .value.trim(),
+
+            featured:
+                document
+                .getElementById("productFeatured")
+                .checked,
+
+            updatedAt:
+                serverTimestamp()
+
+        };
+
+        try{
+
+            if(id){
+
+                await updateDoc(
+                    doc(db,"products",id),
+                    data
+                );
+
+                toast(
+                    "تم تعديل المنتج بنجاح"
+                );
+
+            }else{
+
+                data.createdAt =
+                    serverTimestamp();
+
+                await addDoc(
+                    collection(db,"products"),
+                    data
+                );
+
+                toast(
+                    "تم إضافة المنتج بنجاح"
+                );
+
+            }
+
+            closeModal("productModal");
+
+            resetProductForm();
+
+        }catch(error){
+
+            console.error(error);
+
+            toast(
+                "حدث خطأ أثناء حفظ المنتج",
+                "error"
+            );
+
+        }
+
+    }
+);
+
+
+window.editProduct = function(id){
+
+    const product =
+        products.find(
+            p=>p.id===id
+        );
+
+    if(product)
+        openProductForm(product);
+
+};
+
+
+window.deleteProduct = async function(id){
+
+    if(!confirm(
+        "هل تريد حذف هذا المنتج؟"
+    ))
+        return;
+
+    try{
+
+        await deleteDoc(
+            doc(db,"products",id)
+        );
+
+        toast(
+            "تم حذف المنتج"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        toast(
+            "تعذر حذف المنتج",
+            "error"
+        );
+
+    }
+
+};
+
+
+function renderProductsTable(){
+
+    const tbody =
+        document.getElementById(
+            "productsTable"
+        );
+
+    const search =
+        (
+            document
+            .getElementById("productSearch")
+            ?.value ||
+            ""
+        )
+        .toLowerCase();
+
+    const list =
+        products.filter(p=>
+            String(p.name || "")
+            .toLowerCase()
+            .includes(search)
+        );
+
+    if(!list.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    لا توجد منتجات
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    tbody.innerHTML =
+        list.map(p=>`
+
+            <tr>
+
+                <td>
+
+                    <div class="product-mini">
+
+                        <img
+                            src="${escapeHTML(
+                                p.image ||
+                                "https://via.placeholder.com/100"
+                            )}"
+                        >
+
+                        <div>
+
+                            <strong>
+                                ${escapeHTML(
+                                    p.name ||
+                                    "بدون اسم"
+                                )}
+                            </strong>
+
+                            <small>
+                                ${escapeHTML(
+                                    p.badge || ""
+                                )}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        p.category || "-"
+                    )}
+                </td>
+
+
+                <td>
+                    ${money(p.price)}
+                </td>
+
+
+                <td>
+                    ${Number(p.stock || 0)}
+                </td>
+
+
+                <td>
+
+                    ${
+                        Number(p.stock || 0)>0
+
+                        ?
+
+                        `<span class="status green">
+                            ● متاح
+                        </span>`
+
+                        :
+
+                        `<span class="status red">
+                            ● نفد
+                        </span>`
+                    }
+
+                </td>
+
+
+                <td>
+
+                    <div class="actions">
+
+                        <button
+                            class="btn btn-blue btn-sm"
+                            onclick="editProduct('${p.id}')">
+
+                            <i class="fa-solid fa-pen"></i>
+
+                        </button>
+
+
+                        <button
+                            class="btn btn-danger btn-sm"
+                            onclick="deleteProduct('${p.id}')">
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `)
+        .join("");
+
+}
+
+
+/* ================= ORDERS ================= */
+
+function subscribeOrders(){
+
+    onSnapshot(
+        collection(db,"orders"),
+        snapshot=>{
+
+            orders =
+                snapshot.docs.map(
+                    d=>({
+                        id:d.id,
+                        ...d.data()
+                    })
+                );
+
+            orders.sort(
+                (a,b)=>
+                    getTime(b.createdAt) -
+                    getTime(a.createdAt)
+            );
+
+            renderOrders();
+
+            updateStats();
+
+            renderDashboardOrders();
+
+        }
+    );
+
+}
+
+
+function getTime(timestamp){
+
+    if(timestamp?.toDate)
+        return timestamp.toDate().getTime();
+
+    return 0;
+
+}
+
+
+function formatDate(timestamp){
+
+    if(!timestamp?.toDate)
+        return "-";
+
+    return timestamp
+        .toDate()
+        .toLocaleString("ar-EG");
+
+}
+
+
+function renderOrders(){
+
+    const tbody =
+        document.getElementById(
+            "ordersTable"
+        );
+
+    const search =
+        (
+            document
+            .getElementById("orderSearch")
+            ?.value ||
+            ""
+        )
+        .toLowerCase();
+
+    const list =
+        orders.filter(order=>{
+
+            const text =
+                (
+                    order.customerName ||
+                    ""
+                ).toLowerCase();
+
+            return text.includes(search) ||
+                order.id.toLowerCase()
+                    .includes(search);
+
+        });
+
+    if(!list.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    لا توجد طلبات
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    tbody.innerHTML =
+        list.map(order=>`
+
+            <tr>
+
+                <td>
+
+                    <strong>
+                        ${escapeHTML(
+                            order.customerName ||
+                            "عميل"
+                        )}
+                    </strong>
+
+                </td>
+
+
+                <td>
+
+                    ${
+                        Array.isArray(order.items)
+
+                        ?
+                        order.items
+                            .map(
+                                x=>
+                                escapeHTML(
+                                    x.name
+                                ) +
+                                " × " +
+                                x.quantity
+                            )
+                            .join("<br>")
+
+                        :
+                        "-"
+                    }
+
+                </td>
+
+
+                <td>
+                    ${money(order.total)}
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        order.coupon || "-"
+                    )}
+                </td>
+
+
+                <td>
+
+                    <select
+                        class="form-control"
+                        style="height:35px;width:130px"
+                        onchange="changeOrderStatus('${order.id}',this.value)">
+
+                        <option
+                            value="new"
+                            ${order.status==="new"?"selected":""}>
+                            جديد
+                        </option>
+
+                        <option
+                            value="processing"
+                            ${order.status==="processing"?"selected":""}>
+                            جاري التجهيز
+                        </option>
+
+                        <option
+                            value="shipping"
+                            ${order.status==="shipping"?"selected":""}>
+                            تم الشحن
+                        </option>
+
+                        <option
+                            value="completed"
+                            ${order.status==="completed"?"selected":""}>
+                            مكتمل
+                        </option>
+
+                        <option
+                            value="cancelled"
+                            ${order.status==="cancelled"?"selected":""}>
+                            ملغي
+                        </option>
+
+                    </select>
+
+                </td>
+
+
+                <td>
+                    ${formatDate(order.createdAt)}
+                </td>
+
+
+                <td>
+
+                    <button
+                        class="btn btn-blue btn-sm"
+                        onclick="openOrderChat('${order.customerId}')">
+
+                        <i class="fa-solid fa-comments"></i>
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `)
+        .join("");
+
+}
+
+
+window.changeOrderStatus =
+async function(id,status){
+
+    try{
+
+        const order =
+            orders.find(
+                x=>x.id===id
+            );
+
+        await updateDoc(
+            doc(db,"orders",id),
+            {
+                status,
+                updatedAt:
+                    serverTimestamp()
+            }
+        );
+
+        if(order?.customerId){
+
+            await addCustomerNotification(
+                order.customerId,
+                "تحديث الطلب",
+                getStatusText(status),
+                "order"
+            );
+
+        }
+
+        toast(
+            "تم تحديث حالة الطلب"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        toast(
+            "تعذر تحديث الطلب",
+            "error"
+        );
+
+    }
+
+};
+
+
+function getStatusText(status){
+
+    const map = {
+
+        new:
+            "تم استلام طلبك بنجاح.",
+
+        processing:
+            "طلبك الآن قيد التجهيز.",
+
+        shipping:
+            "تم شحن طلبك وهو في الطريق إليك.",
+
+        completed:
+            "تم إكمال طلبك بنجاح.",
+
+        cancelled:
+            "تم إلغاء الطلب."
+
+    };
+
+    return map[status] ||
+        "تم تحديث حالة طلبك.";
+
+}
+
+
+window.openOrderChat = function(customerId){
+
+    showPage("chat");
+
+    const customer =
+        customers.find(
+            c=>c.id===customerId
+        );
+
+    if(customer)
+        selectCustomer(customer);
+
+};
+
+
+/* ================= CUSTOMERS ================= */
+
+function subscribeCustomers(){
+
+    onSnapshot(
+        collection(db,"customers"),
+        snapshot=>{
+
+            customers =
+                snapshot.docs.map(
+                    d=>({
+                        id:d.id,
+                        ...d.data()
+                    })
+                );
+
+            customers.sort(
+                (a,b)=>
+                    getTime(b.lastMessageAt) -
+                    getTime(a.lastMessageAt)
+            );
+
+            renderCustomers();
+
+            renderChatCustomers();
+
+            populateNotificationCustomers();
+
+            updateStats();
+
+            renderDashboardCustomers();
+
+        }
+    );
+
+}
+
+
+function renderCustomers(){
+
+    const tbody =
+        document.getElementById(
+            "customersTable"
+        );
+
+    const search =
+        (
+            document
+            .getElementById("customerSearch")
+            ?.value ||
+            ""
+        )
+        .toLowerCase();
+
+    const list =
+        customers.filter(c=>
+            String(c.name || "")
+                .toLowerCase()
+                .includes(search)
+        );
+
+    tbody.innerHTML =
+        list.map(c=>`
+
+            <tr>
+
+                <td>
+
+                    <div class="product-mini">
+
+                        <div class="customer-avatar">
+
+                            <i class="fa-solid fa-user"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                ${escapeHTML(
+                                    c.name || "عميل"
+                                )}
+                            </strong>
+
+                            <small>
+                                ${escapeHTML(c.phone || "")}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+                    <small>
+                        ${escapeHTML(c.id)}
+                    </small>
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        c.lastMessage || "-"
+                    )}
+                </td>
+
+
+                <td>
+                    ${formatDate(
+                        c.lastMessageAt ||
+                        c.lastSeen
+                    )}
+                </td>
+
+
+                <td>
+
+                    <button
+                        class="btn btn-primary btn-sm"
+                        onclick="openCustomerChat('${c.id}')">
+
+                        <i class="fa-solid fa-comments"></i>
+
+                        دردشة
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `)
+        .join("");
+
+}
+
+
+window.openCustomerChat = function(id){
+
+    const customer =
+        customers.find(
+            c=>c.id===id
+        );
+
+    if(!customer) return;
+
+    showPage("chat");
+
+    selectCustomer(customer);
+
+};
+
+
+function renderChatCustomers(){
+
+    const container =
+        document.getElementById(
+            "chatCustomersList"
+        );
+
+    if(!customers.length){
+
+        container.innerHTML =
+            "لا يوجد عملاء";
+
+        return;
+    }
+
+    container.innerHTML =
+        customers.map(c=>`
+
+            <div
+                class="customer-item
+                ${selectedCustomer?.id===c.id?"active":""}"
+                onclick="openCustomerChat('${c.id}')">
+
+                <div class="customer-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+                <div class="customer-info">
+
+                    <strong>
+                        ${escapeHTML(
+                            c.name || "عميل"
+                        )}
+                    </strong>
+
+                    <small>
+                        ${escapeHTML(
+                            c.lastMessage ||
+                            "لا توجد رسائل"
+                        )}
+                    </small>
+
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+window.selectCustomer = function(customer){
+
+    selectedCustomer = customer;
+
+    renderChatCustomers();
+
+    document.getElementById(
+        "selectedCustomerInfo"
+    ).innerHTML = `
+
+        <div>
+
+            <strong>
+                ${escapeHTML(
+                    customer.name
+                )}
+            </strong>
+
+            <small
+                style="display:block;color:#64748b">
+
+                ${escapeHTML(
+                    customer.id
+                )}
+
+            </small>
+
+        </div>
+
+    `;
+
+    if(chatUnsubscribe)
+        chatUnsubscribe();
+
+    const messagesRef =
+        collection(
+            db,
+            "customers",
+            customer.id,
+            "messages"
+        );
+
+    const q =
+        query(
+            messagesRef,
+            orderBy("createdAt","asc")
+        );
+
+    chatUnsubscribe =
+        onSnapshot(
+            q,
+            snapshot=>{
+
+                renderAdminMessages(
+                    snapshot.docs.map(
+                        d=>({
+                            id:d.id,
+                            ...d.data()
+                        })
+                    )
+                );
+
+            }
+        );
+
+};
+
+
+function renderAdminMessages(messages){
+
+    const container =
+        document.getElementById(
+            "adminChatMessages"
+        );
+
+    if(!messages.length){
+
+        container.innerHTML = `
+            <div class="empty">
+                <i class="fa-regular fa-comments"></i>
+                <p>
+                    لا توجد رسائل بعد
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        messages.map(message=>{
+
+            const admin =
+                message.sender==="admin";
+
+            return `
+
+                <div
+                    class="chat-msg
+                    ${admin?"admin":"customer"}">
+
+                    ${escapeHTML(
+                        message.text || ""
+                    )}
+
+                    <small>
+                        ${
+                            message.createdAt?.toDate
+                            ?
+                            message.createdAt
+                            .toDate()
+                            .toLocaleTimeString(
+                                "ar-EG",
+                                {
+                                    hour:"2-digit",
+                                    minute:"2-digit"
+                                }
+                            )
+                            :
+                            ""
+                        }
+                    </small>
+
+                </div>
+
+            `;
+
+        })
+        .join("");
+
+    container.scrollTop =
+        container.scrollHeight;
+
+}
+
+
+window.adminChatKey =
+function(event){
+
+    if(event.key==="Enter"){
+
+        event.preventDefault();
+
+        sendAdminMessage();
+
+    }
+
+};
+
+
+window.sendAdminMessage =
+async function(){
+
+    if(!selectedCustomer){
+
+        toast(
+            "اختر عميلًا أولًا",
+            "error"
+        );
+
+        return;
+    }
+
+    const input =
+        document.getElementById(
+            "adminChatInput"
+        );
+
+    const text =
+        input.value.trim();
+
+    if(!text) return;
+
+    input.value = "";
+
+    try{
+
+        await addDoc(
+            collection(
+                db,
+                "customers",
+                selectedCustomer.id,
+                "messages"
+            ),
+            {
+
+                text,
+
+                sender:"admin",
+
+                customerId:
+                    selectedCustomer.id,
+
+                createdAt:
+                    serverTimestamp(),
+
+                readByCustomer:false
+
+            }
+        );
+
+        await updateDoc(
+            doc(
+                db,
+                "customers",
+                selectedCustomer.id
+            ),
+            {
+
+                lastMessage:text,
+
+                lastMessageAt:
+                    serverTimestamp()
+
+            }
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        toast(
+            "تعذر إرسال الرسالة",
+            "error"
+        );
+
+    }
+
+};
+
+
+/* ================= ADS ================= */
+
+function subscribeAds(){
+
+    onSnapshot(
+        collection(db,"ads"),
+        snapshot=>{
+
+            ads =
+                snapshot.docs.map(
+                    d=>({
+                        id:d.id,
+                        ...d.data()
+                    })
+                );
+
+            renderAdsTable();
+
+        }
+    );
+
+}
+
+
+document
+.getElementById("adForm")
+.addEventListener(
+    "submit",
+    async event=>{
+
+        event.preventDefault();
+
+        const id =
+            document
+            .getElementById("adId")
+            .value;
+
+        const data = {
+
+            title:
+                document
+                .getElementById("adTitle")
+                .value.trim(),
+
+            message:
+                document
+                .getElementById("adMessage")
+                .value.trim(),
+
+            image:
+                document
+                .getElementById("adImage")
+                .value.trim(),
+
+            buttonText:
+                document
+                .getElementById("adButtonText")
+                .value.trim(),
+
+            buttonLink:
+                document
+                .getElementById("adButtonLink")
+                .value.trim(),
+
+            priority:
+                Number(
+                    document
+                    .getElementById("adPriority")
+                    .value
+                ),
+
+            active:
+                document
+                .getElementById("adActive")
+                .value==="true",
+
+            updatedAt:
+                serverTimestamp()
+
+        };
+
+        try{
+
+            if(id){
+
+                await updateDoc(
+                    doc(db,"ads",id),
+                    data
+                );
+
+                toast(
+                    "تم تعديل الإعلان"
+                );
+
+            }else{
+
+                data.createdAt =
+                    serverTimestamp();
+
+                await addDoc(
+                    collection(db,"ads"),
+                    data
+                );
+
+                toast(
+                    "تم نشر الإعلان بنجاح 📢"
+                );
+
+            }
+
+            resetAdForm();
+
+        }catch(error){
+
+            console.error(error);
+
+            toast(
+                "تعذر حفظ الإعلان",
+                "error"
+            );
+
+        }
+
+    }
+);
+
+
+function renderAdsTable(){
+
+    const tbody =
+        document.getElementById(
+            "adsTable"
+        );
+
+    if(!ads.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    لا توجد إعلانات
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    tbody.innerHTML =
+        ads.map(ad=>`
+
+            <tr>
+
+                <td>
+                    <strong>
+                        ${escapeHTML(
+                            ad.title || "-"
+                        )}
+                    </strong>
+                </td>
+
+                <td>
+
+                    ${
+                        ad.active !== false
+
+                        ?
+
+                        `<span class="status green">
+                            منشور
+                        </span>`
+
+                        :
+
+                        `<span class="status red">
+                            مخفي
+                        </span>`
+                    }
+
+                </td>
+
+                <td>
+                    ${ad.priority || 0}
+                </td>
+
+                <td>
+
+                    <div class="actions">
+
+                        <button
+                            class="btn btn-blue btn-sm"
+                            onclick="editAd('${ad.id}')">
+
+                            <i class="fa-solid fa-pen"></i>
+
+                        </button>
+
+                        <button
+                            class="btn btn-danger btn-sm"
+                            onclick="deleteAd('${ad.id}')">
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `)
+        .join("");
+
+}
+
+
+window.editAd = function(id){
+
+    const ad =
+        ads.find(
+            x=>x.id===id
+        );
+
+    if(!ad) return;
+
+    document.getElementById("adId")
+        .value = ad.id;
+
+    document.getElementById("adTitle")
+        .value = ad.title || "";
+
+    document.getElementById("adMessage")
+        .value = ad.message || "";
+
+    document.getElementById("adImage")
+        .value = ad.image || "";
+
+    document.getElementById("adImageFile")
+        .value = "";
+
+    document.getElementById("adButtonText")
+        .value = ad.buttonText || "";
+
+    document.getElementById("adButtonLink")
+        .value = ad.buttonLink || "";
+
+    document.getElementById("adPriority")
+        .value = ad.priority || 0;
+
+    document.getElementById("adActive")
+        .value =
+        ad.active===false
+        ?
+        "false"
+        :
+        "true";
+
+    showPage("ads");
+
+    updateAdPreview();
+
+};
+
+
+window.deleteAd = async function(id){
+
+    if(!confirm(
+        "هل تريد حذف الإعلان؟"
+    ))
+        return;
+
+    try{
+
+        await deleteDoc(
+            doc(db,"ads",id)
+        );
+
+        toast(
+            "تم حذف الإعلان"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        toast(
+            "تعذر حذف الإعلان",
+            "error"
+        );
+
+    }
+
+};
+
+
+window.resetAdForm = function(){
+
+    document
+        .getElementById("adForm")
+        .reset();
+
+    document.getElementById("adId")
+        .value = "";
+
+    document.getElementById("adImage")
+        .value = "";
+
+    document.getElementById("adPreview")
+        .style.backgroundImage =
+        "";
+
+    document.getElementById("previewTitle")
+        .textContent =
+        "عنوان الإعلان";
+
+    document.getElementById("previewMessage")
+        .textContent =
+        "اكتب الإعلان لمشاهدة المعاينة";
+
+};
+
+
+function updateAdPreview(){
+
+    const title =
+        document
+        .getElementById("adTitle")
+        .value;
+
+    const message =
+        document
+        .getElementById("adMessage")
+        .value;
+
+    const image =
+        document
+        .getElementById("adImage")
+        .value;
+
+    document.getElementById("previewTitle")
+        .textContent =
+        title || "عنوان الإعلان";
+
+    document.getElementById("previewMessage")
+        .textContent =
+        message ||
+        "اكتب الإعلان لمشاهدة المعاينة";
+
+    if(image){
+
+        document.getElementById("adPreview")
+            .style.backgroundImage =
+            `linear-gradient(
+                rgba(17,24,36,.7),
+                rgba(17,24,36,.7)
+            ),url("${image}")`;
+
+        document.getElementById("adPreview")
+            .style.backgroundSize =
+            "cover";
+
+    }
+
+}
+
+
+[
+    "adTitle",
+    "adMessage"
+]
+.forEach(id=>{
+
+    document
+    .getElementById(id)
+    .addEventListener(
+        "input",
+        updateAdPreview
+    );
+
+});
+
+
+/* ================= COUPONS ================= */
+
+function subscribeCoupons(){
+
+    onSnapshot(
+        collection(db,"coupons"),
+        snapshot=>{
+
+            coupons =
+                snapshot.docs.map(
+                    d=>({
+                        id:d.id,
+                        ...d.data()
+                    })
+                );
+
+            renderCoupons();
+
+        }
+    );
+
+}
+
+
+window.openCouponForm = function(){
+
+    document
+        .getElementById("couponForm")
+        .reset();
+
+    document
+        .getElementById("couponModal")
+        .classList.add("show");
+
+};
+
+
+document
+.getElementById("couponForm")
+.addEventListener(
+    "submit",
+    async event=>{
+
+        event.preventDefault();
+
+        const code =
+            document
+            .getElementById("couponCode")
+            .value
+            .trim()
+            .toUpperCase();
+
+        const data = {
+
+            code,
+
+            type:
+                document
+                .getElementById("couponType")
+                .value,
+
+            value:
+                Number(
+                    document
+                    .getElementById("couponValue")
+                    .value
+                ),
+
+            minOrder:
+                Number(
+                    document
+                    .getElementById("couponMinOrder")
+                    .value
+                ),
+
+            maxDiscount:
+                Number(
+                    document
+                    .getElementById("couponMaxDiscount")
+                    .value
+                ),
+
+            active:
+                document
+                .getElementById("couponActive")
+                .value==="true",
+
+            createdAt:
+                serverTimestamp()
+
+        };
+
+        try{
+
+            await addDoc(
+                collection(db,"coupons"),
+                data
+            );
+
+            toast(
+                "تم إنشاء كود الخصم"
+            );
+
+            closeModal("couponModal");
+
+        }catch(error){
+
+            console.error(error);
+
+            toast(
+                "تعذر إنشاء الكود",
+                "error"
+            );
+
+        }
+
+    }
+);
+
+
+function renderCoupons(){
+
+    const tbody =
+        document.getElementById(
+            "couponsTable"
+        );
+
+    if(!coupons.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    لا توجد أكواد خصم
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    tbody.innerHTML =
+        coupons.map(c=>`
+
+            <tr>
+
+                <td>
+
+                    <strong>
+                        ${escapeHTML(
+                            c.code || "-"
+                        )}
+                    </strong>
+
+                </td>
+
+                <td>
+                    ${
+                        c.type==="percent"
+                        ?
+                        "نسبة مئوية"
+                        :
+                        "مبلغ ثابت"
+                    }
+                </td>
+
+                <td>
+                    ${
+                        c.type==="percent"
+                        ?
+                        c.value + "%"
+                        :
+                        money(c.value)
+                    }
+                </td>
+
+                <td>
+                    ${money(c.minOrder)}
+                </td>
+
+                <td>
+
+                    ${
+                        c.active !== false
+
+                        ?
+
+                        `<span class="status green">
+                            مفعل
+                        </span>`
+
+                        :
+
+                        `<span class="status red">
+                            متوقف
+                        </span>`
+                    }
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteCoupon('${c.id}')">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `)
+        .join("");
+
+}
+
+
+window.deleteCoupon = async function(id){
+
+    if(!confirm(
+        "هل تريد حذف كود الخصم؟"
+    ))
+        return;
+
+    try{
+
+        await deleteDoc(
+            doc(db,"coupons",id)
+        );
+
+        toast(
+            "تم حذف كود الخصم"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        toast(
+            "تعذر حذف الكود",
+            "error"
+        );
+
+    }
+
+};
+
+
+/* ================= NOTIFICATIONS ================= */
+
+window.selectNotificationTarget =
+function(target){
+
+    notificationTarget =
+        target;
+
+    document
+        .querySelectorAll(".target-card")
+        .forEach(el=>
+            el.classList.remove("active")
+        );
+
+    if(target==="all"){
+
+        document
+            .getElementById("targetAll")
+            .classList.add("active");
+
+    }
+
+    if(target==="customer"){
+
+        document
+            .getElementById("targetCustomer")
+            .classList.add("active");
+
+    }
+
+    if(target==="announcement"){
+
+        document
+            .getElementById("targetAnnouncement")
+            .classList.add("active");
+
+    }
+
+    document
+        .getElementById(
+            "notificationCustomerGroup"
+        )
+        .style.display =
+        target==="customer"
+        ?
+        "flex"
+        :
+        "none";
+
+};
+
+
+function populateNotificationCustomers(){
+
+    const select =
+        document.getElementById(
+            "notificationCustomer"
+        );
+
+    select.innerHTML = `
+        <option value="">
+            اختر العميل
+        </option>
+    `;
+
+    customers.forEach(c=>{
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            c.id;
+
+        option.textContent =
+            c.name || c.id;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+document
+.getElementById("notificationForm")
+.addEventListener(
+    "submit",
+    async event=>{
+
+        event.preventDefault();
+
+        const title =
+            document
+            .getElementById(
+                "notificationTitle"
+            )
+            .value
+            .trim();
+
+        const message =
+            document
+            .getElementById(
+                "notificationMessage"
+            )
+            .value
+            .trim();
+
+        const type =
+            document
+            .getElementById(
+                "notificationType"
+            )
+            .value;
+
+        if(
+            notificationTarget==="customer"
+        ){
+
+            const customerId =
+                document
+                .getElementById(
+                    "notificationCustomer"
+                )
+                .value;
+
+            if(!customerId){
+
+                toast(
+                    "اختر العميل",
+                    "error"
+                );
+
+                return;
+            }
+
+            await addCustomerNotification(
+                customerId,
+                title,
+                message,
+                type
+            );
+
+            toast(
+                "تم إرسال الإشعار للعميل 🔔"
+            );
+
+        }else{
+
+            await sendNotificationToAll(
+                title,
+                message,
+                type
+            );
+
+            toast(
+                "تم إرسال الإشعار لجميع العملاء 🔔"
+            );
+
+        }
+
+        document
+            .getElementById(
+                "notificationForm"
+            )
+            .reset();
+
+    }
+);
+
+
+async function addCustomerNotification(
+    customerId,
+    title,
+    message,
+    type="general"
+){
+
+    await addDoc(
+        collection(
+            db,
+            "customers",
+            customerId,
+            "notifications"
+        ),
+        {
+
+            title,
+
+            message,
+
+            type,
+
+            read:false,
+
+            createdAt:
+                serverTimestamp()
+
+        }
+    );
+
+}
+
+
+async function sendNotificationToAll(
+    title,
+    message,
+    type
+){
+
+    for(
+        const customer
+        of customers
+    ){
+
+        await addCustomerNotification(
+            customer.id,
+            title,
+            message,
+            type
+        );
+
+    }
+
+}
+
+
+function subscribeNotifications(){
+
+    onSnapshot(
+        collection(db,"notifications"),
+        snapshot=>{
+
+            renderGlobalNotifications(
+                snapshot.docs.map(
+                    d=>({
+                        id:d.id,
+                        ...d.data()
+                    })
+                )
+            );
+
+        },
+        ()=>{
+            document
+                .getElementById(
+                    "notificationsList"
+                )
+                .innerHTML = `
+                    <div style="color:#64748b">
+                        الإشعارات الخاصة بالعملاء
+                        تُحفظ داخل حساب كل عميل.
+                    </div>
+                `;
+        }
+    );
+
+}
+
+
+function renderGlobalNotifications(list){
+
+    const container =
+        document.getElementById(
+            "notificationsList"
+        );
+
+    if(!list.length){
+
+        container.innerHTML = `
+            <div style="color:#64748b">
+                لا توجد إشعارات عامة.
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        list
+        .slice(0,20)
+        .map(n=>`
+
+            <div class="notification-item">
+
+                <div class="notification-icon">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+
+                <div>
+
+                    <strong>
+                        ${escapeHTML(
+                            n.title || "إشعار"
+                        )}
+                    </strong>
+
+                    <p>
+                        ${escapeHTML(
+                            n.message || ""
+                        )}
+                    </p>
+
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+/* ================= STATS ================= */
+
+function updateStats(){
+
+    document.getElementById(
+        "statProducts"
+    ).textContent =
+        products.length;
+
+    document.getElementById(
+        "statOrders"
+    ).textContent =
+        orders.length;
+
+    document.getElementById(
+        "statCustomers"
+    ).textContent =
+        customers.length;
+
+    const sales =
+        orders
+        .filter(
+            o=>o.status!=="cancelled"
+        )
+        .reduce(
+            (sum,o)=>
+                sum + Number(o.total || 0),
+            0
+        );
+
+    document.getElementById(
+        "statSales"
+    ).textContent =
+        money(sales);
+
+    document.getElementById(
+        "ordersBadge"
+    ).textContent =
+        orders.filter(
+            o=>o.status==="new"
+        ).length;
+
+}
+
+
+function renderDashboardOrders(){
+
+    const container =
+        document.getElementById(
+            "dashboardOrders"
+        );
+
+    const list =
+        orders.slice(0,5);
+
+    if(!list.length){
+
+        container.innerHTML =
+            "لا توجد طلبات حتى الآن.";
+
+        return;
+
+    }
+
+    container.innerHTML =
+        list.map(order=>`
+
+            <div
+                style="
+                    padding:12px 0;
+                    border-bottom:1px solid var(--border);
+                    display:flex;
+                    justify-content:space-between;
+                    gap:10px;
+                ">
+
+                <div>
+
+                    <strong
+                        style="
+                            display:block;
+                            font-size:12px;
+                        ">
+
+                        ${escapeHTML(
+                            order.customerName ||
+                            "عميل"
+                        )}
+
+                    </strong>
+
+                    <small
+                        style="
+                            color:#64748b;
+                            font-size:9px;
+                        ">
+
+                        ${formatDate(
+                            order.createdAt
+                        )}
+
+                    </small>
+
+                </div>
+
+                <strong>
+                    ${money(order.total)}
+                </strong>
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+function renderDashboardCustomers(){
+
+    const container =
+        document.getElementById(
+            "dashboardCustomers"
+        );
+
+    const list =
+        customers.slice(0,5);
+
+    if(!list.length){
+
+        container.innerHTML =
+            "لا يوجد عملاء حتى الآن.";
+
+        return;
+
+    }
+
+    container.innerHTML =
+        list.map(c=>`
+
+            <div
+                style="
+                    display:flex;
+                    align-items:center;
+                    gap:10px;
+                    padding:10px 0;
+                    border-bottom:1px solid var(--border);
+                ">
+
+                <div class="customer-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+                <div>
+
+                    <strong
+                        style="
+                            display:block;
+                            font-size:12px;
+                        ">
+
+                        ${escapeHTML(
+                            c.name || "عميل"
+                        )}
+
+                    </strong>
+
+                    <small
+                        style="
+                            color:#64748b;
+                            font-size:9px;
+                        ">
+
+                        ${formatDate(
+                            c.lastSeen
+                        )}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+/* ================= INIT ================= */
+
+subscribeProducts();
+
+subscribeOrders();
+
+subscribeCustomers();
+
+subscribeAds();
+
+subscribeCoupons();
+
+subscribeNotifications();
+
+</script>
+
+</body>
+</html>
