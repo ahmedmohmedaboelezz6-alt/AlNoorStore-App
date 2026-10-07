@@ -1018,14 +1018,14 @@ a{
     border-color:var(--primary);
 }
 
-/* ================= CHAT ================= */
+/* ================= CHAT ENHANCED ================= */
 
 .chat-window{
     position:fixed;
     left:25px;
     bottom:90px;
     width:min(390px,calc(100% - 30px));
-    height:560px;
+    height:580px;
     background:#0f1621;
     border:1px solid var(--border);
     border-radius:25px;
@@ -1082,27 +1082,32 @@ a{
     flex:1;
     padding:15px;
     overflow:auto;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
 }
 
 .message{
     max-width:82%;
     padding:10px 12px;
     border-radius:15px;
-    margin-bottom:10px;
     font-size:13px;
     line-height:1.7;
+    position:relative;
 }
 
 .message.user{
     margin-right:auto;
     background:linear-gradient(135deg,#ea580c,#f97316);
     border-bottom-right-radius:4px;
+    color:#fff;
 }
 
 .message.admin{
     margin-left:auto;
     background:#1b2635;
     border-bottom-left-radius:4px;
+    color:#fff;
 }
 
 .message-time{
@@ -1110,34 +1115,130 @@ a{
     opacity:.6;
     font-size:9px;
     margin-top:4px;
+    text-align:left;
 }
 
-.chat-input{
-    padding:12px;
-    display:flex;
-    gap:7px;
+/* Chat Media Elements */
+.chat-img-msg{
+    max-width:100%;
+    border-radius:10px;
+    margin-top:4px;
+    display:block;
+    cursor:pointer;
+    max-height:200px;
+    object-fit:cover;
+}
+
+.chat-sticker-msg{
+    width:90px;
+    height:90px;
+    object-fit:contain;
+}
+
+.chat-audio-msg{
+    width:100%;
+    min-width:200px;
+    margin-top:5px;
+}
+
+/* Stickers Picker Popup */
+.sticker-picker{
+    position:absolute;
+    bottom:70px;
+    left:10px;
+    right:10px;
+    background:#121925;
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:10px;
+    display:none;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    box-shadow:var(--shadow);
+    z-index:10;
+}
+
+.sticker-picker.show{
+    display:grid;
+}
+
+.sticker-item{
+    width:100%;
+    aspect-ratio:1;
+    object-fit:contain;
+    cursor:pointer;
+    padding:4px;
+    border-radius:8px;
+    background:rgba(255,255,255,.05);
+    transition:.2s;
+}
+
+.sticker-item:hover{
+    background:rgba(249,115,22,.2);
+    transform:scale(1.1);
+}
+
+/* Chat Input Bar */
+.chat-input-area{
     border-top:1px solid var(--border);
+    background:#151d29;
+    padding:10px;
+    position:relative;
 }
 
-.chat-input input{
+.chat-input-row{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.chat-input-row input{
     flex:1;
     min-width:0;
-    height:45px;
+    height:42px;
     border:1px solid var(--border);
-    border-radius:13px;
-    background:#151d29;
+    border-radius:12px;
+    background:#0f1621;
     color:#fff;
     padding:0 12px;
     outline:none;
+    font-size:13px;
+}
+
+.chat-tool-btn{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:10px;
+    background:rgba(255,255,255,.06);
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.2s;
+}
+
+.chat-tool-btn:hover{
+    background:rgba(249,115,22,.2);
+    color:var(--primary);
+}
+
+.chat-tool-btn.recording{
+    background:var(--danger);
+    color:#fff;
+    animation:pulse 1s infinite;
 }
 
 .chat-send{
-    width:45px;
-    height:45px;
+    width:42px;
+    height:42px;
     border:none;
-    border-radius:13px;
+    border-radius:12px;
     background:var(--primary);
     color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
 .chat-float{
@@ -1913,23 +2014,58 @@ footer ul{
     </div>
 
 
-    <div class="chat-input">
+    <!-- STICKER PICKER POPUP -->
+    <div class="sticker-picker" id="stickerPicker">
+        <img class="sticker-item" src="https://em-content.zobj.net/source/apple/391/grinning-face-with-smiling-eyes_1f604.png" onclick="sendSticker(this.src)">
+        <img class="sticker-item" src="https://em-content.zobj.net/source/apple/391/red-heart_2764-fe0f.png" onclick="sendSticker(this.src)">
+        <img class="sticker-item" src="https://em-content.zobj.net/source/apple/391/thumbs-up_1f44d.png" onclick="sendSticker(this.src)">
+        <img class="sticker-item" src="https://em-content.zobj.net/source/apple/391/fire_1f525.png" onclick="sendSticker(this.src)">
+        <img class="sticker-item" src="https://em-content.zobj.net/source/apple/391/clapping-hands_1f44f.png" onclick="sendSticker(this.src)">
+        <img class="sticker-item" src="https://em-content.zobj.net/source/apple/391/party-popper_1f389.png" onclick="sendSticker(this.src)">
+        <img class="sticker-item" src="https://em-content.zobj.net/source/apple/391/sparkles_2728.png" onclick="sendSticker(this.src)">
+        <img class="sticker-item" src="https://em-content.zobj.net/source/apple/391/smiling-face-with-heart-eyes_1f60d.png" onclick="sendSticker(this.src)">
+    </div>
 
-        <input
-            id="chatInput"
-            type="text"
-            maxlength="500"
-            placeholder="اكتب رسالتك..."
-            onkeydown="handleChatKey(event)"
-        >
 
-        <button
-            class="chat-send"
-            onclick="sendMessage()">
+    <div class="chat-input-area">
+        
+        <!-- Hidden file input for images -->
+        <input type="file" id="chatImageInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
 
-            <i class="fa-solid fa-paper-plane"></i>
+        <div class="chat-input-row">
+            
+            <!-- Sticker button -->
+            <button class="chat-tool-btn" title="اختر ملصق" onclick="toggleStickerPicker()">
+                <i class="fa-solid fa-face-smile"></i>
+            </button>
 
-        </button>
+            <!-- Image upload button -->
+            <button class="chat-tool-btn" title="إرسال صورة" onclick="document.getElementById('chatImageInput').click()">
+                <i class="fa-regular fa-image"></i>
+            </button>
+
+            <!-- Voice record button -->
+            <button class="chat-tool-btn" id="voiceRecordBtn" title="تسجيل صوتي" onclick="toggleVoiceRecording()">
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+
+            <input
+                id="chatInput"
+                type="text"
+                maxlength="500"
+                placeholder="اكتب رسالتك..."
+                onkeydown="handleChatKey(event)"
+            >
+
+            <button
+                class="chat-send"
+                onclick="sendMessage()">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
+            </button>
+
+        </div>
 
     </div>
 
@@ -2027,6 +2163,11 @@ let customer = JSON.parse(
 
 let chatUnsubscribe = null;
 let notificationsUnsubscribe = null;
+
+// Voice recording variables
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
 
 
 /* ================= HELPERS ================= */
@@ -2163,7 +2304,7 @@ function ensureCustomer(){
 }
 
 
-/* ================= NOTIFICATIONS (NEW) ================= */
+/* ================= NOTIFICATIONS ================= */
 
 function subscribeNotifications(){
     if(!customer) return;
@@ -2171,35 +2312,30 @@ function subscribeNotifications(){
     if(notificationsUnsubscribe)
         notificationsUnsubscribe();
 
-    // 1. الاستماع للإشعارات العامة (للكل)
     const globalQuery = query(
         collection(db, "notifications"),
         where("target", "==", "all"),
         orderBy("createdAt", "desc")
     );
 
-    // 2. الاستماع للإشعارات المخصصة لهذا المستخدم فقط
     const personalQuery = query(
         collection(db, "notifications"),
         where("targetId", "==", customer.id),
         orderBy("createdAt", "desc")
     );
 
-    // متابعة الإشعارات العامة
     onSnapshot(globalQuery, snapshot => {
         snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
                 const data = change.doc.data();
-                // لتجنب إظهار الإشعارات القديمة جداً عند فتح الموقع لأول مرة
                 const dataTime = data.createdAt?.toMillis ? data.createdAt.toMillis() : Date.now();
-                if (Date.now() - dataTime < 60000) { // آخر دقيقة فقط
+                if (Date.now() - dataTime < 60000) {
                     showNotificationBanner(data.title, data.message);
                 }
             }
         });
     }, err => console.log(err));
 
-    // متابعة الإشعارات الخاصة
     onSnapshot(personalQuery, snapshot => {
         snapshot.docChanges().forEach(change => {
             if (change.type === "added") {
@@ -2671,7 +2807,7 @@ window.toggleFavorite = function(id){
 
         favorites.push(id);
 
-        toast("تمت إضافة المنتج للمفضلة ❤️️");
+        toast("تمت إضافة المنتج للمفضلة ❤");
 
     }
 
@@ -3446,7 +3582,7 @@ function renderAds(ads){
 }
 
 
-/* ================= CHAT ================= */
+/* ================= CHAT ENHANCED (TEXT, IMAGES, STICKERS, VOICE) ================= */
 
 window.openChat = function(){
 
@@ -3466,6 +3602,18 @@ window.closeChat = function(){
     document
         .getElementById("chatWindow")
         .classList.remove("open");
+
+    document
+        .getElementById("stickerPicker")
+        .classList.remove("show");
+
+};
+
+
+window.toggleStickerPicker = function(){
+
+    const picker = document.getElementById("stickerPicker");
+    picker.classList.toggle("show");
 
 };
 
@@ -3532,7 +3680,7 @@ function renderMessages(messages){
                     أهلاً ${escapeHTML(customer.name)}
                     👋
                     <br>
-                    اكتب رسالتك وسنرد عليك.
+                    اكتب رسالتك أو أرسل صورة، ملصق، أو فويس نوت.
                 </p>
             </div>
         `;
@@ -3563,13 +3711,23 @@ function renderMessages(messages){
 
             }
 
+            let contentHTML = "";
+
+            if(message.type === "image"){
+                contentHTML = `<img src="${escapeHTML(message.mediaUrl)}" class="chat-img-msg" onclick="window.open(this.src, '_blank')">`;
+            } else if(message.type === "sticker"){
+                contentHTML = `<img src="${escapeHTML(message.mediaUrl)}" class="chat-sticker-msg">`;
+            } else if(message.type === "voice"){
+                contentHTML = `<audio controls src="${escapeHTML(message.mediaUrl)}" class="chat-audio-msg"></audio>`;
+            } else {
+                contentHTML = `<div>${escapeHTML(message.text || "")}</div>`;
+            }
+
             return `
 
                 <div class="message ${isUser?"user":"admin"}">
 
-                    ${escapeHTML(
-                        message.text || ""
-                    )}
+                    ${contentHTML}
 
                     <span class="message-time">
                         ${time}
@@ -3601,6 +3759,7 @@ window.handleChatKey = function(event){
 };
 
 
+// إرسال رسالة نصية عادية
 window.sendMessage = async function(){
 
     if(!ensureCustomer()) return;
@@ -3617,8 +3776,120 @@ window.sendMessage = async function(){
 
     input.value = "";
 
-    try{
+    await saveMessageToFirestore({
+        text,
+        type: "text"
+    });
 
+};
+
+
+// إرسال ملصق
+window.sendSticker = async function(stickerUrl){
+
+    if(!ensureCustomer()) return;
+
+    document.getElementById("stickerPicker").classList.remove("show");
+
+    await saveMessageToFirestore({
+        mediaUrl: stickerUrl,
+        type: "sticker",
+        text: "[ملصق]"
+    });
+
+};
+
+
+// رفع واختيار صورة وإرسالها
+window.handleImageUpload = async function(event){
+
+    const file = event.target.files[0];
+    if(!file) return;
+
+    if(!ensureCustomer()) return;
+
+    toast("جاري رفع الصورة...", "notification");
+
+    // تحويل الصورة إلى Base64 لكي تحفظ مباشرة في قاعدة البيانات بدون الحاجة لتفعيل Firebase Storage منفصل
+    const reader = new FileReader();
+    reader.onload = async function(e){
+        const base64Image = e.target.result;
+        
+        await saveMessageToFirestore({
+            mediaUrl: base64Image,
+            type: "image",
+            text: "[صورة]"
+        });
+
+        toast("تم إرسال الصورة بنجاح");
+        event.target.value = "";
+    };
+
+    reader.readAsDataURL(file);
+
+};
+
+
+// تسجيل وإرسال فويس نوت (Voice Note)
+window.toggleVoiceRecording = async function(){
+
+    const btn = document.getElementById("voiceRecordBtn");
+
+    if(!isRecording){
+        try{
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                
+                // تحويل التسجيل إلى Base64
+                const reader = new FileReader();
+                reader.onload = async function(e){
+                    const base64Audio = e.target.result;
+                    
+                    await saveMessageToFirestore({
+                        mediaUrl: base64Audio,
+                        type: "voice",
+                        text: "[تسجيل صوتي]"
+                    });
+
+                    toast("تم إرسال التسجيل الصوتي 🎤");
+                };
+                reader.readAsDataURL(audioBlob);
+
+                // إيقاف استخدام الميكروفون
+                stream.getTracks().forEach(track => track.stop());
+            };
+
+            mediaRecorder.start();
+            isRecording = true;
+            btn.classList.add("recording");
+            btn.title = "إيقاف التسجيل وإرساله";
+            toast("جاري التسجيل... انقر مرة أخرى للإرسال", "notification");
+
+        } catch(err){
+            console.error(err);
+            toast("تعذر الوصول للميكروفون", "error");
+        }
+    } else {
+        mediaRecorder.stop();
+        isRecording = false;
+        btn.classList.remove("recording");
+        btn.title = "تسجيل صوتي";
+    }
+
+};
+
+
+// حفظ الرسالة في فايبربيس
+async function saveMessageToFirestore(messageData){
+    try{
         await addDoc(
             collection(
                 db,
@@ -3627,36 +3898,23 @@ window.sendMessage = async function(){
                 "messages"
             ),
             {
-
-                text,
-
+                ...messageData,
                 sender:"customer",
-
                 customerId:customer.id,
-
                 customerName:customer.name,
-
                 createdAt:serverTimestamp(),
-
                 readByAdmin:false
-
             }
         );
 
         await setDoc(
             doc(db,"customers",customer.id),
             {
-
                 name:customer.name,
-
                 customerId:customer.id,
-
-                lastMessage:text,
-
+                lastMessage: messageData.text || "[محتوى مرئي]",
                 lastMessageAt:serverTimestamp(),
-
                 lastSeen:serverTimestamp()
-
             },
             {merge:true}
         );
@@ -3671,8 +3929,7 @@ window.sendMessage = async function(){
         );
 
     }
-
-};
+}
 
 
 /* ================= SCROLL ================= */
