@@ -1354,6 +1354,24 @@ footer ul{
     border-top:1px solid var(--border);
 }
 
+
+/* ================= NOOR NEW FEATURES ================= */
+.store-logo-img{width:48px;height:48px;border-radius:15px;object-fit:cover;display:none;box-shadow:0 0 28px rgba(249,115,22,.35)}
+.brand.has-logo .brand-icon{display:none}.brand.has-logo .store-logo-img{display:block}
+.notification-panel{position:fixed;top:88px;right:24px;width:min(390px,calc(100% - 30px));max-height:70vh;overflow:auto;background:#101722;border:1px solid rgba(249,115,22,.35);border-radius:20px;z-index:12000;box-shadow:0 25px 80px rgba(0,0,0,.55);padding:14px;display:none}
+.notification-panel.show{display:block;animation:toastIn .25s ease}.notification-head{display:flex;justify-content:space-between;align-items:center;padding:6px 5px 12px;border-bottom:1px solid var(--border)}
+.notification-item{padding:13px 10px;border-bottom:1px solid var(--border);cursor:pointer}.notification-item:last-child{border-bottom:0}.notification-item.unread{background:rgba(249,115,22,.07);border-radius:12px}.notification-item strong{display:block;color:#fff}.notification-item p{color:#cbd5e1;font-size:12px;line-height:1.8;margin-top:4px}.notification-item small{color:#64748b;font-size:10px}
+.notification-empty{text-align:center;color:var(--muted);padding:35px 10px}.notification-count{background:#f59e0b!important}
+.chat-unread-label{position:absolute;left:48px;bottom:34px;background:#f59e0b;color:#111827;border-radius:20px;padding:7px 12px;font-size:11px;font-weight:900;display:none;box-shadow:0 5px 25px rgba(245,158,11,.25);white-space:nowrap}.chat-unread-label.show{display:block;animation:pulse 1.8s infinite}
+.unread-dot{display:inline-block;width:9px;height:9px;background:#f59e0b;border-radius:50%;margin-left:6px;box-shadow:0 0 10px rgba(245,158,11,.8)}
+.ad-card{box-shadow:0 0 20px rgba(249,115,22,.15),0 0 55px rgba(245,158,11,.07),inset 0 0 35px rgba(249,115,22,.05);animation:adGlow 2.8s ease-in-out infinite alternate;border-color:rgba(249,115,22,.6)}
+.ad-card::after{content:"";position:absolute;inset:0;border-radius:24px;border:1px solid rgba(255,255,255,.08);pointer-events:none;box-shadow:inset 0 0 22px rgba(245,158,11,.12)}
+@keyframes adGlow{from{box-shadow:0 0 18px rgba(249,115,22,.14),0 0 35px rgba(245,158,11,.05),inset 0 0 25px rgba(249,115,11,.03)}to{box-shadow:0 0 32px rgba(249,115,22,.35),0 0 80px rgba(245,158,11,.12),inset 0 0 35px rgba(249,115,11,.08)}}
+.quantity-picker{display:flex;align-items:center;gap:7px;margin-top:9px}.quantity-picker button{width:28px;height:28px;border:1px solid var(--border);background:#171f2c;color:#fff;border-radius:8px}.quantity-picker strong{min-width:28px;text-align:center}.product-quick-qty{position:absolute;right:12px;bottom:12px;background:rgba(8,11,18,.82);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:5px;display:flex;gap:4px;align-items:center}.product-quick-qty button{width:25px;height:25px;border:0;border-radius:7px;background:#252f3d;color:#fff}.product-quick-qty span{font-size:11px;min-width:20px;text-align:center;font-weight:800}
+.checkout-fields{padding:15px;border-top:1px solid var(--border);background:rgba(255,255,255,.015)}.checkout-fields h3{font-size:14px;margin-bottom:10px}.checkout-fields .input{margin-bottom:9px;height:46px}.checkout-note{font-size:10px;color:#64748b;line-height:1.7}
+.application-section{padding-top:20px}.application-card{max-width:900px;margin:auto;background:linear-gradient(135deg,#151d29,#0d131d);border:1px solid rgba(249,115,22,.25);border-radius:25px;padding:25px;box-shadow:0 0 50px rgba(249,115,22,.06)}.application-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.application-grid .full{grid-column:1/-1}.application-submit{width:100%;margin-top:10px}.application-status{margin-top:12px;color:#94a3b8;font-size:12px;line-height:1.8}.download-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#171f2c;color:#fff;padding:7px 10px;border-radius:9px;margin-top:6px;font-size:10px}.chat-media-wrap{display:flex;flex-direction:column}.chat-media-wrap .download-btn{align-self:flex-start}
+@media(max-width:600px){.application-grid{grid-template-columns:1fr}.application-grid .full{grid-column:auto}.notification-panel{right:15px}.chat-unread-label{left:40px}.product-quick-qty{right:7px;bottom:7px}}
+
 /* ================= RESPONSIVE ================= */
 
 @media(max-width:1100px){
@@ -1498,8 +1516,9 @@ footer ul{
 <!-- NAVBAR -->
 <nav class="navbar">
 
-    <a href="#" class="brand">
+    <a href="#" class="brand" id="storeBrand">
 
+        <img id="storeLogo" class="store-logo-img" alt="لوجو متجر النور">
         <div class="brand-icon">
             <i class="fa-solid fa-store"></i>
         </div>
@@ -1515,6 +1534,11 @@ footer ul{
 
         <button class="icon-btn" onclick="scrollToProducts()">
             <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <button class="icon-btn" onclick="toggleNotifications()" title="الإشعارات">
+            <i class="fa-solid fa-bell"></i>
+            <span class="badge notification-count" id="notificationCount">0</span>
         </button>
 
         <button class="icon-btn" onclick="openFavorites()">
@@ -1560,10 +1584,8 @@ footer ul{
                 اكتشف المنتجات
             </button>
 
-            <button class="secondary-btn" onclick="openChat()">
-                <i class="fa-solid fa-headset"></i>
-                تحدث معنا
-            </button>
+            <button class="secondary-btn" onclick="openChat()"><i class="fa-solid fa-headset"></i> تحدث معنا</button>
+            <button class="secondary-btn" onclick="document.getElementById('applicationSection').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-file-signature"></i> التقديم</button>
 
         </div>
 
@@ -1699,6 +1721,31 @@ footer ul{
 </section>
 
 
+<!-- APPLICATION / REQUEST -->
+<section class="section application-section" id="applicationSection">
+    <div class="section-head"><div>
+        <div class="section-title">التقديم <span>والطلبات الخاصة</span></div>
+        <div class="section-subtitle">قدّم طلبك بالتفاصيل وسيظهر مباشرة في لوحة التحكم</div>
+    </div></div>
+    <div class="application-card">
+        <div class="application-grid">
+            <input id="applicationName" class="input" placeholder="الاسم بالكامل">
+            <input id="applicationPhone" class="input" type="tel" placeholder="رقم التليفون">
+            <input id="applicationTitle" class="input" placeholder="عنوان الطلب">
+            <input id="applicationReceive" class="input" placeholder="هستلم إمتى؟">
+            <textarea id="applicationDetails" class="input full" style="height:130px;padding-top:14px;resize:vertical" placeholder="اكتب تفاصيل الطلب بالتفصيل..."></textarea>
+        </div>
+        <button class="primary-btn application-submit" onclick="submitApplication()"><i class="fa-solid fa-paper-plane"></i> إرسال التقديم</button>
+        <div id="applicationStatus" class="application-status"></div>
+    </div>
+</section>
+
+<!-- NOTIFICATIONS -->
+<div class="notification-panel" id="notificationPanel">
+    <div class="notification-head"><strong><i class="fa-solid fa-bell" style="color:#f59e0b"></i> الإشعارات</strong><button class="close-btn" style="width:34px;height:34px" onclick="toggleNotifications()"><i class="fa-solid fa-xmark"></i></button></div>
+    <div id="notificationList"><div class="notification-empty">لا توجد إشعارات حتى الآن</div></div>
+</div>
+
 <!-- FOOTER -->
 <footer>
 
@@ -1790,6 +1837,14 @@ footer ul{
 
     <div class="cart-items" id="cartItems"></div>
 
+
+    <div class="checkout-fields">
+        <h3><i class="fa-solid fa-location-dot" style="color:#f97316"></i> بيانات استلام الطلب</h3>
+        <input id="checkoutName" class="input" placeholder="الاسم بالكامل">
+        <input id="checkoutPhone" class="input" type="tel" placeholder="رقم التليفون">
+        <input id="checkoutAddress" class="input" placeholder="العنوان بالتفصيل">
+        <div class="checkout-note">لن يتم إرسال الطلب إلا بعد إدخال الاسم ورقم التليفون والعنوان.</div>
+    </div>
 
     <div class="discount-area">
 
@@ -1915,12 +1970,14 @@ footer ul{
 
                 </ul>
 
-                <button
-                    class="primary-btn"
-                    id="detailAddButton">
-                    <i class="fa-solid fa-cart-plus"></i>
-                    إضافة للسلة
-                </button>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <button class="primary-btn" id="detailAddButton">
+                        <i class="fa-solid fa-cart-plus"></i> إضافة للسلة
+                    </button>
+                    <a id="detailDownloadButton" class="download-btn" style="padding:13px 16px" target="_blank" download>
+                        <i class="fa-solid fa-download"></i> تحميل الصورة
+                    </a>
+                </div>
 
             </div>
 
@@ -2078,11 +2135,8 @@ footer ul{
 
     <i class="fa-solid fa-comments"></i>
 
-    <span
-        class="chat-unread"
-        id="chatUnread">
-        0
-    </span>
+    <span class="chat-unread" id="chatUnread">0</span>
+    <span class="chat-unread-label" id="chatUnreadLabel">يوجد رسالة جديدة</span>
 
 </button>
 
@@ -2163,6 +2217,10 @@ let customer = JSON.parse(
 
 let chatUnsubscribe = null;
 let notificationsUnsubscribe = null;
+let storeSettingsUnsubscribe = null;
+let allNotifications = [];
+let unreadNotifications = 0;
+let unreadChatCount = 0;
 
 // Voice recording variables
 let mediaRecorder = null;
@@ -2248,10 +2306,9 @@ window.saveCustomerName = async function(){
         createdAt:Date.now()
     };
 
-    localStorage.setItem(
-        "noor_customer",
-        JSON.stringify(customer)
-    );
+    localStorage.setItem("noor_customer",JSON.stringify(customer));
+    document.getElementById("checkoutName").value=name;
+    document.getElementById("applicationName").value=name;
 
     try{
 
@@ -2305,60 +2362,76 @@ function ensureCustomer(){
 
 
 /* ================= NOTIFICATIONS ================= */
-
+function notificationTime(ts){
+    if(!ts) return "";
+    try{return (ts.toDate ? ts.toDate() : new Date(ts)).toLocaleString("ar-EG",{dateStyle:"short",timeStyle:"short"});}catch(e){return "";}
+}
+function notificationKey(id){return "noor_notification_seen_"+id;}
+function isNotificationSeen(id){return localStorage.getItem(notificationKey(id)) === "1";}
+function markNotificationSeen(id){localStorage.setItem(notificationKey(id),"1");}
+function renderNotificationList(){
+    const list=document.getElementById("notificationList");
+    if(!allNotifications.length){list.innerHTML='<div class="notification-empty"><i class="fa-regular fa-bell-slash"></i><br>لا توجد إشعارات حتى الآن</div>';return;}
+    list.innerHTML=allNotifications.map(n=>`<div class="notification-item ${isNotificationSeen(n.id)?"":"unread"}" onclick="readNotification('${n.id}')"><strong>${escapeHTML(n.title||"إشعار جديد")} ${isNotificationSeen(n.id)?"":"<span class='unread-dot'></span>"}</strong><p>${escapeHTML(n.message||"")}</p><small>${notificationTime(n.createdAt)}</small></div>`).join("");
+}
+window.readNotification=function(id){markNotificationSeen(id);renderNotificationList();updateNotificationBadge();};
+function updateNotificationBadge(){
+    unreadNotifications=allNotifications.filter(n=>!isNotificationSeen(n.id)).length;
+    const el=document.getElementById("notificationCount"); if(el) el.textContent=unreadNotifications;
+}
+window.toggleNotifications=function(){
+    if(!ensureCustomer()) return;
+    const panel=document.getElementById("notificationPanel"); panel.classList.toggle("show");
+    if(panel.classList.contains("show")){allNotifications.forEach(n=>{});}
+};
 function subscribeNotifications(){
     if(!customer) return;
-
-    if(notificationsUnsubscribe)
-        notificationsUnsubscribe();
-
-    const globalQuery = query(
-        collection(db, "notifications"),
-        where("target", "==", "all"),
-        orderBy("createdAt", "desc")
-    );
-
-    const personalQuery = query(
-        collection(db, "notifications"),
-        where("targetId", "==", customer.id),
-        orderBy("createdAt", "desc")
-    );
-
-    onSnapshot(globalQuery, snapshot => {
-        snapshot.docChanges().forEach(change => {
-            if (change.type === "added") {
-                const data = change.doc.data();
-                const dataTime = data.createdAt?.toMillis ? data.createdAt.toMillis() : Date.now();
-                if (Date.now() - dataTime < 60000) {
-                    showNotificationBanner(data.title, data.message);
-                }
-            }
-        });
-    }, err => console.log(err));
-
-    onSnapshot(personalQuery, snapshot => {
-        snapshot.docChanges().forEach(change => {
-            if (change.type === "added") {
-                const data = change.doc.data();
-                const dataTime = data.createdAt?.toMillis ? data.createdAt.toMillis() : Date.now();
-                if (Date.now() - dataTime < 60000) {
-                    showNotificationBanner(data.title || "إشعار خاص لك", data.message);
-                }
-            }
-        });
-    }, err => console.log(err));
+    if(notificationsUnsubscribe) notificationsUnsubscribe();
+    const queries=[];
+    queries.push(onSnapshot(query(collection(db,"notifications"),where("target","==","all"),orderBy("createdAt","desc")),snap=>{mergeNotifications(snap.docs.map(d=>({id:d.id,...d.data()})));},err=>console.log(err)));
+    queries.push(onSnapshot(query(collection(db,"notifications"),where("targetId","==",customer.id),orderBy("createdAt","desc")),snap=>{mergeNotifications(snap.docs.map(d=>({id:d.id,...d.data()})));},err=>console.log(err)));
+    notificationsUnsubscribe=()=>queries.forEach(u=>typeof u==="function"&&u());
+}
+function mergeNotifications(items){
+    const map=new Map(allNotifications.map(n=>[n.id,n])); items.forEach(n=>map.set(n.id,n));
+    allNotifications=[...map.values()].sort((a,b)=>{const aa=a.createdAt?.toMillis?a.createdAt.toMillis():0;const bb=b.createdAt?.toMillis?b.createdAt.toMillis():0;return bb-aa;});
+    renderNotificationList(); updateNotificationBadge();
+    const newest=items.find(n=>!isNotificationSeen(n.id)); if(newest && newest.createdAt) showNotificationBanner(newest.title||"إشعار جديد",newest.message||"");
+}
+function showNotificationBanner(title,message){
+    const htmlContent=`<div style="font-weight:800;margin-bottom:3px;color:var(--primary);"><i class="fa-solid fa-bell"></i> ${escapeHTML(title)}</div><div>${escapeHTML(message)}</div>`;
+    toast(htmlContent,"notification");
 }
 
-function showNotificationBanner(title, message){
-    const htmlContent = `
-        <div style="font-weight:800; margin-bottom:3px; color:var(--primary);">
-            <i class="fa-solid fa-bell"></i> ${escapeHTML(title)}
-        </div>
-        <div>${escapeHTML(message)}</div>
-    `;
-    toast(htmlContent, "notification");
+/* ================= STORE SETTINGS / LOGO ================= */
+function subscribeStoreSettings(){
+    if(storeSettingsUnsubscribe) storeSettingsUnsubscribe();
+    storeSettingsUnsubscribe=onSnapshot(doc(db,"settings","store"),snap=>{
+        if(!snap.exists()) return;
+        const data=snap.data(); const logo=data.logo || data.logoUrl || data.storeLogo || "";
+        if(logo){document.getElementById("storeLogo").src=logo;document.getElementById("storeBrand").classList.add("has-logo");}
+        if(data.name) document.querySelector(".brand-text strong").textContent=data.name;
+        if(data.subtitle) document.querySelector(".brand-text small").textContent=data.subtitle;
+    },err=>console.log(err));
 }
 
+/* ================= APPLICATIONS ================= */
+window.submitApplication=async function(){
+    if(!ensureCustomer()) return;
+    const name=document.getElementById("applicationName").value.trim() || customer.name;
+    const phone=document.getElementById("applicationPhone").value.trim();
+    const title=document.getElementById("applicationTitle").value.trim();
+    const receive=document.getElementById("applicationReceive").value.trim();
+    const details=document.getElementById("applicationDetails").value.trim();
+    if(name.length<2 || phone.length<7 || title.length<2 || details.length<5){toast("اكمل بيانات التقديم والطلب بالتفصيل","error");return;}
+    const status=document.getElementById("applicationStatus"); status.textContent="جاري إرسال التقديم...";
+    try{
+        await addDoc(collection(db,"applications"),{customerId:customer.id,customerName:name,phone,title,receiveAt:receive,details,status:"new",createdAt:serverTimestamp()});
+        await setDoc(doc(db,"customers",customer.id),{name,phone,lastSeen:serverTimestamp()},{merge:true});
+        customer={...customer,name,phone}; localStorage.setItem("noor_customer",JSON.stringify(customer));
+        status.innerHTML="تم إرسال التقديم بنجاح ✅ وسيظهر في لوحة التحكم."; toast("تم إرسال التقديم بنجاح ✅");
+    }catch(e){console.error(e);status.textContent="تعذر إرسال التقديم";toast("تعذر إرسال التقديم","error");}
+};
 
 /* ================= PRODUCTS ================= */
 
@@ -2440,8 +2513,8 @@ function normalizeProduct(product){
         badge:
             product.badge || "",
 
-        featured:
-            Boolean(product.featured)
+        featured:Boolean(product.featured),
+        downloadUrl:product.downloadUrl || product.fileUrl || ""
 
     };
 
@@ -2618,6 +2691,12 @@ function productCard(product){
                     ""
                 }
 
+                <div class="product-quick-qty" onclick="event.stopPropagation()">
+                    <button onclick="quickQty('${product.id}',-1)">−</button>
+                    <span id="qty-${product.id}">${(cart.find(x=>x.id===product.id)||{}).qty||0}</span>
+                    <button onclick="quickQty('${product.id}',1)">+</button>
+                </div>
+
                 <div class="product-actions">
 
                     <button
@@ -2700,6 +2779,7 @@ function productCard(product){
 
                     <button
                         class="add-cart"
+                        title="اختيار الكمية وإضافة للسلة"
                         onclick="event.stopPropagation();addToCart('${product.id}')">
 
                         <i class="fa-solid fa-cart-plus"></i>
@@ -2769,6 +2849,10 @@ window.openProduct = function(id){
             }
 
         `;
+
+    const detailDownload=document.getElementById("detailDownloadButton");
+    detailDownload.href=product.downloadUrl || product.image;
+    detailDownload.download=(product.name||"noor-product").replace(/[^\w\u0600-\u06FF-]+/g,"-")+".jpg";
 
     document.getElementById("detailAddButton")
         .onclick = ()=>{
@@ -2912,6 +2996,14 @@ window.addToCart = function(id){
 };
 
 
+window.quickQty=function(id,change){
+    const item=cart.find(x=>x.id===id);
+    if(change>0){addToCart(id);return;}
+    if(!item) return;
+    item.qty--; if(item.qty<=0) cart=cart.filter(x=>x.id!==id);
+    saveCart(); renderCart(); renderProducts();
+};
+
 function saveCart(){
 
     localStorage.setItem(
@@ -3049,7 +3141,9 @@ window.changeQty = function(id,change){
 
     if(!item) return;
 
+    const product=products.map(normalizeProduct).find(p=>p.id===id);
     item.qty += change;
+    if(product && item.qty > product.stock){item.qty=product.stock;toast("لا توجد كمية أكبر من المتاح","error");}
 
     if(item.qty <= 0){
 
@@ -3061,6 +3155,7 @@ window.changeQty = function(id,change){
     saveCart();
 
     renderCart();
+    renderProducts();
 
 };
 
@@ -3360,6 +3455,17 @@ window.checkout = async function(){
         return;
     }
 
+    const checkoutName=document.getElementById("checkoutName").value.trim();
+    const checkoutPhone=document.getElementById("checkoutPhone").value.trim();
+    const checkoutAddress=document.getElementById("checkoutAddress").value.trim();
+    if(checkoutName.length<2 || checkoutPhone.length<7 || checkoutAddress.length<5){
+        toast("اكتب الاسم ورقم التليفون والعنوان أولاً","error"); return;
+    }
+
+    await setDoc(doc(db,"customers",customer.id),{name:checkoutName,phone:checkoutPhone,address:checkoutAddress,lastSeen:serverTimestamp()},{merge:true});
+    customer={...customer,name:checkoutName,phone:checkoutPhone,address:checkoutAddress};
+    localStorage.setItem("noor_customer",JSON.stringify(customer));
+
     const subtotal =
         calculateSubtotal();
 
@@ -3397,13 +3503,9 @@ window.checkout = async function(){
 
                 total,
 
-                coupon:
-                    appliedCoupon
-                    ?
-                    appliedCoupon.code || null
-                    :
-                    null,
-
+                coupon:appliedCoupon ? (appliedCoupon.code || null) : null,
+                customerPhone:checkoutPhone,
+                customerAddress:checkoutAddress,
                 status:"new",
 
                 createdAt:serverTimestamp()
@@ -3593,6 +3695,7 @@ window.openChat = function(){
         .classList.add("open");
 
     subscribeChat();
+    markAdminMessagesRead();
 
 };
 
@@ -3666,6 +3769,9 @@ function subscribeChat(){
 
 function renderMessages(messages){
 
+    unreadChatCount=messages.filter(m=>m.sender==="admin" && m.readByCustomer!==true).length;
+    updateChatUnreadUI();
+
     const container =
         document.getElementById(
             "chatMessages"
@@ -3714,11 +3820,11 @@ function renderMessages(messages){
             let contentHTML = "";
 
             if(message.type === "image"){
-                contentHTML = `<img src="${escapeHTML(message.mediaUrl)}" class="chat-img-msg" onclick="window.open(this.src, '_blank')">`;
+                contentHTML = `<div class="chat-media-wrap"><img src="${escapeHTML(message.mediaUrl)}" class="chat-img-msg" onclick="window.open(this.src, '_blank')"><a class="download-btn" href="${escapeHTML(message.mediaUrl)}" download="noor-chat-image"><i class="fa-solid fa-download"></i> تحميل الصورة</a></div>`;
             } else if(message.type === "sticker"){
                 contentHTML = `<img src="${escapeHTML(message.mediaUrl)}" class="chat-sticker-msg">`;
             } else if(message.type === "voice"){
-                contentHTML = `<audio controls src="${escapeHTML(message.mediaUrl)}" class="chat-audio-msg"></audio>`;
+                contentHTML = `<div class="chat-media-wrap"><audio controls src="${escapeHTML(message.mediaUrl)}" class="chat-audio-msg"></audio><a class="download-btn" href="${escapeHTML(message.mediaUrl)}" download="noor-chat-audio"><i class="fa-solid fa-download"></i> تحميل الصوت</a></div>`;
             } else {
                 contentHTML = `<div>${escapeHTML(message.text || "")}</div>`;
             }
@@ -3745,6 +3851,19 @@ function renderMessages(messages){
 
 }
 
+
+function updateChatUnreadUI(){
+    const badge=document.getElementById("chatUnread"), label=document.getElementById("chatUnreadLabel");
+    badge.textContent=unreadChatCount; badge.style.display=unreadChatCount?"flex":"none"; label.classList.toggle("show",unreadChatCount>0);
+}
+async function markAdminMessagesRead(){
+    if(!customer) return;
+    try{
+        const snap=await getDocs(query(collection(db,"customers",customer.id,"messages"),where("sender","==","admin"),where("readByCustomer","==",false)));
+        await Promise.all(snap.docs.map(d=>updateDoc(d.ref,{readByCustomer:true,readAt:serverTimestamp()})));
+        unreadChatCount=0; updateChatUnreadUI();
+    }catch(e){console.log(e);}
+}
 
 window.handleChatKey = function(event){
 
@@ -3966,10 +4085,18 @@ function init(){
     updateFavoriteCount();
 
     renderCart();
+    if(customer){
+        document.getElementById("checkoutName").value=customer.name||"";
+        document.getElementById("checkoutPhone").value=customer.phone||"";
+        document.getElementById("checkoutAddress").value=customer.address||"";
+        document.getElementById("applicationName").value=customer.name||"";
+        document.getElementById("applicationPhone").value=customer.phone||"";
+    }
 
     subscribeProducts();
 
     subscribeAds();
+    subscribeStoreSettings();
 
     if(customer){
 
