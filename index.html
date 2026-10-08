@@ -2350,7 +2350,14 @@ let allNotifications = [];
 let unreadNotifications = 0;
 let unreadChatCount = 0;
 let reviewsUnsubscribe = null;
-let storeIsOpen = false;
+let storeIsOpen = (() => {
+    try{
+        const cached = JSON.parse(localStorage.getItem("noor_store_state") || "null");
+        return cached && typeof cached.open === "boolean" ? cached.open : true;
+    }catch(e){
+        return true;
+    }
+})();
 let currentReviewProductId = null;
 let currentReviewUnsubscribe = null;
 
@@ -2643,15 +2650,18 @@ function maybeOpenCustomerName(){
 function subscribeStoreSettings(){
     if(storeSettingsUnsubscribe) storeSettingsUnsubscribe();
 
-    // اقفل المتجر أولاً حتى لا يظهر محتوى المتجر لحظةً قبل وصول إعداد Firebase.
-    storeIsOpen=false;
+    // نستخدم آخر حالة معروفة من لوحة التحكم فورًا، ثم نحدّثها لحظيًا من Firebase.
     applyStoreVisibility();
 
     storeSettingsUnsubscribe=onSnapshot(
         doc(db,"settings","store"),
         snap=>{
             if(!snap.exists()){
-                storeIsOpen=false;
+                storeIsOpen=true;
+                localStorage.setItem("noor_store_state", JSON.stringify({
+                    open:true,
+                    syncedAt:Date.now()
+                }));
                 applyStoreVisibility();
                 document.getElementById("storeClosedTitle").innerHTML="المتجر <span>مغلق حاليًا</span>";
                 document.getElementById("storeClosedMessage").textContent="المتجر غير متاح حاليًا. برجاء العودة لاحقًا.";
@@ -2673,7 +2683,12 @@ function subscribeStoreSettings(){
                 data.open!==undefined ? data.open===true :
                 data.storeOpen!==undefined ? data.storeOpen===true :
                 data.isOpen!==undefined ? data.isOpen===true :
-                false;
+                true;
+
+            localStorage.setItem("noor_store_state", JSON.stringify({
+                open:storeIsOpen,
+                syncedAt:Date.now()
+            }));
 
             const screen=document.getElementById("storeClosedScreen");
             const title=document.getElementById("storeClosedTitle");
@@ -2701,7 +2716,8 @@ function subscribeStoreSettings(){
         },
         err=>{
             console.error("Store settings error:",err);
-            storeIsOpen=false;
+            // لا نعرض شاشة الإغلاق بسبب خطأ مؤقت في الاتصال.
+            // نحتفظ بآخر حالة محفوظة محليًا.
             applyStoreVisibility();
         }
     );
