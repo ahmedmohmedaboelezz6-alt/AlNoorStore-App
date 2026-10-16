@@ -1589,6 +1589,76 @@ body.store-is-closed > *:not(#storeClosedScreen){display:none!important}
 .store-status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:800;margin-top:9px}.store-status-badge.open{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25)}.store-status-badge.closed{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.25)}
 .stock-line{font-size:11px;margin:7px 0;color:#94a3b8}.stock-line strong{color:#fbbf24}.stock-line.out{color:#f87171;font-weight:800}.add-cart:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
 .review-area{margin-top:25px;padding-top:20px;border-top:1px solid var(--border)}.review-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.review-head h3{font-size:18px}.review-form{display:grid;gap:9px;background:rgba(255,255,255,.025);border:1px solid var(--border);padding:14px;border-radius:16px;margin-bottom:15px}.review-form textarea{min-height:90px;resize:vertical;padding:12px!important}.review-stars{display:flex;gap:5px;direction:rtl;justify-content:flex-start}.review-stars button{border:0;background:none;color:#475569;font-size:22px;padding:2px}.review-stars button.active,.review-stars button:hover{color:#fbbf24}.review-item{padding:12px 0;border-bottom:1px solid var(--border)}.review-item:last-child{border-bottom:0}.review-item-top{display:flex;justify-content:space-between;gap:10px}.review-item-name{font-weight:800;font-size:13px}.review-item-date{font-size:9px;color:#64748b}.review-comment{font-size:12px;color:#cbd5e1;line-height:1.8;margin-top:5px}.product-rating-summary{color:#fbbf24;font-size:11px}
+
+/* ===== Noor Store visual upgrade ===== */
+body{isolation:isolate;overflow-x:hidden}
+body::before,body::after{content:"";position:fixed;width:380px;height:380px;border-radius:50%;filter:blur(90px);opacity:.13;pointer-events:none;z-index:-1;animation:ambientDrift 16s ease-in-out infinite alternate}
+body::before{top:8%;left:-170px;background:#f97316}
+body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
+@keyframes ambientDrift{0%{transform:translate3d(0,0,0) scale(.9)}100%{transform:translate3d(70px,-45px,0) scale(1.18)}}
+.hero{position:relative}.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 25%,rgba(249,115,22,.045),transparent 70%);background-size:220% 100%;animation:heroShimmer 9s linear infinite;pointer-events:none}
+@keyframes heroShimmer{to{background-position:-220% 0}}
+.hero-circle{animation:heroFloat 6s ease-in-out infinite}.hero-circle:after{content:"";position:absolute;inset:-13px;border:1px solid rgba(249,115,22,.18);border-radius:50%;animation:orbitRing 18s linear infinite}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}@keyframes orbitRing{to{transform:rotate(360deg)}}
+.product-card{animation:cardRise .55s both;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+@keyframes cardRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.loader{background:radial-gradient(ellipse at 50% 35%,#1b1b24 0%,#070a10 68%)}.loader-box{width:min(360px,85vw);padding:30px 25px;border:1px solid rgba(249,115,22,.2);border-radius:28px;background:rgba(16,21,31,.72);box-shadow:0 20px 90px rgba(0,0,0,.45),0 0 50px rgba(249,115,22,.08);backdrop-filter:blur(16px)}.loader-logo{position:relative;isolation:isolate}.loader-logo:after{content:"";position:absolute;inset:-9px;border:1px solid rgba(249,115,22,.4);border-radius:29px;animation:loaderOrbit 2s ease-in-out infinite}.loader p{font-weight:800;font-size:15px}.loader-subtitle{font-size:11px;color:#94a3b8;margin-top:5px}.loader-track{height:5px;border-radius:9px;background:#273142;overflow:hidden;margin-top:18px}.loader-track span{display:block;height:100%;width:35%;border-radius:9px;background:linear-gradient(90deg,#f97316,#fbbf24);animation:loadingBar 1.5s ease-in-out infinite}
+@keyframes loaderOrbit{50%{transform:scale(1.08);opacity:.45}}@keyframes loadingBar{0%{transform:translateX(220%)}100%{transform:translateX(-350%)}}
+.cart-header{background:linear-gradient(110deg,rgba(249,115,22,.1),transparent);}.cart-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:12px 14px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.018)}.cart-benefit{display:flex;align-items:center;justify-content:center;gap:6px;color:#cbd5e1;font-size:10px;text-align:center}.cart-benefit i{color:#f59e0b}.cart-progress{padding:12px 16px 10px;border-bottom:1px solid var(--border);background:rgba(249,115,22,.035)}.cart-progress-text{font-size:11px;color:#cbd5e1;margin-bottom:8px}.cart-progress-text strong{color:#fdba74}.cart-progress-track{height:6px;border-radius:10px;background:#273142;overflow:hidden}.cart-progress-fill{height:100%;width:0;background:linear-gradient(90deg,#f97316,#fbbf24);border-radius:10px;transition:width .35s ease}.cart-items:empty:after{content:"سلتك لسه فاضية — اختار اللي يعجبك ✨";display:block;text-align:center;color:#94a3b8;padding:45px 12px;font-size:13px}
+.toast{backdrop-filter:blur(14px);border-color:rgba(255,255,255,.13)}.toast.success:before{content:"✓ ";color:#4ade80;font-weight:900}.toast.error:before{content:"! ";color:#f87171;font-weight:900}
+.icon-btn:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #fb923c;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+
+/* Cart usability refresh: visible per-item controls and a persistent bottom summary */
+.cart{overflow:hidden;}
+.cart-header{flex:0 0 auto;}
+.cart-benefits{flex:0 0 auto;}
+.cart-body-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#475569 transparent;}
+.cart-body-scroll::-webkit-scrollbar{width:6px}
+.cart-body-scroll::-webkit-scrollbar-thumb{background:#475569;border-radius:10px}
+.cart-items{flex:0 0 auto;min-height:90px;overflow:visible;padding:12px 14px 5px;}
+.cart-item{align-items:flex-start;gap:11px;padding:13px;margin:0 0 10px;border:1px solid rgba(148,163,184,.2);border-radius:16px;background:linear-gradient(145deg,rgba(30,41,59,.62),rgba(15,23,42,.45));box-shadow:0 8px 20px rgba(0,0,0,.12);}
+.cart-item img{flex:0 0 76px;width:76px;height:76px;border:1px solid rgba(255,255,255,.06);}
+.cart-item-info{min-width:0;}
+.cart-item-name{line-height:1.6;overflow-wrap:anywhere;}
+.cart-item-price{line-height:1.6;color:#cbd5e1;}
+.cart-item-line-total{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;font-size:12px;color:#cbd5e1;}
+.cart-item-line-total strong{color:#fdba74;font-size:13px;white-space:nowrap;}
+.cart-item-controls{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-top:10px;padding-top:9px;border-top:1px dashed rgba(148,163,184,.22);}
+.qty-label{font-size:11px;color:#cbd5e1;font-weight:800;margin-inline-end:2px;}
+.qty button.qty-control{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid rgba(249,115,22,.42);background:rgba(249,115,22,.12);color:#fed7aa;border-radius:10px;font-size:18px;font-weight:900;cursor:pointer;transition:background .18s,transform .18s;}
+.qty button.qty-control:hover{background:rgba(249,115,22,.27);transform:translateY(-1px);}
+.qty .qty-value{display:inline-flex;align-items:center;justify-content:center;min-width:31px;height:32px;padding:0 7px;border:1px solid rgba(148,163,184,.25);border-radius:9px;background:#0b1220;color:#fff;font-size:14px;}
+.remove-item{display:inline-flex;align-items:center;justify-content:center;gap:6px;margin-inline-start:auto;margin-right:0;padding:8px 10px;border:1px solid rgba(248,113,113,.28);border-radius:10px;background:rgba(239,68,68,.09);color:#fca5a5;font-size:12px;font-weight:800;cursor:pointer;}
+.remove-item:hover{background:rgba(239,68,68,.2);}
+.cart-body-scroll .checkout-fields,.cart-body-scroll .discount-area{flex:0 0 auto;}
+.cart-body-scroll .checkout-fields{padding:13px 15px;}
+.cart-body-scroll .discount-area{padding:13px 15px 17px;}
+.summary{flex:0 0 auto;position:relative;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,#101925 0%,#0b111b 100%);box-shadow:0 -10px 28px rgba(0,0,0,.24);border-top:1px solid rgba(249,115,22,.28);}
+.summary-line{margin:6px 0;}
+.subtotal-line{align-items:center;}
+.subtotal-label{display:flex;flex-direction:column;gap:3px;}
+.subtotal-label>span{font-weight:800;color:#f8fafc;}
+.subtotal-label small{font-size:10px;color:#94a3b8;}
+.summary-line.total{margin-top:8px;padding-top:9px;font-size:20px;}
+.summary .checkout{margin-top:8px;min-height:47px;box-shadow:0 8px 22px rgba(249,115,22,.15);}
+@media(max-width:520px){
+  .cart-header{padding:14px 16px;}
+  .cart-header h2{font-size:18px;}
+  .cart-benefits{padding:9px 8px;gap:3px;}
+  .cart-benefit{font-size:9px;gap:4px;}
+  .cart-progress{padding:9px 13px 8px;}
+  .cart-item{padding:10px;gap:9px;}
+  .cart-item img{flex-basis:64px;width:64px;height:64px;}
+  .cart-item-controls{gap:6px;}
+  .qty button.qty-control{width:32px;height:32px;}
+  .remove-item{padding:7px 8px;}
+  .summary{padding:9px 13px calc(9px + env(safe-area-inset-bottom));}
+  .summary-line{font-size:12px;}
+  .summary-line.total{font-size:18px;}
+}
+
 </style>
 </head>
 
@@ -1614,6 +1684,8 @@ body.store-is-closed > *:not(#storeClosedScreen){display:none!important}
             <i class="fa-solid fa-store"></i>
         </div>
         <p>جاري تجهيز متجر النور...</p>
+        <div class="loader-subtitle">بنجهز لك تجربة تسوق أجمل ✨</div>
+        <div class="loader-track"><span></span></div>
         <div class="spinner"></div>
     </div>
 </div>
@@ -1948,11 +2020,20 @@ body.store-is-closed > *:not(#storeClosedScreen){display:none!important}
 
     </div>
 
+    <div class="cart-benefits" aria-label="مميزات التسوق">
+        <div class="cart-benefit"><i class="fa-solid fa-shield-halved"></i><span>تسوق آمن</span></div>
+        <div class="cart-benefit"><i class="fa-solid fa-headset"></i><span>دعم العملاء</span></div>
+        <div class="cart-benefit"><i class="fa-solid fa-box-open"></i><span>تجهيز الطلب</span></div>
+    </div>
+    <div class="cart-body-scroll">
+        <div class="cart-progress">
+            <div class="cart-progress-text" id="cartProgressText">أضف منتجاتك للسلة وابدأ التسوق ✨</div>
+            <div class="cart-progress-track"><div class="cart-progress-fill" id="cartProgressFill"></div></div>
+        </div>
 
-    <div class="cart-items" id="cartItems"></div>
+        <div class="cart-items" id="cartItems"></div>
 
-
-    <div class="checkout-fields">
+        <div class="checkout-fields">
         <h3><i class="fa-solid fa-location-dot" style="color:#f97316"></i> بيانات استلام الطلب</h3>
         <input id="checkoutName" class="input" placeholder="الاسم بالكامل">
         <input id="checkoutPhone" class="input" type="tel" placeholder="رقم التليفون">
@@ -1986,13 +2067,16 @@ body.store-is-closed > *:not(#storeClosedScreen){display:none!important}
             class="discount-message">
         </div>
 
-    </div>
-
+    </div><!-- /.discount-area -->
+    </div><!-- /.cart-body-scroll -->
 
     <div class="summary">
 
-        <div class="summary-line">
-            <span>إجمالي المنتجات</span>
+        <div class="summary-line subtotal-line">
+            <div class="subtotal-label">
+                <span>إجمالي المنتجات</span>
+                <small id="cartPieceCount">0 قطعة</small>
+            </div>
             <span id="subtotal">0 ج.م</span>
         </div>
 
@@ -2312,7 +2396,6 @@ const firebaseConfig = {
     appId: "1:167424721322:web:ea7e683eac5873ac2cebd3",
     measurementId: "G-BZJYK0JVPT"
 };
-
 
 /* ========================================================= */
 
@@ -3386,29 +3469,30 @@ function renderCart(){
                         </div>
 
                         <div class="cart-item-price">
-                            ${money(item.price)}
+                            سعر القطعة: ${money(item.price)}
                         </div>
 
-                        <div class="qty">
+                        <div class="cart-item-line-total">
+                            <span>إجمالي المنتج</span>
+                            <strong>${money(item.price * item.qty)}</strong>
+                        </div>
 
-                            <button
-                                onclick="changeQty('${item.id}',1)">
-                                +
-                            </button>
-
-                            <strong>${item.qty}</strong>
-
-                            <button
-                                onclick="changeQty('${item.id}',-1)">
-                                -
-                            </button>
-
-                            <button
-                                class="remove-item"
+                        <div class="qty cart-item-controls" aria-label="التحكم في كمية المنتج">
+                            <span class="qty-label">الكمية</span>
+                            <button class="qty-control qty-increase"
+                                aria-label="زيادة كمية ${escapeHTML(item.name)}"
+                                title="زيادة الكمية"
+                                onclick="changeQty('${item.id}',1)">+</button>
+                            <strong class="qty-value">${item.qty}</strong>
+                            <button class="qty-control qty-decrease"
+                                aria-label="تقليل كمية ${escapeHTML(item.name)}"
+                                title="تقليل الكمية"
+                                onclick="changeQty('${item.id}',-1)">−</button>
+                            <button class="remove-item"
+                                aria-label="حذف ${escapeHTML(item.name)} من السلة"
                                 onclick="removeFromCart('${item.id}')">
-                                <i class="fa-solid fa-trash"></i>
+                                <i class="fa-solid fa-trash"></i><span>حذف</span>
                             </button>
-
                         </div>
 
                     </div>
@@ -3711,9 +3795,26 @@ function calculateDiscount(subtotal){
 
 
 function updateCartSummary(){
+    // Visual cart progress indicator (based on cart subtotal; no shipping promise implied).
+    const progressFill=document.getElementById("cartProgressFill");
+    const progressText=document.getElementById("cartProgressText");
+    if(progressFill&&progressText){
+        const subtotalValue=Number(calculateSubtotal())||0;
+        const target=1000;
+        const percent=Math.min(100,Math.round(subtotalValue/target*100));
+        progressFill.style.width=percent+"%";
+        progressText.innerHTML=subtotalValue<=0?'أضف منتجاتك للسلة وابدأ التسوق ✨':subtotalValue<target?`قيمة مشترياتك <strong>${subtotalValue.toLocaleString("ar-EG")} ج.م</strong> — استمر في التصفح`:'ممتاز! سلتك مليانة اختيارات حلوة 🎉';
+    }
+
 
     const subtotal =
         calculateSubtotal();
+
+    const pieceCountElement = document.getElementById("cartPieceCount");
+    if(pieceCountElement){
+        const pieceCount = cart.reduce((sum,item)=>sum + (Number(item.qty)||0),0);
+        pieceCountElement.textContent = pieceCount.toLocaleString("ar-EG") + " قطعة";
+    }
 
     const discount =
         calculateDiscount(subtotal);
