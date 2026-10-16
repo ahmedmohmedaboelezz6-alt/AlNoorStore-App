@@ -2365,6 +2365,9 @@ import {
 
 import {
     getFirestore,
+    initializeFirestore,
+    persistentLocalCache,
+    persistentMultipleTabManager,
     collection,
     doc,
     addDoc,
@@ -2401,7 +2404,18 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+// ذاكرة محلية دائمة لتقليل انتظار البيانات عند تكرار زيارة المتجر.
+let db;
+try {
+    db = initializeFirestore(app, {
+        localCache: persistentLocalCache({
+            tabManager: persistentMultipleTabManager()
+        })
+    });
+} catch (cacheError) {
+    console.warn("Persistent cache unavailable; using standard Firestore cache.", cacheError);
+    db = getFirestore(app);
+}
 
 
 /* ================= GLOBAL ================= */
@@ -2567,7 +2581,49 @@ window.saveCustomerName = async function(){
 };
 
 
+async function verifyCustomerAllowed(showToast = true){
+    if(!customer) return false;
+    try{
+        const customerSnapshot = await getDoc(doc(db,"customers",customer.id));
+        const isBlocked = customerSnapshot.exists() && customerSnapshot.data().blocked === true;
+        if(isBlocked){
+            localStorage.setItem("noor_customer_blocked","true");
+            if(showToast) toast("تم تقييد حسابك من المتجر. تواصل مع خدمة العملاء للمراجعة.","error");
+            return false;
+        }
+        localStorage.removeItem("noor_customer_blocked");
+        return true;
+    }catch(error){
+        console.warn("Unable to verify customer block state:",error);
+        // عند انقطاع الاتصال لا نعتمد على حالة محلية قديمة كبديل عن التحقق من الخادم.
+        if(localStorage.getItem("noor_customer_blocked") === "true"){
+            if(showToast) toast("لا يمكن التحقق من حالة حسابك الآن. حاول مرة أخرى عند عودة الاتصال.","error");
+            return false;
+        }
+        return true;
+    }
+}
+
+function watchCustomerBlockState(){
+    if(!customer?.id) return;
+    onSnapshot(doc(db,"customers",customer.id),snapshot=>{
+        const isBlocked = snapshot.exists() && snapshot.data().blocked === true;
+        if(isBlocked){
+            const wasAlreadyBlocked = localStorage.getItem("noor_customer_blocked") === "true";
+            localStorage.setItem("noor_customer_blocked","true");
+            if(!wasAlreadyBlocked) toast("تم تقييد حسابك من المتجر. لا يمكن إرسال طلبات أو رسائل أثناء الحظر.","error");
+        }else{
+            localStorage.removeItem("noor_customer_blocked");
+        }
+    },error=>console.warn("Customer block status listener:",error));
+}
+
 function ensureCustomer(){
+
+    if(localStorage.getItem("noor_customer_blocked") === "true"){
+        toast("حسابك محظور حاليًا من المتجر. تواصل مع الإدارة للمراجعة.","error");
+        return false;
+    }
 
     if(!customer){
 
@@ -2809,6 +2865,7 @@ function subscribeStoreSettings(){
 /* ================= APPLICATIONS ================= */
 window.submitApplication=async function(){
     if(!ensureCustomer()) return;
+    if(!await verifyCustomerAllowed()) return;
     const name=document.getElementById("applicationName").value.trim() || customer.name;
     const phone=document.getElementById("applicationPhone").value.trim();
     const title=document.getElementById("applicationTitle").value.trim();
@@ -3841,6 +3898,7 @@ function updateCartSummary(){
 
 window.checkout = async function(){
     if(!ensureCustomer()) return;
+    if(!await verifyCustomerAllowed()) return;
     if(!storeIsOpen){toast("المتجر مغلق حاليًا من لوحة التحكم","error");return;}
     const items=getCartDetails();
     if(!items.length){toast("السلة فارغة","error");return;}
@@ -3848,6 +3906,14 @@ window.checkout = async function(){
     const checkoutPhone=document.getElementById("checkoutPhone").value.trim();
     const checkoutAddress=document.getElementById("checkoutAddress").value.trim();
     if(checkoutName.length<2||checkoutPhone.length<7||checkoutAddress.length<5){toast("اكتب الاسم ورقم التليفون والعنوان أولاً","error");return;}
+    try{
+        const phoneMatches = await getDocs(query(collection(db,"customers"),where("phone","==",checkoutPhone)));
+        if(phoneMatches.docs.some(d=>d.data().blocked === true)){
+            localStorage.setItem("noor_customer_blocked","true");
+            toast("هذا الرقم محظور من المتجر. تواصل مع الإدارة للمراجعة.","error");
+            return;
+        }
+    }catch(checkError){ console.warn("Phone block lookup failed:",checkError); }
     const subtotal=calculateSubtotal(), discount=calculateDiscount(subtotal), total=subtotal-discount;
     try{
         const orderRef=doc(collection(db,"orders"));
@@ -4208,6 +4274,7 @@ window.handleChatKey = function(event){
 window.sendMessage = async function(){
 
     if(!ensureCustomer()) return;
+    if(!await verifyCustomerAllowed()) return;
 
     const input =
         document.getElementById(
@@ -4233,6 +4300,7 @@ window.sendMessage = async function(){
 window.sendSticker = async function(stickerUrl){
 
     if(!ensureCustomer()) return;
+    if(!await verifyCustomerAllowed()) return;
 
     document.getElementById("stickerPicker").classList.remove("show");
 
@@ -4252,6 +4320,7 @@ window.handleImageUpload = async function(event){
     if(!file) return;
 
     if(!ensureCustomer()) return;
+    if(!await verifyCustomerAllowed()) { event.target.value=""; return; }
 
     toast("جاري رفع الصورة...", "notification");
 
@@ -4334,6 +4403,7 @@ window.toggleVoiceRecording = async function(){
 
 // حفظ الرسالة في فايبربيس
 async function saveMessageToFirestore(messageData){
+    if(!await verifyCustomerAllowed()) return;
     try{
         await addDoc(
             collection(
@@ -4419,7 +4489,9 @@ function init(){
         document.getElementById("applicationPhone").value=customer.phone||"";
     }
 
-    subscribeProducts();
+    if(customer) watchCustomerBlockState();
+
+subscribeProducts();
 
     subscribeAds();
     subscribeStoreSettings();
