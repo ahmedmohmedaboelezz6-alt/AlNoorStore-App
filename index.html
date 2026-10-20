@@ -1370,6 +1370,8 @@ footer ul{
 .quantity-picker{display:flex;align-items:center;gap:7px;margin-top:9px}.quantity-picker button{width:28px;height:28px;border:1px solid var(--border);background:#171f2c;color:#fff;border-radius:8px}.quantity-picker strong{min-width:28px;text-align:center}.product-quick-qty{position:absolute;right:12px;bottom:12px;background:rgba(8,11,18,.82);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:5px;display:flex;gap:4px;align-items:center}.product-quick-qty button{width:25px;height:25px;border:0;border-radius:7px;background:#252f3d;color:#fff}.product-quick-qty span{font-size:11px;min-width:20px;text-align:center;font-weight:800}
 .checkout-fields{padding:15px;border-top:1px solid var(--border);background:rgba(255,255,255,.015)}.checkout-fields h3{font-size:14px;margin-bottom:10px}.checkout-fields .input{margin-bottom:9px;height:46px}.checkout-note{font-size:10px;color:#64748b;line-height:1.7}
 .application-section{padding-top:20px}.application-card{max-width:900px;margin:auto;background:linear-gradient(135deg,#151d29,#0d131d);border:1px solid rgba(249,115,22,.25);border-radius:25px;padding:25px;box-shadow:0 0 50px rgba(249,115,22,.06)}.application-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.application-grid .full{grid-column:1/-1}.application-submit{width:100%;margin-top:10px}.application-status{margin-top:12px;color:#94a3b8;font-size:12px;line-height:1.8}.download-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#171f2c;color:#fff;padding:7px 10px;border-radius:9px;margin-top:6px;font-size:10px}.chat-media-wrap{display:flex;flex-direction:column}.chat-media-wrap .download-btn{align-self:flex-start}
+.image-quote-section{padding-top:25px}.image-quote-card{max-width:900px;margin:auto;padding:clamp(18px,4vw,32px);border:1px solid rgba(249,115,22,.35);border-radius:26px;background:radial-gradient(circle at 100% 0,rgba(249,115,22,.12),transparent 40%),linear-gradient(135deg,#151d29,#0b111b);box-shadow:0 15px 55px rgba(0,0,0,.2)}.image-quote-intro{display:flex;align-items:center;gap:15px;margin-bottom:22px}.image-quote-intro h3{font-size:clamp(18px,3vw,24px);margin:0 0 6px}.image-quote-intro p{color:#aab5c5;line-height:1.9;font-size:13px}.image-quote-icon{flex:0 0 60px;width:60px;height:60px;display:grid;place-items:center;border-radius:18px;background:linear-gradient(135deg,var(--primary),var(--gold));color:#fff;font-size:26px;box-shadow:0 0 30px rgba(249,115,22,.2)}.image-quote-drop{min-height:160px;padding:24px 14px;border:2px dashed rgba(249,115,22,.55);border-radius:19px;background:rgba(249,115,22,.045);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:9px;text-align:center;cursor:pointer;transition:.2s}.image-quote-drop:hover{background:rgba(249,115,22,.1);border-color:var(--gold);transform:translateY(-2px)}.image-quote-drop>i{font-size:32px;color:#fb923c}.image-quote-drop strong{font-size:15px}.image-quote-drop span{font-size:11px;color:#94a3b8;line-height:1.8}.image-quote-preview{display:flex;align-items:center;gap:14px;margin-top:14px;padding:12px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.025)}.image-quote-preview[hidden]{display:none}.image-quote-preview img{width:96px;height:96px;object-fit:contain;background:#fff;border-radius:12px}.image-quote-preview>div{display:flex;min-width:0;flex-direction:column;gap:8px}.image-quote-preview strong{overflow-wrap:anywhere}.image-quote-remove{align-self:flex-start;background:transparent;border:1px solid rgba(239,68,68,.4);color:#fca5a5;padding:7px 10px;border-radius:10px;font-size:12px}.image-quote-note{margin:14px 0 0;min-height:100px;height:100px;padding:12px 14px;resize:vertical}.image-quote-send{width:100%;margin-top:12px}.image-quote-send:disabled{opacity:.65;cursor:wait}.image-quote-section .application-status{margin-bottom:0}@media(max-width:600px){.image-quote-intro{align-items:flex-start}.image-quote-icon{flex-basis:48px;width:48px;height:48px;font-size:22px;border-radius:15px}.image-quote-drop{min-height:140px}.image-quote-preview img{width:76px;height:76px}}
+
 @media(max-width:600px){.application-grid{grid-template-columns:1fr}.application-grid .full{grid-column:auto}.notification-panel{right:15px}.chat-unread-label{left:40px}.product-quick-qty{right:7px;bottom:7px}}
 
 /* ================= RESPONSIVE ================= */
@@ -1771,6 +1773,7 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
             </button>
 
             <button class="secondary-btn" onclick="openChat()"><i class="fa-solid fa-headset"></i> تحدث معنا</button>
+            <button class="secondary-btn" onclick="document.getElementById('imageQuoteSection').scrollIntoView({behavior:'smooth',block:'center'})"><i class="fa-regular fa-image"></i> ابعت صورة لتسعيرها</button>
             <button class="secondary-btn" onclick="document.getElementById('applicationSection').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-file-signature"></i> التقديم</button>
 
         </div>
@@ -1906,6 +1909,44 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
 
 </section>
 
+
+<!-- CUSTOMER IMAGE PRICE REQUEST -->
+<section class="section image-quote-section" id="imageQuoteSection">
+    <div class="section-head">
+        <div>
+            <div class="section-title">مش لاقي المنتج؟ <span>ابعت صورته</span></div>
+            <div class="section-subtitle">ارفع صورة المنتج اللي محتاج تعرف سعره، والإدارة هتراجعه وتبعتلك السعر على المتجر.</div>
+        </div>
+    </div>
+    <div class="image-quote-card">
+        <div class="image-quote-intro">
+            <div class="image-quote-icon"><i class="fa-solid fa-camera-retro"></i></div>
+            <div>
+                <h3>اطلب تسعير أي منتج بالصورة</h3>
+                <p>اختار صورة واضحة من موبايلك أو الكمبيوتر، واكتب أي تفاصيل تساعدنا نحدد المنتج.</p>
+            </div>
+        </div>
+        <label class="image-quote-drop" for="quoteImageFileInput">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <strong>اضغط هنا لاختيار صورة المنتج</strong>
+            <span>الصور المدعومة: JPG وPNG وWEBP · الحد الأقصى للحجم الأصلي 10 ميجابايت</span>
+        </label>
+        <input id="quoteImageFileInput" type="file" accept="image/*" hidden onchange="previewCustomerQuoteImage(event)">
+        <div class="image-quote-preview" id="quoteImagePreviewWrap" hidden>
+            <img id="quoteImagePreview" alt="معاينة الصورة التي سترسلها">
+            <div><strong id="quoteImageFileName">الصورة المختارة</strong><button type="button" class="image-quote-remove" onclick="clearCustomerQuoteImage()"><i class="fa-solid fa-trash"></i> تغيير الصورة</button></div>
+        </div>
+        <textarea id="quoteImageNote" class="input image-quote-note" maxlength="400" placeholder="اكتب تفاصيل إضافية (اختياري): اللون، المقاس، الكمية أو اسم المنتج..."></textarea>
+        <button id="sendCustomerQuoteImageBtn" class="primary-btn image-quote-send" type="button" onclick="submitCustomerImageQuote()"><i class="fa-solid fa-paper-plane"></i> إرسال الصورة للإدارة وطلب السعر</button>
+        <div id="quoteImageStatus" class="application-status" role="status" aria-live="polite">بعد الإرسال، هتلاقي طلبك في لوحة الإدارة، والسعر هيوصلك هنا وفي إشعارات المتجر.</div>
+        <div id="customerQuoteRequestsPanel" style="margin-top:22px;padding-top:18px;border-top:1px solid rgba(148,163,184,.22)">
+            <h3 style="margin:0 0 12px;font-size:18px"><i class="fa-solid fa-tags" style="color:#fb923c"></i> طلباتي وأسعارها</h3>
+            <div id="customerQuoteRequests" aria-live="polite" style="display:grid;gap:10px">
+                <div style="color:#94a3b8;font-size:13px">سجّل باسمك في المتجر لمتابعة طلباتك وأسعارها.</div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- APPLICATION / REQUEST -->
 <section class="section application-section" id="applicationSection">
@@ -2188,6 +2229,9 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
                     <a id="detailDownloadButton" class="download-btn" style="padding:13px 16px" target="_blank" download>
                         <i class="fa-solid fa-download"></i> تحميل الصورة
                     </a>
+                    <button class="primary-btn" type="button" onclick="requestProductQuote()" style="background:linear-gradient(135deg,#7c3aed,#4f46e5)">
+                        <i class="fa-solid fa-tags"></i> اطلب سعر من الإدارة
+                    </button>
                 </div>
 
             </div>
@@ -2442,6 +2486,7 @@ let customer = JSON.parse(
 
 let chatUnsubscribe = null;
 let notificationsUnsubscribe = null;
+let customerQuoteRequestsUnsubscribe = null;
 let storeSettingsUnsubscribe = null;
 let allNotifications = [];
 let unreadNotifications = 0;
@@ -2577,6 +2622,7 @@ window.saveCustomerName = async function(){
 
     subscribeChat();
     subscribeNotifications();
+    subscribeCustomerQuoteRequests();
 
 };
 
@@ -2688,11 +2734,12 @@ function subscribeNotifications(){
                         n.targetId ?? n.customerId ?? n.userId ?? ""
                     );
 
-                    const broadcast =
-                        !target ||
-                        ["all","everyone","customers","customer","broadcast"].includes(target);
+                    // وجود targetId يعني أن الإشعار موجه لصاحب هذا المعرّف فقط.
+                    // كلمة "customer" تصف نوع المستلم وليست إعلانًا لكل العملاء.
+                    if(targetId) return targetId === String(customer.id);
 
-                    return broadcast || targetId === String(customer.id);
+                    // الإشعار العام فقط هو الذي لا يحمل معرّف عميل محدد.
+                    return !target || ["all","everyone","customers","broadcast"].includes(target);
                 });
 
             const previousIds = new Set(allNotifications.map(n => n.id));
@@ -3247,7 +3294,199 @@ function productCard(product){
 }
 
 
+/* ================= CUSTOMER IMAGE PRICE REQUEST ================= */
+let customerQuoteImageFile = null;
+let customerQuoteImageDataUrl = "";
+
+function renderCustomerQuoteRequests(items){
+    const container = document.getElementById("customerQuoteRequests");
+    if(!container) return;
+    if(!customer?.id){
+        container.innerHTML = '<div style="color:#94a3b8;font-size:13px">سجّل باسمك في المتجر لمتابعة طلباتك وأسعارها.</div>';
+        return;
+    }
+    if(!items.length){
+        container.innerHTML = '<div style="color:#94a3b8;font-size:13px">لسه ما بعتّش أي طلب تسعير. لما تبعت صورة أو تطلب سعر منتج، هتلاقيه هنا.</div>';
+        return;
+    }
+    container.innerHTML = items.map(q=>{
+        const priceWasSent = q.status === "priced" && q.price !== undefined && q.price !== null;
+        const title = escapeHTML(q.productName || (q.requestType === "customer_image" ? "صورة منتج" : "طلب تسعير منتج"));
+        const state = priceWasSent ? "تم إرسال السعر" : "بانتظار تحديد السعر";
+        const safeImage = typeof q.productImage === "string" && (/^https?:\/\//i.test(q.productImage) || /^data:image\/(?:png|jpe?g|webp|gif);base64,/i.test(q.productImage)) ? escapeHTML(q.productImage) : "";
+        const thumbnail = safeImage ? `<img src="${safeImage}" alt="صورة الطلب" loading="lazy" style="width:68px;height:68px;object-fit:contain;background:#fff;border-radius:10px;flex:0 0 68px">` : `<div style="width:68px;height:68px;display:grid;place-items:center;background:rgba(148,163,184,.12);border-radius:10px;flex:0 0 68px"><i class="fa-solid fa-tag"></i></div>`;
+        const date = q.createdAt?.toDate ? q.createdAt.toDate().toLocaleDateString("ar-EG") : "";
+        return `<div style="display:flex;gap:12px;align-items:center;padding:12px;border:1px solid rgba(148,163,184,.2);border-radius:14px;background:rgba(148,163,184,.045)">${thumbnail}<div style="min-width:0;flex:1"><strong style="display:block;overflow-wrap:anywhere">${title}</strong><div style="font-size:12px;color:#94a3b8;margin-top:4px">${state}${date ? ` · ${date}` : ""}</div><div style="margin-top:7px;font-weight:800;color:${priceWasSent ? '#22c55e' : '#fbbf24'}">السعر: ${priceWasSent ? money(q.price) : "----"}</div>${!priceWasSent ? '<div style="font-size:11px;color:#94a3b8;margin-top:3px">السعر هيظهر هنا بعد ما الإدارة تبعتهولك.</div>' : ""}</div></div>`;
+    }).join("");
+}
+
+function subscribeCustomerQuoteRequests(){
+    if(customerQuoteRequestsUnsubscribe){ customerQuoteRequestsUnsubscribe(); customerQuoteRequestsUnsubscribe = null; }
+    const container = document.getElementById("customerQuoteRequests");
+    if(!customer?.id){ renderCustomerQuoteRequests([]); return; }
+    if(container) container.innerHTML = '<div style="color:#94a3b8;font-size:13px">جاري تحميل طلباتك...</div>';
+    const ownRequestsQuery = query(collection(db,"quoteRequests"), where("customerId","==",String(customer.id)));
+    customerQuoteRequestsUnsubscribe = onSnapshot(ownRequestsQuery, snapshot=>{
+        const items = snapshot.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{
+            const aa = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+            const bb = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+            return bb-aa;
+        });
+        renderCustomerQuoteRequests(items);
+    }, error=>{
+        console.error("Customer quote requests listener:",error);
+        if(container) container.innerHTML = '<div style="color:#fca5a5;font-size:13px">تعذر تحميل طلباتك الآن. تأكد من اتصال الإنترنت وصلاحيات Firebase.</div>';
+    });
+}
+
+window.previewCustomerQuoteImage = function(event){
+    const file = event?.target?.files?.[0];
+    if(!file) return;
+    if(!file.type || !file.type.startsWith("image/")){
+        toast("اختار ملف صورة صالح", "error"); event.target.value=""; return;
+    }
+    if(file.size > 10 * 1024 * 1024){
+        toast("حجم الصورة الأصلية لازم يكون أقل من 10 ميجابايت", "error"); event.target.value=""; return;
+    }
+    customerQuoteImageFile = file;
+    customerQuoteImageDataUrl = "";
+    const preview = document.getElementById("quoteImagePreview");
+    const wrap = document.getElementById("quoteImagePreviewWrap");
+    const name = document.getElementById("quoteImageFileName");
+    if(preview) preview.src = URL.createObjectURL(file);
+    if(name) name.textContent = file.name || "الصورة المختارة";
+    if(wrap) wrap.hidden = false;
+    const status = document.getElementById("quoteImageStatus");
+    if(status) status.textContent = "تم اختيار الصورة. اضغط على زر الإرسال لإرسالها للإدارة.";
+};
+
+window.clearCustomerQuoteImage = function(){
+    customerQuoteImageFile = null;
+    customerQuoteImageDataUrl = "";
+    const input = document.getElementById("quoteImageFileInput");
+    if(input) input.value = "";
+    const preview = document.getElementById("quoteImagePreview");
+    if(preview){ if(preview.src.startsWith("blob:")) URL.revokeObjectURL(preview.src); preview.removeAttribute("src"); }
+    const wrap = document.getElementById("quoteImagePreviewWrap"); if(wrap) wrap.hidden = true;
+    const status = document.getElementById("quoteImageStatus");
+    if(status) status.textContent = "اختار صورة واضحة للمنتج، وبعد الإرسال الإدارة هتراجعها وتحدد السعر.";
+};
+
+async function compressCustomerQuoteImage(file){
+    const imageUrl = URL.createObjectURL(file);
+    try{
+        const image = await new Promise((resolve,reject)=>{
+            const img = new Image();
+            img.onload = ()=>resolve(img);
+            img.onerror = ()=>reject(new Error("تعذر قراءة الصورة"));
+            img.src = imageUrl;
+        });
+        const qualities = [0.82,0.74,0.66,0.58,0.5,0.42];
+        for(let maxSide=1200; maxSide>=450; maxSide-=150){
+            const scale = Math.min(1,maxSide/Math.max(image.naturalWidth,image.naturalHeight));
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(1,Math.round(image.naturalWidth*scale));
+            canvas.height = Math.max(1,Math.round(image.naturalHeight*scale));
+            const context = canvas.getContext("2d",{alpha:false});
+            context.fillStyle="#ffffff"; context.fillRect(0,0,canvas.width,canvas.height);
+            context.drawImage(image,0,0,canvas.width,canvas.height);
+            for(const quality of qualities){
+                const blob = await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",quality));
+                if(blob && blob.size <= 420*1024){
+                    return await new Promise((resolve,reject)=>{
+                        const reader=new FileReader();
+                        reader.onload=()=>resolve(reader.result);
+                        reader.onerror=()=>reject(new Error("تعذر تجهيز الصورة"));
+                        reader.readAsDataURL(blob);
+                    });
+                }
+            }
+        }
+        throw new Error("حجم الصورة بعد الضغط ما زال كبيرًا. جرّب صورة أصغر.");
+    }finally{ URL.revokeObjectURL(imageUrl); }
+}
+
+window.submitCustomerImageQuote = async function(){
+    if(!ensureCustomer()) return;
+    if(!await verifyCustomerAllowed()) return;
+    if(!customerQuoteImageFile){
+        toast("اختار صورة المنتج الأول من المربع الموجود فوق", "error");
+        document.getElementById("quoteImageFileInput")?.click();
+        return;
+    }
+    const button=document.getElementById("sendCustomerQuoteImageBtn");
+    const status=document.getElementById("quoteImageStatus");
+    if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> جاري تجهيز وإرسال الصورة...';}
+    try{
+        const imageData = await compressCustomerQuoteImage(customerQuoteImageFile);
+        customerQuoteImageDataUrl = imageData;
+        const note = (document.getElementById("quoteImageNote")?.value || "").trim().slice(0,400);
+        const request = await addDoc(collection(db,"quoteRequests"),{
+            requestType:"customer_image",
+            customerId:customer.id,
+            customerName:customer.name || "عميل",
+            productId:"",
+            productName:"صورة مرفقة من العميل",
+            productImage:imageData,
+            listedPrice:0,
+            customerNote:note,
+            status:"new",
+            createdAt:serverTimestamp(),
+            updatedAt:serverTimestamp()
+        });
+        await saveMessageToFirestore({
+            type:"image",
+            text:note ? `طلب تسعير صورة منتج. التفاصيل: ${note}` : "أرسلت صورة منتج وطلبت معرفة سعره",
+            mediaUrl:imageData,
+            quoteRequest:true,
+            quoteRequestId:request.id
+        });
+        if(status) status.textContent="✅ تم إرسال الصورة بنجاح! الإدارة هتراجعها وتبعتلك السعر في إشعارات المتجر.";
+        toast("تم إرسال الصورة للإدارة بنجاح");
+        if(document.getElementById("quoteImageNote")) document.getElementById("quoteImageNote").value="";
+        window.clearCustomerQuoteImage();
+        if(status) status.textContent="✅ تم إرسال الصورة بنجاح! الإدارة هتراجعها وتبعتلك السعر في إشعارات المتجر.";
+    }catch(error){
+        console.error("Customer image quote failed:",error);
+        if(status) status.textContent="تعذر إرسال الصورة. راجع اتصال الإنترنت وصلاحيات Firebase ثم حاول مرة أخرى.";
+        toast(error?.message || "تعذر إرسال الصورة. حاول مرة أخرى", "error");
+    }finally{
+        if(button){button.disabled=false;button.innerHTML='<i class="fa-solid fa-paper-plane"></i> إرسال الصورة للإدارة وطلب السعر';}
+    }
+};
+
 /* ================= PRODUCT DETAILS ================= */
+
+window.requestProductQuote = async function(){
+    if(!ensureCustomer()) return;
+    if(!await verifyCustomerAllowed()) return;
+    const product = products.map(normalizeProduct).find(p=>p.id===currentReviewProductId);
+    if(!product){ toast("تعذر العثور على المنتج", "error"); return; }
+    try{
+        await addDoc(collection(db,"quoteRequests"),{
+            customerId:customer.id,
+            customerName:customer.name || "عميل",
+            productId:product.id,
+            productName:product.name || "منتج",
+            productImage:product.image || "",
+            listedPrice:Number(product.price || 0),
+            status:"new",
+            customerNote:"طلب العميل معرفة السعر النهائي",
+            createdAt:serverTimestamp(),
+            updatedAt:serverTimestamp()
+        });
+        await saveMessageToFirestore({
+            type:"text",
+            text:`طلبت سعرًا خاصًا للمنتج: ${product.name}`,
+            productId:product.id,
+            productName:product.name,
+            mediaUrl:product.image || "",
+            quoteRequest:true
+        });
+        toast("تم إرسال المنتج للإدارة، وسيصلك السعر في إشعارات المتجر");
+        closeProductModal();
+    }catch(error){ console.error(error); toast("تعذر إرسال طلب السعر. حاول مرة أخرى", "error"); }
+};
 
 window.openProduct = function(id){
     const product=products.map(normalizeProduct).find(p=>p.id===id);
@@ -4500,6 +4739,7 @@ subscribeProducts();
 
         subscribeChat();
         subscribeNotifications();
+        subscribeCustomerQuoteRequests();
 
     }else{
         maybeOpenCustomerName();
