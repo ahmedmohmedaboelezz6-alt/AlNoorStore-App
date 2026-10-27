@@ -1355,6 +1355,13 @@ footer ul{
 }
 
 
+
+/* ================= PWA INSTALL BUTTON ================= */
+.install-app-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:0 13px;border:1px solid rgba(249,115,22,.42);border-radius:13px;background:linear-gradient(135deg,rgba(249,115,22,.18),rgba(245,158,11,.12));color:#fdba74;font-family:inherit;font-size:11px;font-weight:900;white-space:nowrap;transition:.2s}
+.install-app-btn:hover{transform:translateY(-2px);border-color:#f59e0b;box-shadow:0 0 22px rgba(249,115,22,.18)}
+.install-app-btn[hidden]{display:none!important}
+@media(max-width:600px){.nav-actions{gap:5px}.install-app-btn{width:42px;padding:0;font-size:0;gap:0}.install-app-btn i{font-size:16px}}
+
 /* ================= NOOR NEW FEATURES ================= */
 .store-logo-img{width:48px;height:48px;border-radius:15px;object-fit:cover;display:none;box-shadow:0 0 28px rgba(249,115,22,.35)}
 .brand.has-logo .brand-icon{display:none}.brand.has-logo .store-logo-img{display:block}
@@ -1489,7 +1496,7 @@ footer ul{
         bottom:15px;
     }
 }
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="./manifest.json">
 
 /* ================= STORE STATUS / STOCK / REVIEWS ================= */
 .store-closed-screen{
@@ -1661,6 +1668,17 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
   .summary-line.total{font-size:18px;}
 }
 
+
+/* Smart performance, Google sign-in and product media gallery */
+.google-login-btn{width:100%;height:49px;border:1px solid #d1d5db;border-radius:13px;background:#fff;color:#202124;font-weight:800;margin:0 0 12px;display:flex;align-items:center;justify-content:center;gap:10px}
+.google-login-btn i{color:#4285f4;font-size:19px}.login-divider{display:flex;align-items:center;gap:10px;color:#94a3b8;font-size:11px;margin:0 0 12px}.login-divider:before,.login-divider:after{content:"";height:1px;background:var(--border);flex:1}
+.cart-installment-panel{margin:12px 15px;padding:14px;border-radius:16px;border:1px solid rgba(34,197,94,.26);background:linear-gradient(145deg,rgba(34,197,94,.07),rgba(249,115,22,.045))}.cart-installment-panel h3{font-size:13px;margin:0 0 7px;color:#f8fafc}.cart-installment-panel h3 i{color:#4ade80;margin-left:6px}.cart-installment-help,.cart-installment-notice{font-size:10px;line-height:1.8;color:#94a3b8;margin:0 0 8px}.cart-installment-panel label{font-size:11px;display:block;margin:7px 0 5px;color:#cbd5e1}.cart-installment-panel select{width:100%;height:43px;background:#0e151f;color:#f8fafc;border:1px solid rgba(148,163,184,.24);border-radius:10px;padding:0 10px;font:inherit;font-size:12px}.cart-installment-summary{margin:9px 0 5px;padding:10px;border-radius:10px;background:rgba(34,197,94,.08);color:#bbf7d0;font-size:12px;font-weight:800;line-height:1.8}.cart-installment-notice{margin-bottom:0;color:#fdba74}.cart-installment-summary.pending{color:#fcd34d;background:rgba(245,158,11,.08)}.cart-installment-summary.approved{color:#86efac;background:rgba(34,197,94,.11)}.cart-installment-summary.rejected{color:#fca5a5;background:rgba(239,68,68,.08)}
+.installment-banner{display:flex;align-items:center;gap:10px;margin:14px 0;padding:13px 15px;border-radius:15px;background:linear-gradient(110deg,rgba(34,197,94,.14),rgba(249,115,22,.1));border:1px solid rgba(34,197,94,.3);font-size:13px;font-weight:800}.installment-banner i{font-size:22px;color:#4ade80}.installment-banner small{display:block;color:#aab5c5;font-weight:500;font-size:10px;margin-top:3px}.installment-banner select{display:block;width:100%;max-width:220px;margin:8px 0;padding:9px 11px;border:1px solid rgba(34,197,94,.35);border-radius:10px;background:#111827;color:inherit;font:inherit;font-size:12px;cursor:pointer}.installment-banner .installment-title{display:block}.installment-banner #installmentAmount{display:block;margin-top:5px;color:#4ade80;font-weight:900}
+.product-gallery{position:relative;width:100%;height:100%;min-height:400px;display:flex;align-items:center;justify-content:center}.gallery-stage{width:100%;height:100%;min-height:400px;display:flex;align-items:center;justify-content:center}.gallery-stage img,.gallery-stage video{width:100%;height:100%;min-height:400px;max-height:65vh;object-fit:contain;background:#080d15}.gallery-nav{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:rgba(0,0,0,.65);color:white;z-index:3}.gallery-nav.prev{right:12px}.gallery-nav.next{left:12px}.gallery-dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:7px;z-index:4}.gallery-dot{width:8px;height:8px;border:0;border-radius:50%;background:#64748b;padding:0}.gallery-dot.active{background:#f97316;transform:scale(1.3)}.gallery-nav[hidden],.gallery-dots:empty{display:none}
+.cart-progress.free-shipping-achieved{background:rgba(34,197,94,.09)}.cart-progress.free-shipping-achieved .cart-progress-fill{background:linear-gradient(90deg,#16a34a,#4ade80)}
+.cart-loyalty{padding:10px 15px;font-size:11px;color:#fde68a;background:rgba(245,158,11,.07);border-bottom:1px solid var(--border)}.cart-loyalty i{color:#fbbf24;margin-left:5px}.cart-loyalty strong{font-size:14px}
+@media(max-width:800px){.product-gallery,.gallery-stage,.gallery-stage img,.gallery-stage video{min-height:280px}.gallery-stage img,.gallery-stage video{max-height:45vh}}
+
 </style>
 </head>
 
@@ -1737,6 +1755,11 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
         <button class="icon-btn" onclick="openCart()">
             <i class="fa-solid fa-cart-shopping"></i>
             <span class="badge" id="cartCount">0</span>
+        </button>
+
+        <button class="install-app-btn" id="installAppBtn" type="button" onclick="installNoorApp()" title="إضافة متجر النور إلى الشاشة الرئيسية">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <span>تثبيت التطبيق</span>
         </button>
 
     </div>
@@ -1843,7 +1866,7 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
             id="searchInput"
             type="text"
             placeholder="ابحث عن منتج، قسم، أو كلمة..."
-            oninput="filterProducts()"
+            oninput="debouncedFilterProducts()"
         >
 
     </div>
@@ -2072,6 +2095,7 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
             <div class="cart-progress-track"><div class="cart-progress-fill" id="cartProgressFill"></div></div>
         </div>
 
+        <div class="cart-loyalty" id="cartLoyalty"><i class="fa-solid fa-award"></i> ستكسب <strong id="loyaltyPoints">0</strong> نقطة ولاء عند إتمام الطلب</div>
         <div class="cart-items" id="cartItems"></div>
 
         <div class="checkout-fields">
@@ -2081,6 +2105,19 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
         <input id="checkoutAddress" class="input" placeholder="العنوان بالتفصيل">
         <div class="checkout-note">لن يتم إرسال الطلب إلا بعد إدخال الاسم ورقم التليفون والعنوان.</div>
     </div>
+
+    <section class="cart-installment-panel" aria-labelledby="cartInstallmentHeading">
+        <h3 id="cartInstallmentHeading"><i class="fa-solid fa-calendar-check"></i> طريقة الدفع والتقسيط</h3>
+        <p class="cart-installment-help">اختار الدفع الكامل أو اطلب التقسيط على شهر أو شهرين. طلب التقسيط يذهب للإدارة للموافقة أولًا، ولن يتم اعتماد الطلب أو خصم المخزون قبل الموافقة.</p>
+        <label for="cartPaymentPlan">طريقة الدفع</label>
+        <select id="cartPaymentPlan" class="input" onchange="window.updateCartInstallmentUI()">
+            <option value="full">دفع كامل عند الاستلام</option>
+            <option value="installment-1">تقسيط على شهر واحد</option>
+            <option value="installment-2">تقسيط على شهرين</option>
+        </select>
+        <div id="cartInstallmentSummary" class="cart-installment-summary" aria-live="polite">الدفع الكامل عند الاستلام.</div>
+        <div id="cartInstallmentNotice" class="cart-installment-notice">التقسيط لا يتأكد إلا بعد موافقة الإدارة.</div>
+    </section>
 
     <div class="discount-area">
 
@@ -2136,7 +2173,7 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
             <span id="grandTotal">0 ج.م</span>
         </div>
 
-        <button class="primary-btn checkout" onclick="checkout()">
+        <button id="checkoutButton" class="primary-btn checkout" onclick="checkout()">
             <i class="fa-solid fa-check"></i>
             إتمام الطلب
         </button>
@@ -2164,7 +2201,12 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
         <div class="product-details">
 
             <div class="details-image">
-                <img decoding="async" id="detailImage" src="">
+                <div class="product-gallery" id="productGallery">
+                    <div class="gallery-stage" id="galleryStage"><img id="detailImage" src="" alt="صورة المنتج" loading="lazy" decoding="async"></div>
+                    <button type="button" class="gallery-nav prev" id="galleryPrev" onclick="moveGallery(-1)" aria-label="الصورة السابقة"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button type="button" class="gallery-nav next" id="galleryNext" onclick="moveGallery(1)" aria-label="الصورة التالية"><i class="fa-solid fa-chevron-left"></i></button>
+                    <div class="gallery-dots" id="galleryDots"></div>
+                </div>
             </div>
 
             <div class="details-content">
@@ -2179,6 +2221,7 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
                 <div class="rating" id="detailRating"></div>
 
                 <div id="detailPrice"></div>
+                <div class="installment-banner"><i class="fa-solid fa-calendar-check"></i><div style="flex:1;min-width:0"><strong class="installment-title">التقسيط متاح بطلب موافقة الإدارة</strong><small>اختار من السلة التقسيط على شهر واحد أو شهرين. الإدارة تراجع الطلب أولًا، ولا يتم اعتماد الشراء قبل الموافقة.</small></div></div>
 
                 <p
                     class="details-description"
@@ -2268,6 +2311,10 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
                 maxlength="60"
                 placeholder="اكتب اسمك هنا"
             >
+            <button type="button" class="google-login-btn" onclick="signInWithGoogle()">
+                <i class="fa-brands fa-google"></i> تسجيل الدخول بحساب جوجل
+            </button>
+            <div class="login-divider"><span>أو اكتب اسمك للمتابعة</span></div>
 
             <button
                 class="primary-btn"
@@ -2403,9 +2450,8 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
 <!-- FIREBASE -->
 <script type="module">
 
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 import {
     getFirestore,
@@ -2425,7 +2471,8 @@ import {
     serverTimestamp,
     where,
     getDocs,
-    runTransaction
+    runTransaction,
+    limit
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 
@@ -2447,6 +2494,8 @@ const firebaseConfig = {
 /* ========================================================= */
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 // ذاكرة محلية دائمة لتقليل انتظار البيانات عند تكرار زيارة المتجر.
 let db;
@@ -2550,6 +2599,27 @@ window.toast = function(message, type = "success"){
 
 
 /* ================= CUSTOMER ================= */
+
+window.signInWithGoogle=async function(){
+    try{
+        const result=await signInWithPopup(auth,googleProvider);
+        const user=result.user;
+        const id="google_"+user.uid;
+        const name=user.displayName||"عميل متجر النور";
+        customer={id,name,email:user.email||"",photoURL:user.photoURL||"",authProvider:"google",createdAt:Date.now()};
+        await setDoc(doc(db,"customers",id),{name,email:customer.email,photoURL:customer.photoURL,customerId:id,authProvider:"google",lastSeen:serverTimestamp(),createdAt:serverTimestamp()},{merge:true});
+        localStorage.setItem("noor_customer",JSON.stringify(customer));
+        document.getElementById("nameModal").classList.remove("show");
+        document.getElementById("checkoutName").value=name;
+        document.getElementById("applicationName").value=name;
+        subscribeChat();subscribeNotifications();subscribeCustomerQuoteRequests();watchCustomerBlockState();
+        toast("تم تسجيل الدخول بحساب جوجل بنجاح");
+    }catch(error){
+        console.error("Google sign-in failed",error);
+        const msg=error?.code==="auth/unauthorized-domain"?"أضف نطاق الموقع إلى Authorized domains في Firebase Authentication.":error?.code==="auth/popup-closed-by-user"?"تم إغلاق نافذة تسجيل الدخول قبل اكتمال العملية.":"تعذر تسجيل الدخول بجوجل. تأكد من تفعيل Google في Firebase Authentication.";
+        toast(msg,"error");
+    }
+};
 
 function createCustomerId(){
 
@@ -2932,8 +3002,8 @@ window.submitApplication=async function(){
 
 function subscribeProducts(){
 
-    const productsRef =
-        collection(db,"products");
+    // جلب أول 40 منتجًا فقط لتقليل البيانات الأولية؛ يمكن توسيع الحد لاحقًا بإضافة ترقيم صفحات.
+    const productsRef = query(collection(db,"products"), limit(40));
 
     onSnapshot(
         productsRef,
@@ -3009,7 +3079,9 @@ function normalizeProduct(product){
             product.badge || "",
 
         featured:Boolean(product.featured),
-        downloadUrl:product.downloadUrl || product.fileUrl || ""
+        downloadUrl:product.downloadUrl || product.fileUrl || "",
+        gallery:Array.isArray(product.gallery)?product.gallery:(Array.isArray(product.media)?product.media:[]),
+        videoUrl:product.videoUrl || product.video || ""
 
     };
 
@@ -3075,6 +3147,8 @@ window.selectCategory = function(category,button){
 };
 
 
+let productFilterTimer=null;
+window.debouncedFilterProducts=function(){clearTimeout(productFilterTimer);productFilterTimer=setTimeout(()=>window.filterProducts(),180);};
 window.filterProducts = function(){
 
     const search =
@@ -3488,15 +3562,45 @@ window.requestProductQuote = async function(){
     }catch(error){ console.error(error); toast("تعذر إرسال طلب السعر. حاول مرة أخرى", "error"); }
 };
 
+window.currentProductGallery=[];
+window.currentGalleryIndex=0;
+window.renderProductGallery=function(){
+    const stage=document.getElementById("galleryStage"), dots=document.getElementById("galleryDots");
+    const items=window.currentProductGallery||[], idx=window.currentGalleryIndex||0;
+    if(!stage) return;
+    const item=items[idx]||{type:"image",url:""};
+    stage.innerHTML=item.type==="video"
+      ? `<video src="${escapeHTML(item.url)}" controls playsinline preload="metadata" aria-label="فيديو المنتج"></video>`
+      : `<img id="detailImage" src="${escapeHTML(item.url)}" alt="صورة المنتج" loading="lazy" decoding="async">`;
+    const multiple=items.length>1;
+    document.getElementById("galleryPrev").hidden=!multiple; document.getElementById("galleryNext").hidden=!multiple;
+    dots.innerHTML=multiple?items.map((_,i)=>`<button class="gallery-dot ${i===idx?"active":""}" aria-label="عرض الوسيط ${i+1}" onclick="goGallery(${i})"></button>`).join(""):"";
+};
+window.moveGallery=function(delta){const n=(window.currentProductGallery||[]).length;if(!n)return;window.currentGalleryIndex=(window.currentGalleryIndex+delta+n)%n;renderProductGallery();};
+window.goGallery=function(index){window.currentGalleryIndex=index;renderProductGallery();};
+
+window.currentInstallmentProductPrice=0;
+window.updateInstallmentSummary=function(){
+    const select=document.getElementById("installmentMonths");
+    const amount=document.getElementById("installmentAmount");
+    if(!select||!amount) return;
+    const months=Number(select.value)===2?2:1;
+    const monthly=(Number(window.currentInstallmentProductPrice)||0)/months;
+    amount.textContent=`حوالي ${money(monthly)} ${months===1?"لمدة شهر واحد":"شهريًا لمدة شهرين"}`;
+};
+
 window.openProduct = function(id){
     const product=products.map(normalizeProduct).find(p=>p.id===id);
     if(!product) return;
     currentReviewProductId=product.id;
     window.currentReviewRating=5;
-    document.getElementById("detailImage").src=product.image;
+    const galleryItems=[{type:"image",url:product.image},...(product.gallery||[]).map(item=>typeof item==="string"?{type:/\\.(mp4|webm|ogg)(\\?|$)/i.test(item)?"video":"image",url:item}:{type:item.type||(item.video||item.url&&/\\.(mp4|webm|ogg)(\\?|$)/i.test(item.url)?"video":"image"),url:item.url||item.src||item.video}).filter(item=>item.url),...(product.videoUrl?[{type:"video",url:product.videoUrl}]:[])];
+    window.currentProductGallery=galleryItems; window.currentGalleryIndex=0; renderProductGallery();
     document.getElementById("detailName").textContent=product.name;
     document.getElementById("detailCategory").textContent=product.category;
     document.getElementById("detailDescription").textContent=product.description;
+    window.currentInstallmentProductPrice=Number(product.price)||0;
+    window.updateInstallmentSummary();
     document.getElementById("detailRating").innerHTML=`${Array.from({length:5},(_,i)=>`<i class="fa-${i<Math.round(product.rating)?"solid":"regular"} fa-star"></i>`).join("")}<span>${product.rating}/5</span>`;
     document.getElementById("detailPrice").innerHTML=`<div class="price">${money(product.price)}</div>${product.oldPrice>product.price?`<span class="old-price">${money(product.oldPrice)}</span>`:""}<div class="stock-line ${product.stock<=0?"out":""}"><i class="fa-solid fa-boxes-stacked"></i> ${product.stock<=0?"نفد المخزون":`المتاح بالمخزون: <strong>${product.stock}</strong> قطعة`}</div>`;
     const detailDownload=document.getElementById("detailDownloadButton");
@@ -3753,9 +3857,9 @@ function renderCart(){
 
                 <div class="cart-item">
 
-                    <img decoding="async"
+                    <img loading="lazy" decoding="async"
                         src="${escapeHTML(item.image)}"
-                        alt=""
+                        alt="${escapeHTML(item.name)}"
                     >
 
                     <div class="cart-item-info">
@@ -4091,7 +4195,7 @@ function calculateDiscount(subtotal){
 
 
 function updateCartSummary(){
-    // Visual cart progress indicator (based on cart subtotal; no shipping promise implied).
+    // شريط الشحن المجاني (حده 1000 جنيه ويمكن تعديله حسب سياسة المتجر).
     const progressFill=document.getElementById("cartProgressFill");
     const progressText=document.getElementById("cartProgressText");
     if(progressFill&&progressText){
@@ -4099,9 +4203,12 @@ function updateCartSummary(){
         const target=1000;
         const percent=Math.min(100,Math.round(subtotalValue/target*100));
         progressFill.style.width=percent+"%";
-        progressText.innerHTML=subtotalValue<=0?'أضف منتجاتك للسلة وابدأ التسوق ✨':subtotalValue<target?`قيمة مشترياتك <strong>${subtotalValue.toLocaleString("ar-EG")} ج.م</strong> — استمر في التصفح`:'ممتاز! سلتك مليانة اختيارات حلوة 🎉';
+        const progressBox=progressText.closest(".cart-progress");
+        if(progressBox) progressBox.classList.toggle("free-shipping-achieved",subtotalValue>=target);
+        progressText.innerHTML=subtotalValue<=0?'أضف منتجاتك للسلة لتحصل على شحن مجاني عند الوصول إلى <strong>1000 ج.م</strong> ✨':subtotalValue<target?`أضف <strong>${(target-subtotalValue).toLocaleString("ar-EG")} ج.م</strong> لتحصل على الشحن المجاني`:'🎉 <strong>مبروك! حصلت على الشحن المجاني</strong>';
     }
-
+    const pointsEl=document.getElementById("loyaltyPoints");
+    if(pointsEl) pointsEl.textContent=Math.floor((Number(calculateSubtotal())||0)/10).toLocaleString("ar-EG");
 
     const subtotal =
         calculateSubtotal();
@@ -4129,9 +4236,94 @@ function updateCartSummary(){
 
     document.getElementById("grandTotal")
         .textContent = money(total);
+    window.updateCartInstallmentUI();
 
 }
 
+
+/* ================= INSTALLMENT REQUESTS ================= */
+let activeInstallmentRequestId = null;
+let activeInstallmentRequestStatus = null;
+let activeInstallmentSignature = "";
+let installmentRequestUnsubscribe = null;
+
+function installmentMonthsFromSelection(value){
+    if(value === "installment-1") return 1;
+    if(value === "installment-2") return 2;
+    return 0;
+}
+
+function makeInstallmentSignature(items, total, months){
+    const normalizedItems = (items || []).map(item=>({id:String(item.id),qty:Number(item.qty)||0,price:Math.round((Number(item.price)||0)*100)/100}))
+        .sort((a,b)=>a.id.localeCompare(b.id));
+    return JSON.stringify({items:normalizedItems,total:Math.round((Number(total)||0)*100)/100,months:Number(months)||0,coupon:appliedCoupon?.code||null});
+}
+
+function currentInstallmentSignature(months){
+    const items = getCartDetails();
+    const subtotal = Number(calculateSubtotal())||0;
+    const total = subtotal - (Number(calculateDiscount(subtotal))||0);
+    return makeInstallmentSignature(items,total,months);
+}
+
+function watchInstallmentRequest(id, signature, initialStatus="pending"){
+    activeInstallmentRequestId = id;
+    activeInstallmentSignature = signature;
+    activeInstallmentRequestStatus = initialStatus;
+    if(installmentRequestUnsubscribe){ installmentRequestUnsubscribe(); installmentRequestUnsubscribe = null; }
+    try{
+        installmentRequestUnsubscribe = onSnapshot(doc(db,"installmentRequests",id), snap=>{
+            if(!snap.exists()) return;
+            const data = snap.data();
+            activeInstallmentRequestStatus = data.status || "pending";
+            activeInstallmentRequestId = id;
+            activeInstallmentSignature = data.cartSignature || signature;
+            window.updateCartInstallmentUI();
+        }, error=>console.warn("Installment status listener:",error));
+    }catch(error){ console.warn("Cannot watch installment request status:",error); }
+    window.updateCartInstallmentUI();
+}
+
+window.updateCartInstallmentUI = function(){
+    const select = document.getElementById("cartPaymentPlan");
+    const summary = document.getElementById("cartInstallmentSummary");
+    const notice = document.getElementById("cartInstallmentNotice");
+    const button = document.getElementById("checkoutButton");
+    if(!select || !summary) return;
+    const months = installmentMonthsFromSelection(select.value);
+    const subtotal = Number(calculateSubtotal())||0;
+    const total = Math.max(0,subtotal-(Number(calculateDiscount(subtotal))||0));
+    const signature = months ? makeInstallmentSignature(getCartDetails(),total,months) : "";
+    const status = signature && signature === activeInstallmentSignature ? activeInstallmentRequestStatus : null;
+    summary.className = "cart-installment-summary";
+    if(!months){
+        summary.textContent = `الدفع الكامل عند الاستلام: ${money(total)}.`;
+        if(notice) notice.textContent = "لن يتم إنشاء طلب تقسيط عند اختيار الدفع الكامل.";
+        if(button) button.innerHTML = '<i class="fa-solid fa-check"></i> إتمام الطلب';
+    }else{
+        const monthly = Math.round((total/months)*100)/100;
+        if(status === "approved"){
+            summary.classList.add("approved");
+            summary.textContent = `تمت الموافقة على التقسيط ✅ · ${months===1?"شهر واحد":"شهران"} · ${money(monthly)} لكل شهر.`;
+            if(notice) notice.textContent = "اضغط الزر لإتمام الطلب بعد الموافقة. سيتم مراجعة المخزون مرة أخرى قبل التأكيد.";
+            if(button) button.innerHTML = '<i class="fa-solid fa-cart-check"></i> إتمام الطلب بعد الموافقة';
+        }else if(status === "pending"){
+            summary.classList.add("pending");
+            summary.textContent = `طلب التقسيط قيد مراجعة الإدارة · القسط المتوقع ${money(monthly)} شهريًا.`;
+            if(notice) notice.textContent = "لن يتم خصم المخزون أو اعتماد الشراء حتى توافق الإدارة.";
+            if(button) button.innerHTML = '<i class="fa-solid fa-rotate"></i> التحقق من طلب التقسيط';
+        }else if(status === "rejected"){
+            summary.classList.add("rejected");
+            summary.textContent = `تم رفض الطلب السابق. يمكنك إعادة طلب التقسيط بقسط تقديري ${money(monthly)} شهريًا.`;
+            if(notice) notice.textContent = "إرسال طلب جديد لا يعني الموافقة تلقائيًا.";
+            if(button) button.innerHTML = '<i class="fa-solid fa-paper-plane"></i> إعادة إرسال طلب التقسيط';
+        }else{
+            summary.textContent = `القسط التقديري: ${money(monthly)} شهريًا لمدة ${months===1?"شهر واحد":"شهرين"} · إجمالي ${money(total)}.`;
+            if(notice) notice.textContent = "هذا تقدير مبدئي فقط. الإدارة تراجع الطلب وتوافق أو ترفض قبل اعتماد الشراء.";
+            if(button) button.innerHTML = '<i class="fa-solid fa-paper-plane"></i> إرسال طلب التقسيط للموافقة';
+        }
+    }
+};
 
 /* ================= CHECKOUT ================= */
 
@@ -4153,10 +4345,71 @@ window.checkout = async function(){
             return;
         }
     }catch(checkError){ console.warn("Phone block lookup failed:",checkError); }
-    const subtotal=calculateSubtotal(), discount=calculateDiscount(subtotal), total=subtotal-discount;
+
+    const subtotal=Number(calculateSubtotal())||0;
+    const discount=Number(calculateDiscount(subtotal))||0;
+    const total=Math.max(0,subtotal-discount);
+    const planValue=document.getElementById("cartPaymentPlan")?.value||"full";
+    const installmentMonths=installmentMonthsFromSelection(planValue);
+    const signature=installmentMonths?makeInstallmentSignature(items,total,installmentMonths):"";
+    let approvedInstallmentRequest=null;
+
+    if(installmentMonths){
+        try{
+            const requestsSnapshot=await getDocs(query(collection(db,"installmentRequests"),where("customerId","==",customer.id)));
+            const matching=requestsSnapshot.docs.map(d=>({id:d.id,...d.data()}))
+                .filter(r=>r.cartSignature===signature)
+                .sort((a,b)=>{
+                    const at=a.createdAt?.toDate?a.createdAt.toDate().getTime():0;
+                    const bt=b.createdAt?.toDate?b.createdAt.toDate().getTime():0;
+                    return bt-at;
+                });
+            const pending=matching.find(r=>r.status==="pending");
+            if(pending){
+                watchInstallmentRequest(pending.id,signature,"pending");
+                toast("طلب التقسيط موجود بالفعل وما زال بانتظار موافقة الإدارة.","error");
+                return;
+            }
+            approvedInstallmentRequest=matching.find(r=>r.status==="approved")||null;
+            if(!approvedInstallmentRequest){
+                const monthlyAmount=Math.round((total/installmentMonths)*100)/100;
+                const requestRef=await addDoc(collection(db,"installmentRequests"),{
+                    customerId:customer.id,
+                    customerName:checkoutName,
+                    customerPhone:checkoutPhone,
+                    customerAddress:checkoutAddress,
+                    items:items.map(item=>({productId:item.id,name:item.name,price:Number(item.price)||0,quantity:Number(item.qty)||1})),
+                    subtotal,discount,total,
+                    coupon:appliedCoupon?(appliedCoupon.code||null):null,
+                    months:installmentMonths,
+                    monthlyAmount,
+                    cartSignature:signature,
+                    status:"pending",
+                    createdAt:serverTimestamp(),
+                    updatedAt:serverTimestamp()
+                });
+                watchInstallmentRequest(requestRef.id,signature,"pending");
+                toast("تم إرسال طلب التقسيط للإدارة للمراجعة. لم يتم اعتماد الشراء أو خصم المخزون بعد.");
+                return;
+            }
+            watchInstallmentRequest(approvedInstallmentRequest.id,signature,"approved");
+        }catch(installmentError){
+            console.error("Installment request error:",installmentError);
+            toast("تعذر التحقق من طلب التقسيط. راجع اتصال وصلاحيات Firebase.","error");
+            return;
+        }
+    }
+
     try{
         const orderRef=doc(collection(db,"orders"));
+        const installmentRequestRef=approvedInstallmentRequest?doc(db,"installmentRequests",approvedInstallmentRequest.id):null;
         await runTransaction(db,async transaction=>{
+            if(installmentRequestRef){
+                const requestSnap=await transaction.get(installmentRequestRef);
+                if(!requestSnap.exists()||requestSnap.data().status!=="approved"||requestSnap.data().cartSignature!==signature){
+                    throw new Error("INSTALLMENT_NOT_APPROVED");
+                }
+            }
             const fresh=[];
             for(const item of items){
                 const ref=doc(db,"products",item.id), snap=await transaction.get(ref);
@@ -4166,15 +4419,45 @@ window.checkout = async function(){
                 fresh.push({ref,stock,qty:item.qty});
             }
             for(const p of fresh) transaction.update(p.ref,{stock:p.stock-p.qty});
-            transaction.set(orderRef,{customerId:customer.id,customerName:checkoutName,items:items.map(item=>({productId:item.id,name:item.name,price:item.price,quantity:item.qty})),subtotal,discount,total,coupon:appliedCoupon?(appliedCoupon.code||null):null,customerPhone:checkoutPhone,customerAddress:checkoutAddress,status:"new",createdAt:serverTimestamp()});
+            const orderData={
+                customerId:customer.id,
+                customerName:checkoutName,
+                items:items.map(item=>({productId:item.id,name:item.name,price:item.price,quantity:item.qty})),
+                subtotal,discount,total,
+                coupon:appliedCoupon?(appliedCoupon.code||null):null,
+                customerPhone:checkoutPhone,
+                customerAddress:checkoutAddress,
+                status:"new",
+                paymentPlan:installmentMonths?"installment":"full",
+                installmentMonths:installmentMonths||null,
+                installmentMonthlyAmount:installmentMonths?Math.round((total/installmentMonths)*100)/100:null,
+                installmentStatus:installmentMonths?"approved":null,
+                installmentRequestId:approvedInstallmentRequest?.id||null,
+                createdAt:serverTimestamp()
+            };
+            transaction.set(orderRef,orderData);
+            if(installmentRequestRef){
+                transaction.update(installmentRequestRef,{status:"converted",orderId:orderRef.id,convertedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+            }
         });
-        await setDoc(doc(db,"customers",customer.id),{name:checkoutName,phone:checkoutPhone,address:checkoutAddress,lastSeen:serverTimestamp()},{merge:true});
-        customer={...customer,name:checkoutName,phone:checkoutPhone,address:checkoutAddress};
+        const earnedPoints=Math.floor(total/10);
+        const customerRef=doc(db,"customers",customer.id);
+        await setDoc(customerRef,{name:checkoutName,phone:checkoutPhone,address:checkoutAddress,lastSeen:serverTimestamp(),loyaltyPoints:(Number(customer.loyaltyPoints)||0)+earnedPoints},{merge:true});
+        customer={...customer,name:checkoutName,phone:checkoutPhone,address:checkoutAddress,loyaltyPoints:(Number(customer.loyaltyPoints)||0)+earnedPoints};
         localStorage.setItem("noor_customer",JSON.stringify(customer));
-        await addDoc(collection(db,"notifications"),{targetId:customer.id,target:"customer",title:"تم استلام طلبك",message:"تم إرسال طلبك بنجاح وسيتم مراجعته من متجر النور.",type:"order",orderId:orderRef.id,createdAt:serverTimestamp()});
-        toast("تم إرسال طلبك بنجاح ✅"); cart=[]; appliedCoupon=null; saveCart(); renderCart(); renderProducts(); closeCart(); toast("يمكنك التواصل معنا من الدردشة لمتابعة الطلب");
+        const successMessage=installmentMonths
+            ? `تم تأكيد طلبك بالتقسيط بعد موافقة الإدارة. القسط ${money(Math.round((total/installmentMonths)*100)/100)} لمدة ${installmentMonths===1?"شهر":"شهرين"}.`
+            : "تم إرسال طلبك بنجاح وسيتم مراجعته من متجر النور.";
+        await addDoc(collection(db,"notifications"),{targetId:customer.id,target:"customer",title:installmentMonths?"تم تأكيد طلب التقسيط":"تم استلام طلبك",message:successMessage,type:"order",orderId:orderRef.id,createdAt:serverTimestamp()});
+        toast(installmentMonths?"تم إتمام الطلب بعد الموافقة على التقسيط ✅":`تم إرسال طلبك بنجاح ✅ كسبت ${Math.floor(total/10)} نقطة ولاء`);
+        cart=[]; appliedCoupon=null;
+        const paymentPlanSelect=document.getElementById("cartPaymentPlan"); if(paymentPlanSelect) paymentPlanSelect.value="full";
+        activeInstallmentRequestId=null;activeInstallmentRequestStatus=null;activeInstallmentSignature="";
+        if(installmentRequestUnsubscribe){installmentRequestUnsubscribe();installmentRequestUnsubscribe=null;}
+        saveCart(); renderCart(); renderProducts(); closeCart(); toast("يمكنك التواصل معنا من الدردشة لمتابعة الطلب");
     }catch(error){
         console.error(error);
+        if(error.message==="INSTALLMENT_NOT_APPROVED"){toast("موافقة التقسيط لم تعد سارية. تحقق من الحالة في السلة.","error");return;}
         if(String(error.message||"").startsWith("OUT_OF_STOCK:")){const p=String(error.message).split(":");toast(`الكمية المطلوبة من ${p[1]} غير متوفرة. المتاح: ${p[2]} قطعة`,"error");return;}
         toast("تعذر إرسال الطلب","error");
     }
@@ -4553,6 +4836,16 @@ window.sendSticker = async function(stickerUrl){
 
 
 // رفع واختيار صورة وإرسالها
+async function compressImageToWebP(file,maxSide=1280,quality=0.76){
+    if(!file.type.startsWith("image/")) throw new Error("Not an image");
+    const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file);});
+    const img=await new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=dataUrl;});
+    const scale=Math.min(1,maxSide/Math.max(img.width,img.height));
+    const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+    canvas.getContext("2d",{alpha:false}).drawImage(img,0,0,canvas.width,canvas.height);
+    return canvas.toDataURL("image/webp",quality);
+}
+
 window.handleImageUpload = async function(event){
 
     const file = event.target.files[0];
@@ -4750,6 +5043,56 @@ subscribeProducts();
 
 init();
 
+
+/* ================= PWA INSTALL EXPERIENCE ================= */
+let noorInstallPrompt = null;
+const noorInstallButton = document.getElementById("installAppBtn");
+
+function isIOSDevice(){
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+function updateInstallButton(){
+    if(!noorInstallButton) return;
+    // Keep the action visible so iPhone users can see installation guidance too.
+    noorInstallButton.hidden = false;
+    noorInstallButton.setAttribute("aria-label","إضافة متجر النور إلى الشاشة الرئيسية");
+}
+window.installNoorApp = async function(){
+    if(noorInstallPrompt){
+        noorInstallPrompt.prompt();
+        try{
+            const choice = await noorInstallPrompt.userChoice;
+            if(choice && choice.outcome === "accepted"){
+                toast("تم بدء تثبيت متجر النور على جهازك");
+            }
+        }catch(error){ console.warn("PWA install prompt result:", error); }
+        noorInstallPrompt = null;
+        updateInstallButton();
+        return;
+    }
+    if(isIOSDevice()){
+        toast('لإضافة المتجر على iPhone: اضغط مشاركة في Safari ثم اختر «إضافة إلى الشاشة الرئيسية».',"notification");
+    }else{
+        toast('من قائمة المتصفح ⋮ اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية» إذا كان الخيار متاحًا.',"notification");
+    }
+};
+window.addEventListener("beforeinstallprompt", event=>{
+    event.preventDefault();
+    noorInstallPrompt = event;
+    updateInstallButton();
+});
+window.addEventListener("appinstalled", ()=>{
+    noorInstallPrompt = null;
+    toast("تم تثبيت متجر النور بنجاح");
+});
+updateInstallButton();
+
+
+// تسجيل Service Worker للكاش في الزيارات القادمة، على HTTPS أو localhost فقط.
+if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
+    window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(err=>console.warn("Service worker registration failed",err)));
+}
 
 /* ================= EXPOSE ================= */
 
