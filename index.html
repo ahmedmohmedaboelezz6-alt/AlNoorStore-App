@@ -2471,8 +2471,7 @@ import {
     serverTimestamp,
     where,
     getDocs,
-    runTransaction,
-    limit
+    runTransaction
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 
@@ -3002,8 +3001,8 @@ window.submitApplication=async function(){
 
 function subscribeProducts(){
 
-    // جلب أول 40 منتجًا فقط لتقليل البيانات الأولية؛ يمكن توسيع الحد لاحقًا بإضافة ترقيم صفحات.
-    const productsRef = query(collection(db,"products"), limit(40));
+    // جلب جميع المنتجات من Firebase دون حد أقصى.
+    const productsRef = query(collection(db,"products"));
 
     onSnapshot(
         productsRef,
@@ -4436,6 +4435,23 @@ window.checkout = async function(){
                 createdAt:serverTimestamp()
             };
             transaction.set(orderRef,orderData);
+            if(installmentMonths){
+                const accountRef=doc(db,"installmentAccounts",orderRef.id);
+                const startDate=new Date();
+                const schedule=Array.from({length:installmentMonths},(_,idx)=>{
+                    const due=new Date(startDate);
+                    due.setMonth(due.getMonth()+idx+1);
+                    const amount=idx===installmentMonths-1
+                        ? Math.round((total-Math.round((total/installmentMonths)*100)/100*(installmentMonths-1))*100)/100
+                        : Math.round((total/installmentMonths)*100)/100;
+                    return {number:idx+1,amount,paidAmount:0,status:"unpaid",dueDate:due.toISOString().slice(0,10)};
+                });
+                transaction.set(accountRef,{
+                    orderId:orderRef.id,customerId:customer.id,customerName:checkoutName,customerPhone:checkoutPhone,
+                    total,paidAmount:0,remainingAmount:total,months:installmentMonths,monthlyAmount:Math.round((total/installmentMonths)*100)/100,
+                    schedule,status:"active",createdAt:serverTimestamp(),updatedAt:serverTimestamp()
+                });
+            }
             if(installmentRequestRef){
                 transaction.update(installmentRequestRef,{status:"converted",orderId:orderRef.id,convertedAt:serverTimestamp(),updatedAt:serverTimestamp()});
             }
