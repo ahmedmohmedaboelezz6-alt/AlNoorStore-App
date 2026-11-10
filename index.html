@@ -1989,6 +1989,20 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
 <style id="noor-verified-review-style">
 .review-purchase-proof{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:4px 8px;border-radius:999px;background:rgba(34,197,94,.1);color:#86efac;border:1px solid rgba(34,197,94,.22);font-size:10px;font-weight:800}
 </style>
+<style id="noor-public-chat-verified-edit-style">
+.public-chat-verified-badge{display:inline-flex;align-items:center;gap:4px;margin-inline-start:6px;padding:2px 7px;border-radius:999px;color:#fff;background:linear-gradient(110deg,#0ea5e9,#2563eb,#7c3aed,#0ea5e9);background-size:220% 100%;font-size:9px;font-weight:1000;vertical-align:middle;box-shadow:0 0 0 1px rgba(147,197,253,.3),0 0 12px rgba(59,130,246,.22);animation:noorVerifiedShine 2.4s linear infinite, noorVerifiedPulse 2.1s ease-in-out infinite}
+.public-chat-verified-badge i{font-size:9px}
+.public-chat-verified-badge.admin{background:linear-gradient(110deg,#b45309,#f59e0b,#fef3c7,#d97706);background-size:220% 100%;color:#201307;box-shadow:0 0 0 1px rgba(253,230,138,.5),0 0 15px rgba(245,158,11,.3)}
+@keyframes noorVerifiedShine{to{background-position:220% 0}}
+@keyframes noorVerifiedPulse{50%{transform:translateY(-1px) scale(1.035);filter:brightness(1.16)}}
+.public-chat-message-actions{display:flex;gap:6px;justify-content:flex-start;margin-top:8px;flex-wrap:wrap}
+.public-chat-message-actions button{border:1px solid rgba(148,163,184,.2);border-radius:8px;padding:4px 8px;background:rgba(15,23,42,.45);color:#cbd5e1;font:inherit;font-size:10px;font-weight:800;cursor:pointer}
+.public-chat-message-actions button.edit{color:#bfdbfe;border-color:rgba(96,165,250,.25)}
+.public-chat-message-actions button.delete{color:#fecaca;border-color:rgba(248,113,113,.25)}
+.public-chat-edited{font-size:9px;color:#94a3b8;margin-inline-start:5px}
+.public-room-compose-hint{font-size:9px;color:#94a3b8;padding:0 4px 5px}
+@media(prefers-reduced-motion:reduce){.public-chat-verified-badge{animation:none}}
+</style>
 
 
 <style id="noor-restore-vertical-full-catalog">
@@ -2993,6 +3007,7 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
       <div class="public-room-empty"><i class="fa-regular fa-comments"></i><strong>أهلًا بك في محادثة الأعضاء</strong><span>اكتب رسالة وشاركها مع أعضاء المتجر.</span></div>
     </div>
     <div id="publicRoomPaused" class="public-room-paused" hidden>المحادثة العامة متوقفة حاليًا من إدارة المتجر. يمكنك قراءة الرسائل السابقة.</div>
+    <div class="public-room-compose-hint" id="publicRoomComposeHint">يمكنك تعديل رسالتك أو حذفها خلال أول دقيقتين من إرسالها.</div>
     <div class="public-room-compose">
       <input id="publicRoomInput" type="text" maxlength="500" autocomplete="off" placeholder="اكتب رسالة لكل أعضاء المتجر..." onkeydown="handlePublicRoomKey(event)">
       <button id="publicRoomSend" type="button" onclick="sendPublicRoomMessage()" aria-label="إرسال الرسالة"><i class="fa-solid fa-paper-plane"></i></button>
@@ -3094,6 +3109,10 @@ let customer = JSON.parse(
 
 let chatUnsubscribe = null;
 let publicChatUnsubscribe = null;
+let publicChatVerifiedUnsubscribe = null;
+let publicChatVerifiedMemberIds = new Set();
+let publicChatEditExpiryTimer = null;
+const PUBLIC_CHAT_EDIT_WINDOW_MS = 2 * 60 * 1000;
 let currentCustomerChatMode = "private";
 let publicChatEnabled = true;
 let notificationsUnsubscribe = null;
@@ -5370,8 +5389,20 @@ function renderPublicChatDock(messages){
     lines.innerHTML=messages.slice(-2).map(m=>{
         const name=m.sender==="admin"?"الإدارة":(m.customerName||"عضو");
         const text=String(m.text||"").replace(/\s+/g," ").trim();
-        return `<span class="public-chat-dock-line"><strong>${escapeHTML(name)}:</strong> ${escapeHTML(text)}</span>`;
+        const mark=(m.sender==="admin"&&m.adminVerified===true)?'<span class="public-chat-verified-badge admin"><i class="fa-solid fa-check-double"></i></span>':(publicChatVerifiedMemberIds.has(String(m.customerId||""))?'<span class="public-chat-verified-badge"><i class="fa-solid fa-check"></i></span>':"");
+        return `<span class="public-chat-dock-line"><strong>${escapeHTML(name)}${mark}:</strong> ${escapeHTML(text)}</span>`;
     }).join("");
+}
+function publicChatCanEditMessage(message){
+    if(!message || message.sender!="customer" || !customer?.id || message.customerId!==customer.id) return false;
+    const created=publicChatSortTime(message.createdAt);
+    const age=Date.now()-created;
+    return created>0 && age>=0 && age<=PUBLIC_CHAT_EDIT_WINDOW_MS;
+}
+function publicChatVerifiedBadge(message){
+    if(message?.sender==="admin"&&message?.adminVerified===true) return '<span class="public-chat-verified-badge admin" title="رسالة رسمية من إدارة المتجر"><i class="fa-solid fa-check-double"></i> إدارة موثّقة</span>';
+    if(message?.customerId && publicChatVerifiedMemberIds.has(String(message.customerId))) return '<span class="public-chat-verified-badge" title="عضو موثّق من إدارة المتجر"><i class="fa-solid fa-check"></i> موثّق</span>';
+    return "";
 }
 function renderPublicChatMessages(messages){
     const legacy=document.getElementById("publicChatMessages");
@@ -5379,8 +5410,12 @@ function renderPublicChatMessages(messages){
     renderPublicChatDock(messages);
     const html=messages.length?messages.map(m=>{
         const mine=m.sender==="customer"&&m.customerId===customer?.id;
-        const name=m.sender==="admin"?"إدارة متجر النور":(m.customerName||"عضو");
-        return `<div class="public-chat-line ${mine?"mine":""}"><div class="public-chat-name">${escapeHTML(name)}</div><div class="public-chat-text">${escapeHTML(m.text||"")}</div><time>${publicChatTime(m.createdAt)}</time></div>`;
+        const isAdmin=m.sender==="admin";
+        const name=isAdmin?"إدارة متجر النور":(m.customerName||"عضو");
+        const canEdit=publicChatCanEditMessage(m);
+        const safeId=JSON.stringify(String(m.id||""));
+        const actions=canEdit?`<div class="public-chat-message-actions"><button class="edit" type="button" onclick='editOwnPublicChatMessage(${safeId})'><i class="fa-solid fa-pen"></i> تعديل</button><button class="delete" type="button" onclick='deleteOwnPublicChatMessage(${safeId})'><i class="fa-solid fa-trash"></i> حذف</button></div>`:"";
+        return `<div class="public-chat-line ${mine?"mine":""}" data-message-id="${escapeHTML(m.id||"")}"><div class="public-chat-name">${escapeHTML(name)}${publicChatVerifiedBadge(m)}</div><div class="public-chat-text">${escapeHTML(m.text||"")}${m.edited?'<span class="public-chat-edited">(تم التعديل)</span>':""}</div><time>${publicChatTime(m.createdAt)}</time>${actions}</div>`;
     }).join(""):'<div class="public-room-empty"><i class="fa-regular fa-comments"></i><strong>لسه مفيش رسائل</strong><span>ابدأ أول محادثة وحيّي أعضاء المتجر 💬</span></div>';
     if(legacy) legacy.innerHTML=html;
     if(room){
@@ -5388,20 +5423,65 @@ function renderPublicChatMessages(messages){
         room.innerHTML=html;
         if(wasNearBottom||document.getElementById("publicChatPage")?.classList.contains("open")) room.scrollTop=room.scrollHeight;
     }
+    if(publicChatEditExpiryTimer) clearTimeout(publicChatEditExpiryTimer);
+    const expiries=messages.filter(publicChatCanEditMessage).map(m=>PUBLIC_CHAT_EDIT_WINDOW_MS-(Date.now()-publicChatSortTime(m.createdAt))).filter(v=>v>0);
+    if(expiries.length) publicChatEditExpiryTimer=setTimeout(()=>renderPublicChatMessages(window.__noorPublicChatLatestMessages||[]),Math.min(...expiries)+80);
 }
+window.editOwnPublicChatMessage=async function(id){
+    if(!ensureCustomer()) return;
+    try{
+        const ref=doc(db,"publicChatMessages",String(id));
+        const snap=await getDoc(ref);
+        if(!snap.exists()) return toast("الرسالة غير موجودة","error");
+        const data=snap.data();
+        const age=Date.now()-publicChatSortTime(data.createdAt);
+        if(data.sender!=="customer"||data.customerId!==customer.id) return toast("يمكنك تعديل رسائلك أنت فقط","error");
+        if(age<0||age>PUBLIC_CHAT_EDIT_WINDOW_MS) return toast("انتهت مهلة تعديل الرسالة (دقيقتان)","error");
+        const edited=prompt("عدّل رسالتك:",String(data.text||""));
+        if(edited===null) return;
+        const next=String(edited).trim().slice(0,500);
+        if(!next) return toast("لا يمكن حفظ رسالة فارغة","error");
+        await updateDoc(ref,{text:next,edited:true,editedAt:serverTimestamp()});
+        toast("تم تعديل رسالتك");
+    }catch(error){console.error("Edit public message:",error);toast("تعذر تعديل الرسالة. تحقق من صلاحيات Firebase.","error");}
+};
+window.deleteOwnPublicChatMessage=async function(id){
+    if(!ensureCustomer()) return;
+    if(!confirm("هل تريد حذف رسالتك من المحادثة العامة؟")) return;
+    try{
+        const ref=doc(db,"publicChatMessages",String(id));
+        const snap=await getDoc(ref);
+        if(!snap.exists()) return toast("الرسالة غير موجودة","error");
+        const data=snap.data();
+        const age=Date.now()-publicChatSortTime(data.createdAt);
+        if(data.sender!=="customer"||data.customerId!==customer.id) return toast("يمكنك حذف رسائلك أنت فقط","error");
+        if(age<0||age>PUBLIC_CHAT_EDIT_WINDOW_MS) return toast("انتهت مهلة حذف الرسالة (دقيقتان)","error");
+        await deleteDoc(ref);
+        toast("تم حذف رسالتك");
+    }catch(error){console.error("Delete public message:",error);toast("تعذر حذف الرسالة. تحقق من صلاحيات Firebase.","error");}
+};
 function subscribePublicChat(){
-    // One persistent listener feeds both the chat window and the fixed preview.
-    if(publicChatUnsubscribe) return;
-    publicChatUnsubscribe=onSnapshot(query(collection(db,"publicChatMessages"),orderBy("createdAt","desc"),limit(250)),snapshot=>{
-        const messages=snapshot.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>publicChatSortTime(a.createdAt)-publicChatSortTime(b.createdAt));
-        renderPublicChatMessages(messages);
-    },error=>{
-        console.error("Public chat listener:",error);
-        const box=document.getElementById("publicChatMessages");
-        const lines=document.getElementById("publicChatDockLines");
-        if(box)box.innerHTML='<div class="notification-empty">تعذر تحميل المحادثة العامة. راجع صلاحيات Firebase.</div>';
-        if(lines)lines.innerHTML='<span class="public-chat-dock-empty">تعذر تحميل الرسائل حاليًا</span>';
-    });
+    // One persistent listener feeds the room, compact dock, and verified-member badges.
+    if(!publicChatUnsubscribe){
+        publicChatUnsubscribe=onSnapshot(query(collection(db,"publicChatMessages"),orderBy("createdAt","desc"),limit(250)),snapshot=>{
+            const messages=snapshot.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>publicChatSortTime(a.createdAt)-publicChatSortTime(b.createdAt));
+            window.__noorPublicChatLatestMessages=messages;
+            renderPublicChatMessages(messages);
+        },error=>{
+            console.error("Public chat listener:",error);
+            const box=document.getElementById("publicChatMessages");
+            const lines=document.getElementById("publicChatDockLines");
+            if(box)box.innerHTML='<div class="notification-empty">تعذر تحميل المحادثة العامة. راجع صلاحيات Firebase.</div>';
+            if(lines)lines.innerHTML='<span class="public-chat-dock-empty">تعذر تحميل الرسائل حاليًا</span>';
+        });
+    }
+    if(!publicChatVerifiedUnsubscribe){
+        publicChatVerifiedUnsubscribe=onSnapshot(collection(db,"publicChatVerifiedMembers"),snapshot=>{
+            publicChatVerifiedMemberIds=new Set(snapshot.docs.filter(d=>d.data()?.verified===true).map(d=>d.id));
+            // Refresh visible bubbles when the administrator grants/revokes a badge.
+            renderPublicChatMessages(window.__noorPublicChatLatestMessages||[]);
+        },error=>console.warn("Verified members listener:",error));
+    }
 }
 async function sendPublicChatMessage(){
     if(!ensureCustomer()||!await verifyCustomerAllowed()) return;
