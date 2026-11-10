@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f97316">
 
 <title>متجر النور | أدوات منزلية فاخرة</title>
 
@@ -1883,6 +1884,186 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
   .products-grid > .product-card > .product-info { padding: 9px; }
 }
 </style>
+
+<style id="noor-horizontal-ads-cart-refresh">
+/* Image-first advertising carousel, fully manageable from the dashboard. */
+#adsSection{padding-top:34px;padding-bottom:30px}
+.ads-container{display:flex;flex-wrap:nowrap;gap:16px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding:4px;padding:5px 4px 16px;direction:rtl;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:rgba(249,115,22,.65) rgba(255,255,255,.06)}
+.ads-container::-webkit-scrollbar{height:7px}.ads-container::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#f97316,#f59e0b);border-radius:20px}.ads-container::-webkit-scrollbar-track{background:rgba(255,255,255,.05);border-radius:20px}
+.ad-card{flex:0 0 min(45vw,690px);width:min(45vw,690px);height:clamp(210px,25vw,340px);min-height:0;padding:0;border:1px solid rgba(255,255,255,.13);border-radius:22px;scroll-snap-align:start;background:#111827;box-shadow:0 12px 32px rgba(0,0,0,.25);animation:none;isolation:isolate}
+.ad-card::before{inset:0;border:0;border-radius:inherit}.ad-card::after{border-radius:inherit;box-shadow:inset 0 0 25px rgba(0,0,0,.1)}
+.ad-card--square{flex-basis:min(30vw,420px);width:min(30vw,420px);height:clamp(230px,25vw,340px)}
+.ad-card--portrait{flex-basis:min(25vw,350px);width:min(25vw,350px);height:clamp(280px,31vw,420px)}
+.ad-poster-link{position:absolute;inset:0;display:block;color:inherit;text-decoration:none;overflow:hidden;border-radius:inherit}
+.ad-image{position:absolute;inset:0;width:100%;height:100%;object-position:center;opacity:1;transition:transform .65s ease}
+.ad-card:hover .ad-image{transform:scale(1.025)}
+.ad-image-fallback{background:radial-gradient(circle at 15% 20%,color-mix(in srgb,var(--ad-color-one) 38%,transparent),transparent 38%),linear-gradient(135deg,#111827,#273449)}
+.ad-content{position:absolute;z-index:2;inset:auto 0 0;max-width:none;padding:20px 22px 18px;background:linear-gradient(0deg,rgba(5,10,18,.9),rgba(5,10,18,.57) 62%,transparent);pointer-events:none}
+.ad-content small{color:#fde68a}.ad-content h3{font-size:clamp(18px,2vw,27px);line-height:1.35;margin:5px 0}.ad-content p{font-size:12px;line-height:1.7;max-width:85%;color:#f1f5f9}.ad-btn{pointer-events:none;display:inline-flex;margin-top:9px;padding:8px 13px;border-radius:10px;background:linear-gradient(135deg,var(--ad-color-one),var(--ad-color-two));font-size:11px}
+.ad-card.image-only .ad-content{display:none}.ads-empty{flex:1 0 100%}
+@keyframes adBannerGlow{from{box-shadow:0 8px 24px rgba(0,0,0,.2),0 0 12px color-mix(in srgb,var(--ad-color-one) 18%,transparent)}to{box-shadow:0 12px 32px rgba(0,0,0,.24),0 0 30px color-mix(in srgb,var(--ad-color-two) 34%,transparent)}}
+@keyframes adBannerPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
+@keyframes adBannerAurora{0%,100%{box-shadow:0 8px 25px color-mix(in srgb,var(--ad-color-one) 15%,transparent)}50%{box-shadow:0 12px 35px color-mix(in srgb,var(--ad-color-two) 36%,transparent)}}
+@keyframes adBannerShimmer{from{transform:translateX(120%)}to{transform:translateX(-120%)}}
+.ad-card.ad-effect--glow{animation:adBannerGlow var(--ad-speed-duration,3.2s) ease-in-out infinite alternate}
+.ad-card.ad-effect--pulse{animation:adBannerPulse var(--ad-speed-duration,3.2s) ease-in-out infinite}
+.ad-card.ad-effect--aurora{animation:adBannerAurora var(--ad-speed-duration,3.2s) ease-in-out infinite}
+.ad-card.ad-effect--shimmer .ad-poster-link::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.18) 50%,transparent 65%);transform:translateX(120%);animation:adBannerShimmer var(--ad-speed-duration,3.2s) ease-in-out infinite}
+.ad-card.ad-speed--slow{--ad-speed-duration:5.5s}.ad-card.ad-speed--normal{--ad-speed-duration:3.2s}.ad-card.ad-speed--fast{--ad-speed-duration:1.8s}.ad-card.ad-effect--none{animation:none}
+.ads-nav-controls{display:flex;gap:7px;flex:0 0 auto}.ads-nav-controls button,.product-batch-controls button{width:38px;height:38px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.045);color:#f8fafc;transition:.2s}.ads-nav-controls button:hover,.product-batch-controls button:not(:disabled):hover{border-color:#f59e0b;color:#fbbf24;background:rgba(245,158,11,.1)}
+.products-header-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}.product-batch-controls{display:flex;align-items:center;gap:8px}.product-batch-controls button:disabled{opacity:.3;cursor:not-allowed}.product-batch-controls span{font-size:11px;color:#cbd5e1;min-width:88px;text-align:center;font-weight:800}
+/* Catalog shows ten products per batch in a horizontal swipe strip. */
+#productsGrid.products-grid{display:flex;flex-wrap:nowrap;gap:14px;overflow-x:auto;overflow-y:hidden;padding:5px 3px 16px;direction:rtl;scroll-snap-type:x mandatory;scroll-padding:3px;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:rgba(249,115,22,.65) rgba(255,255,255,.06)}
+#productsGrid.products-grid::-webkit-scrollbar{height:7px}#productsGrid.products-grid::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#f97316,#f59e0b);border-radius:20px}#productsGrid.products-grid::-webkit-scrollbar-track{background:rgba(255,255,255,.05);border-radius:20px}
+#productsGrid.products-grid>.product-card{flex:0 0 238px;width:238px;min-width:238px;scroll-snap-align:start;}
+#productsGrid.products-grid>.empty{flex:0 0 100%;width:100%}
+/* Empty cart experience and focused checkout layout. */
+.cart[data-empty="true"] .cart-benefits,.cart[data-empty="true"] .cart-progress,.cart[data-empty="true"] #cartLoyalty,.cart[data-empty="true"] .checkout-fields,.cart[data-empty="true"] .cart-installment-panel,.cart[data-empty="true"] .discount-area,.cart[data-empty="true"] .summary{display:none!important}
+.cart[data-empty="true"] .cart-body-scroll{display:flex;flex:1;min-height:0;flex-direction:column;overflow-y:auto}
+.cart[data-empty="true"] .cart-items{display:flex;flex:1 0 auto;min-height:100%;flex-direction:column;overflow:visible;padding:18px 16px 24px}
+.cart-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:320px;padding:16px 12px 24px}
+.cart-empty-illustration{position:relative;width:118px;height:118px;border-radius:36px;display:grid;place-items:center;margin-bottom:18px;background:radial-gradient(circle at 35% 25%,#fff8c6,#fde047 44%,#f59e0b);color:#243047;box-shadow:0 18px 36px rgba(245,158,11,.22);transform:rotate(-7deg)}
+.cart-empty-illustration i{font-size:56px;filter:drop-shadow(0 5px 4px rgba(0,0,0,.14))}.cart-empty-illustration span{position:absolute;top:13px;right:10px;width:27px;height:27px;display:grid;place-items:center;border-radius:50%;background:#fff;color:#f59e0b;font-size:20px;font-weight:900;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.cart-empty-state h3{font-size:21px;font-weight:900;margin:0 0 7px;color:#fff}.cart-empty-state p{max-width:330px;color:#aebbd0;font-size:12px;line-height:1.9;margin:0 auto 18px}
+.cart-start-shopping{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:0 23px;border:0;border-radius:14px;background:linear-gradient(135deg,#fbbf24,#f97316);color:#171717;font:inherit;font-weight:900;box-shadow:0 9px 24px rgba(249,115,22,.2)}
+.cart-empty-suggestions{border-top:1px solid var(--border);padding:17px 0 0;margin-top:auto}.cart-empty-suggestions-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}.cart-empty-suggestions-head strong{font-size:13px}.cart-empty-suggestions-head span{font-size:10px;color:#fbbf24}
+.cart-empty-suggestion-grid{display:flex;gap:10px;overflow-x:auto;direction:rtl;padding:2px 2px 10px;scroll-snap-type:x mandatory}.cart-empty-suggestion-grid>.product-card{flex:0 0 155px;width:155px;scroll-snap-align:start;border-radius:15px}.cart-empty-suggestion-grid>.product-card .product-image{height:105px}.cart-empty-suggestion-grid>.product-card .product-info{padding:9px}.cart-empty-suggestion-grid>.product-card .product-name{font-size:12px;line-height:1.5;max-height:3em;overflow:hidden}.cart-empty-suggestion-grid>.product-card .product-desc,.cart-empty-suggestion-grid>.product-card .stock-line,.cart-empty-suggestion-grid>.product-card .rating{display:none}.cart-empty-suggestion-grid>.product-card .price{font-size:14px}.cart-empty-suggestion-grid>.product-card .add-cart{width:32px;height:32px;border-radius:10px}
+@media(max-width:700px){
+  .section{padding-inline:14px}.section-head{align-items:center}.section-title{font-size:23px}.ads-container{gap:11px}.ad-card{flex-basis:88vw;width:88vw;height:205px;border-radius:17px}.ad-card--square{flex-basis:78vw;width:78vw;height:225px}.ad-card--portrait{flex-basis:67vw;width:67vw;height:285px}.ad-content{padding:15px}.ad-content h3{font-size:18px}.ad-content p{font-size:11px}
+  .products-header-tools{gap:8px}.product-batch-controls button,.ads-nav-controls button{width:34px;height:34px}.product-batch-controls span{min-width:70px;font-size:10px}
+  #productsGrid.products-grid{gap:11px;padding-bottom:13px}
+  #productsGrid.products-grid>.product-card{flex:0 0 min(86vw,370px);width:min(86vw,370px);min-width:min(86vw,370px);}
+  .cart{width:100vw;right:-100vw;border:0;border-radius:0}.cart.open{right:0}.cart-empty-state{min-height:300px}.cart-empty-state h3{font-size:19px}.cart-empty-illustration{width:100px;height:100px;border-radius:30px}.cart-empty-illustration i{font-size:47px}
+}
+@media(prefers-reduced-motion:reduce){.ad-image{transition:none}.ad-card:hover .ad-image{transform:none}}
+</style>
+
+
+<style id="noor-season-theme-and-public-chat">
+/* Sticky store navigation: remains visible while the customer scrolls. */
+.navbar{position:-webkit-sticky!important;position:sticky!important;top:0!important;z-index:15000!important;isolation:isolate;background:rgba(8,11,18,.96);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+html{scroll-padding-top:92px}
+.season-theme-badge{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:900;background:rgba(255,255,255,.1);border:1px solid currentColor;color:#fbbf24}
+.season-theme-badge[hidden]{display:none!important}
+body.season-theme-ramadan{--primary:#059669;--primary2:#10b981;--gold:#fbbf24;--dark:#06110f;--dark2:#0a1b18;--dark3:#102821;--card:#0e211b;--card2:#153329;background:radial-gradient(circle at 12% 10%,rgba(16,185,129,.15),transparent 32%),radial-gradient(circle at 88% 30%,rgba(251,191,36,.09),transparent 30%),#06110f}
+body.season-theme-eid{--primary:#0d9488;--primary2:#14b8a6;--gold:#facc15;--dark:#071316;--dark2:#0d2022;--dark3:#163235;--card:#102629;--card2:#18383a;background:radial-gradient(circle at 12% 10%,rgba(20,184,166,.15),transparent 32%),radial-gradient(circle at 88% 30%,rgba(250,204,21,.1),transparent 30%),#071316}
+body.season-theme-ramadan .top-bar{background:linear-gradient(90deg,#064e3b,#059669,#d4a72c,#059669,#064e3b)}
+body.season-theme-eid .top-bar{background:linear-gradient(90deg,#134e4a,#0d9488,#eab308,#0d9488,#134e4a)}
+body.season-theme-ramadan .season-theme-badge{color:#bbf7d0;background:rgba(5,150,105,.16)}
+body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,136,.16)}
+.chat-mode-tabs{display:flex;gap:7px;padding:9px 12px;background:rgba(15,23,42,.55);border-bottom:1px solid var(--border)}
+.chat-mode-tabs button{flex:1;min-width:0;border:1px solid var(--border);background:rgba(255,255,255,.035);color:#cbd5e1;border-radius:11px;padding:9px 7px;font:inherit;font-size:11px;font-weight:900}
+.chat-mode-tabs button.active{background:linear-gradient(135deg,var(--primary),var(--gold));color:#fff;border-color:transparent}
+#publicChatLiveDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;margin-right:5px;vertical-align:middle}
+#publicChatLiveDot.off{background:#ef4444}
+.public-chat-messages{background:rgba(9,15,24,.24)}.public-chat-line{max-width:90%;padding:10px 12px;border-radius:14px;margin:8px 10px;background:#172334;border:1px solid rgba(148,163,184,.13);overflow-wrap:anywhere}.public-chat-line.mine{margin-right:auto;background:rgba(5,150,105,.17);border-color:rgba(16,185,129,.25)}.public-chat-line .public-chat-name{font-size:10px;font-weight:900;color:#fbbf24;margin-bottom:4px}.public-chat-line .public-chat-text{font-size:12px;line-height:1.8;color:#f8fafc;white-space:pre-wrap}.public-chat-line time{display:block;color:#94a3b8;font-size:9px;margin-top:4px}.public-chat-paused{padding:11px 14px;text-align:center;color:#fca5a5;background:rgba(127,29,29,.18);border-top:1px solid rgba(239,68,68,.18);font-size:11px;font-weight:800}.public-chat-paused[hidden]{display:none!important}
+#chatWindow.chat-public-mode .chat-tool-btn{display:none!important}
+#chatWindow.chat-public-mode #chatInput{min-width:0}
+#chatWindow.chat-public-mode .chat-input-area{padding-top:7px}
+/* Public group chat preview: a compact, game-style live feed fixed at the bottom. */
+.public-chat-dock{position:fixed;right:16px;bottom:16px;z-index:6100;width:min(470px,calc(100vw - 100px));border:1px solid rgba(255,255,255,.2);border-radius:16px;background:rgba(12,20,29,.84);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 12px 36px rgba(0,0,0,.35);overflow:hidden}
+.public-chat-dock[hidden]{display:none!important}
+.public-chat-dock-trigger{display:block;width:100%;padding:9px 12px;text-align:right;color:#fff;background:transparent;border:0;font:inherit;cursor:pointer}
+.public-chat-dock-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px;color:#a7f3d0;font-size:10px;font-weight:900}
+.public-chat-dock-title{display:inline-flex;align-items:center;gap:6px}
+.public-chat-dock-live{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 9px rgba(34,197,94,.7)}
+.public-chat-dock.paused .public-chat-dock-live{background:#ef4444;box-shadow:none}
+.public-chat-dock-hint{color:#cbd5e1;font-size:9px;font-weight:700}
+.public-chat-dock-lines{display:grid;gap:3px}
+.public-chat-dock-line{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#f8fafc;font-size:11px;line-height:1.65;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.public-chat-dock-line strong{color:#fbbf24;font-weight:900}
+.public-chat-dock-empty{color:#cbd5e1;font-size:11px;line-height:1.7}
+.public-chat-dock-trigger:focus-visible{outline:2px solid var(--gold);outline-offset:-3px}
+@media(max-width:600px){.season-theme-badge{font-size:9px;padding:5px 7px;max-width:82px;overflow:hidden;text-overflow:ellipsis}.chat-mode-tabs{padding:8px;gap:6px}.chat-mode-tabs button{font-size:10px;padding:9px 4px}.public-chat-dock{right:10px;bottom:12px;width:calc(100vw - 92px);max-width:390px;border-radius:13px}.public-chat-dock-trigger{padding:7px 9px}.public-chat-dock-line{font-size:10px}.public-chat-dock-top{font-size:9px}}
+/* A batch is always ten items. They form one horizontal strip; arrows switch to the next ten. */
+#productsGrid.products-grid{display:flex!important;flex-flow:row nowrap!important;direction:rtl;gap:10px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:thin;padding:7px 4px 15px}
+#productsGrid.products-grid>.product-card{flex:0 0 clamp(142px,9.4vw,174px)!important;width:clamp(142px,9.4vw,174px)!important;min-width:clamp(142px,9.4vw,174px)!important;scroll-snap-align:start}
+#productsGrid.products-grid>.product-card .product-image{height:clamp(132px,11vw,178px)}
+#productsGrid.products-grid>.product-card .product-info{padding:10px}
+#productsGrid.products-grid>.product-card .product-name{font-size:13px;line-height:1.55}
+#productsGrid.products-grid>.product-card .price{font-size:15px}
+#productsGrid.products-grid>.empty{flex:0 0 100%;width:100%}
+@media(max-width:700px){#productsGrid.products-grid{gap:9px}#productsGrid.products-grid>.product-card{flex-basis:43vw!important;width:43vw!important;min-width:43vw!important;min-height:150px}#productsGrid.products-grid>.product-card .product-image{height:150px;min-height:150px}#productsGrid.products-grid>.product-card .product-info{padding:8px 9px}#productsGrid.products-grid>.product-card .product-name{font-size:12px}#productsGrid.products-grid>.product-card .price{font-size:14px}}
+@media(max-width:380px){#productsGrid.products-grid>.product-card{flex-basis:47vw!important;width:47vw!important;min-width:47vw!important}}
+</style>
+<style id="noor-verified-review-style">
+.review-purchase-proof{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:4px 8px;border-radius:999px;background:rgba(34,197,94,.1);color:#86efac;border:1px solid rgba(34,197,94,.22);font-size:10px;font-weight:800}
+</style>
+
+
+<style id="noor-restore-vertical-full-catalog">
+/* Restore the original vertical product catalog and show every product at once. */
+#productsGrid.products-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-auto-flow:row!important;
+  gap:20px!important;
+  overflow:visible!important;
+  overflow-x:visible!important;
+  overflow-y:visible!important;
+  flex-flow:initial!important;
+  scroll-snap-type:none!important;
+  padding:0!important;
+  direction:rtl;
+}
+#productsGrid.products-grid>.product-card{
+  display:block!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  min-height:0!important;
+  flex:initial!important;
+  grid-template-columns:none!important;
+  grid-template-rows:none!important;
+  scroll-snap-align:none!important;
+}
+#productsGrid.products-grid>.product-card>.product-image{
+  width:100%!important;
+  height:245px!important;
+  min-height:0!important;
+  grid-column:auto!important;
+  grid-row:auto!important;
+}
+#productsGrid.products-grid>.product-card>.product-info{
+  display:block!important;
+  min-width:0!important;
+  padding:16px!important;
+  grid-column:auto!important;
+  grid-row:auto!important;
+}
+#productsGrid.products-grid>.product-card .product-desc{display:block!important}
+#productsGrid.products-grid>.product-card .product-name{
+  display:block!important;
+  max-height:none!important;
+  min-height:0!important;
+  overflow:visible!important;
+  -webkit-line-clamp:unset!important;
+}
+.product-batch-controls{display:none!important}
+@media(max-width:1100px){
+  #productsGrid.products-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important}
+}
+@media(max-width:800px){
+  #productsGrid.products-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+  #productsGrid.products-grid>.product-card>.product-image{height:190px!important}
+  #productsGrid.products-grid>.product-card>.product-info{padding:12px!important}
+}
+@media(max-width:520px){
+  #productsGrid.products-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+  #productsGrid.products-grid>.product-card>.product-image{height:160px!important}
+  #productsGrid.products-grid>.product-card>.product-info{padding:10px!important}
+  #productsGrid.products-grid>.product-card .product-name{font-size:13px!important;line-height:1.5!important}
+  #productsGrid.products-grid>.product-card .price{font-size:14px!important}
+  #productsGrid.products-grid>.product-card .product-desc{display:none!important}
+}
+/* Public members' room is a text-only live group chat. */
+#chatWindow.chat-public-mode .chat-tool-btn,
+#chatWindow.chat-public-mode #chatImageInput,
+#chatWindow.chat-public-mode #stickerPicker{display:none!important}
+#chatWindow.chat-public-mode .chat-mode-tabs #publicChatTab{background:linear-gradient(135deg,var(--primary),var(--gold));color:#fff;border-color:transparent}
+#chatWindow.chat-public-mode .public-chat-messages{display:block;min-height:220px}
+</style>
+
 </head>
 
 <body>
@@ -1940,6 +2121,8 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
     </a>
 
     <div class="nav-actions">
+
+        <span class="season-theme-badge" id="seasonThemeBadge" hidden></span>
 
         <button class="icon-btn" onclick="scrollToProducts()">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -2040,8 +2223,12 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
             </div>
 
             <div class="section-subtitle">
-                العروض والإعلانات المنشورة من متجر النور
+                العروض والإعلانات المنشورة من متجر النور — اسحب أفقيًا لمشاهدة المزيد
             </div>
+        </div>
+        <div class="ads-nav-controls" aria-label="التنقل بين الإعلانات">
+            <button type="button" onclick="scrollAds(-1)" aria-label="الإعلان السابق"><i class="fa-solid fa-chevron-right"></i></button>
+            <button type="button" onclick="scrollAds(1)" aria-label="الإعلان التالي"><i class="fa-solid fa-chevron-left"></i></button>
         </div>
 
     </div>
@@ -2131,13 +2318,18 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
             </div>
 
             <div class="section-subtitle">
-                منتجات مميزة جاهزة للطلب
+                تصفح جميع منتجات متجر النور — كل المنتجات ظاهرة أمامك ويمكنك البحث والترتيب بسهولة
             </div>
         </div>
 
-        <span id="productsCount" style="color:#94a3b8;font-size:13px">
-            0 منتج
-        </span>
+        <div class="products-header-tools">
+            <span id="productsCount" style="color:#94a3b8;font-size:13px">0 منتج</span>
+            <div class="product-batch-controls" aria-label="التنقل بين مجموعات المنتجات">
+                <button type="button" id="productsPrevBatch" onclick="changeProductBatch(-1)" aria-label="المنتجات العشرة السابقة" disabled><i class="fa-solid fa-chevron-right"></i></button>
+                <span id="productsPageInfo">0 / 0</span>
+                <button type="button" id="productsNextBatch" onclick="changeProductBatch(1)" aria-label="المنتجات العشرة التالية" disabled><i class="fa-solid fa-chevron-left"></i></button>
+            </div>
+        </div>
 
     </div>
 
@@ -2329,7 +2521,7 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
 
 
 <!-- CART -->
-<aside class="cart" id="cart">
+<aside class="cart" id="cart" data-empty="true">
 
     <div class="cart-header">
 
@@ -2518,6 +2710,7 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
                     <div class="review-head"><h3><i class="fa-solid fa-star" style="color:#fbbf24"></i> تقييمات العملاء</h3><span id="reviewSummary" class="product-rating-summary">لا توجد تقييمات بعد</span></div>
                     <div class="review-form">
                         <strong>قيّم المنتج واكتب تعليقك</strong>
+                        <small style="color:#94a3b8;font-size:10px;line-height:1.7">التقييم متاح للعملاء الذين لديهم طلب شراء لهذا المنتج، وسيظهر بجوار التعليق شارة شراء موثّق.</small>
                         <div class="review-stars" id="reviewStars">
                             <button type="button" data-rating="5" onclick="setReviewRating(5)">★</button><button type="button" data-rating="4" onclick="setReviewRating(4)">★</button><button type="button" data-rating="3" onclick="setReviewRating(3)">★</button><button type="button" data-rating="2" onclick="setReviewRating(2)">★</button><button type="button" data-rating="1" onclick="setReviewRating(1)">★</button>
                         </div>
@@ -2626,6 +2819,11 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
     </div>
 
 
+    <div class="chat-mode-tabs" role="tablist" aria-label="نوع المحادثة">
+        <button type="button" id="privateChatTab" class="active" onclick="setCustomerChatMode('private')">محادثة خاصة</button>
+        <button type="button" id="publicChatTab" onclick="setCustomerChatMode('public')">محادثة عامة للكل <span id="publicChatLiveDot"></span></button>
+    </div>
+
     <div class="chat-messages" id="chatMessages">
 
         <div class="empty" style="padding:30px 10px">
@@ -2634,6 +2832,10 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
         </div>
 
     </div>
+    <div class="chat-messages public-chat-messages" id="publicChatMessages" hidden>
+        <div class="empty" style="padding:30px 10px"><i class="fa-regular fa-comments"></i><p>جاري تحميل المحادثة العامة...</p></div>
+    </div>
+    <div class="public-chat-paused" id="publicChatPaused" hidden>المحادثة العامة متوقفة مؤقتًا من إدارة المتجر.</div>
 
 
     <!-- STICKER PICKER POPUP -->
@@ -2696,15 +2898,28 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
 
 <button
     class="chat-float"
-    onclick="openChat()">
+    onclick="openChat()"
+    aria-label="فتح المحادثة الخاصة مع خدمة العملاء">
 
-    <i class="fa-solid fa-comments"></i>
+    <i class="fa-solid fa-headset"></i>
 
     <span class="chat-unread" id="chatUnread">0</span>
     <span class="chat-unread-label" id="chatUnreadLabel">يوجد رسالة جديدة</span>
 
 </button>
 
+<!-- Public members chat preview, styled like the compact in-game chat feed. -->
+<aside class="public-chat-dock" id="publicChatDock" aria-label="رسائل الأعضاء العامة المباشرة">
+    <button type="button" class="public-chat-dock-trigger" onclick="openPublicChatRoom()" aria-label="فتح المحادثة العامة لكل الأعضاء">
+        <span class="public-chat-dock-top">
+            <span class="public-chat-dock-title"><span class="public-chat-dock-live"></span> محادثة الأعضاء <span id="publicChatDockStatus">مباشر</span></span>
+            <span class="public-chat-dock-hint">اضغط للكتابة</span>
+        </span>
+        <span class="public-chat-dock-lines" id="publicChatDockLines" aria-live="polite">
+            <span class="public-chat-dock-empty">جاري تحميل رسائل الأعضاء...</span>
+        </span>
+    </button>
+</aside>
 
 <!-- TOAST -->
 <div class="toast-container" id="toastContainer"></div>
@@ -2731,6 +2946,7 @@ import {
     onSnapshot,
     query,
     orderBy,
+    limit,
     serverTimestamp,
     where,
     getDocs,
@@ -2778,6 +2994,8 @@ try {
 let products = [];
 
 let filteredProducts = [];
+let productBatchIndex = 0;
+const PRODUCTS_PER_BATCH = 10;
 
 let cart = JSON.parse(
     localStorage.getItem("noor_cart") || "[]"
@@ -2796,6 +3014,9 @@ let customer = JSON.parse(
 );
 
 let chatUnsubscribe = null;
+let publicChatUnsubscribe = null;
+let currentCustomerChatMode = "private";
+let publicChatEnabled = true;
 let notificationsUnsubscribe = null;
 let customerQuoteRequestsUnsubscribe = null;
 let storeSettingsUnsubscribe = null;
@@ -2811,7 +3032,7 @@ let storeIsOpen = (() => {
         return true;
     }
 })();
-let storeSettings = { shippingFee:null, freeShippingThreshold:1000, whatsapp:"", facebook:"", faqText:"", returnPolicy:"", shippingPolicy:"" };
+let storeSettings = { shippingFee:null, freeShippingThreshold:1000, whatsapp:"", facebook:"", faqText:"", returnPolicy:"", shippingPolicy:"", seasonTheme:"normal", publicChatEnabled:true };
 let currentReviewProductId = null;
 let currentReviewUnsubscribe = null;
 
@@ -3166,6 +3387,36 @@ function maybeOpenCustomerName(){
     }
 }
 
+function applySeasonTheme(theme){
+    const value=["normal","ramadan","eid"].includes(String(theme||"normal"))?String(theme||"normal"):"normal";
+    document.body.classList.remove("season-theme-ramadan","season-theme-eid");
+    if(value==="ramadan") document.body.classList.add("season-theme-ramadan");
+    if(value==="eid") document.body.classList.add("season-theme-eid");
+    const themeMeta=document.querySelector('meta[name="theme-color"]');
+    if(themeMeta) themeMeta.setAttribute("content",value==="ramadan"?"#059669":value==="eid"?"#0d9488":"#f97316");
+    const badge=document.getElementById("seasonThemeBadge");
+    if(badge){
+        const labels={normal:"",ramadan:"🌙 رمضان كريم",eid:"🎉 عيد سعيد"};
+        badge.textContent=labels[value]||"";
+        badge.hidden=value==="normal";
+    }
+}
+
+function updatePublicChatAvailability(){
+    const dot=document.getElementById("publicChatLiveDot");
+    const pause=document.getElementById("publicChatPaused");
+    const input=document.getElementById("chatInput");
+    const send=document.querySelector("#chatWindow .chat-send");
+    const dock=document.getElementById("publicChatDock");
+    const dockStatus=document.getElementById("publicChatDockStatus");
+    if(dot) dot.classList.toggle("off",!publicChatEnabled);
+    if(dock){dock.classList.toggle("paused",!publicChatEnabled);dock.setAttribute("aria-label",publicChatEnabled?"رسائل الأعضاء العامة المباشرة":"المحادثة العامة متوقفة مؤقتًا");}
+    if(dockStatus) dockStatus.textContent=publicChatEnabled?"مباشر":"متوقفة";
+    if(pause) pause.hidden=!(currentCustomerChatMode==="public"&&!publicChatEnabled);
+    if(input&&currentCustomerChatMode==="public"){input.disabled=!publicChatEnabled;input.placeholder=publicChatEnabled?"اكتب رسالة تظهر لكل العملاء...":"المحادثة العامة متوقفة مؤقتًا";}
+    if(send&&currentCustomerChatMode==="public") send.disabled=!publicChatEnabled;
+}
+
 function subscribeStoreSettings(){
     if(storeSettingsUnsubscribe) storeSettingsUnsubscribe();
 
@@ -3176,6 +3427,9 @@ function subscribeStoreSettings(){
         doc(db,"settings","store"),
         snap=>{
             if(!snap.exists()){
+                publicChatEnabled=true;
+                applySeasonTheme("normal");
+                updatePublicChatAvailability();
                 storeIsOpen=true;
                 localStorage.setItem("noor_store_state", JSON.stringify({
                     open:true,
@@ -3189,6 +3443,9 @@ function subscribeStoreSettings(){
 
             const data=snap.data();
             storeSettings={...storeSettings,...data};
+            publicChatEnabled=data.publicChatEnabled!==false;
+            applySeasonTheme(data.seasonTheme||"normal");
+            updatePublicChatAvailability();
             renderStoreInformation();
             const logo=data.logo||data.logoUrl||data.storeLogo||"";
 
@@ -3292,6 +3549,7 @@ function subscribeProducts(){
             filterProducts();
             renderBestSellers();
             renderFavoritesSection();
+            renderCart();
 
         },
         error => {
@@ -3442,37 +3700,39 @@ window.filterProducts = function(){
         if(sort === "newest") return timeOf(b.createdAt)-timeOf(a.createdAt);
         return (b.soldCount-a.soldCount) || Number(b.featured)-Number(a.featured) || (b.rating-a.rating);
     });
+    productBatchIndex = 0;
     renderProducts();
 };
 
 
 function renderProducts(){
+    const grid = document.getElementById("productsGrid");
+    if(!grid) return;
+    // اعرض كل المنتجات المطابقة مرة واحدة؛ لا يوجد تقسيم إلى مجموعات أو حد 10 منتجات.
+    const allVisibleProducts = filteredProducts;
+    const count = allVisibleProducts.length;
+    const countEl = document.getElementById("productsCount");
+    const pageInfo = document.getElementById("productsPageInfo");
+    const controls = document.querySelector(".product-batch-controls");
+    if(countEl) countEl.textContent = `${count} منتج`;
+    if(pageInfo) pageInfo.textContent = count ? `جميع المنتجات (${count})` : "لا توجد منتجات";
+    if(controls) controls.hidden = true;
 
-    const grid =
-        document.getElementById("productsGrid");
-
-    document.getElementById("productsCount")
-        .textContent =
-        filteredProducts.length + " منتج";
-
-    if(!filteredProducts.length){
-
-        grid.innerHTML = `
-            <div class="empty">
-                <i class="fa-solid fa-box-open"></i>
-                <p>لا توجد منتجات مطابقة للبحث</p>
-            </div>
-        `;
-
+    if(!count){
+        grid.innerHTML = `<div class="empty"><i class="fa-solid fa-box-open"></i><p>لا توجد منتجات مطابقة للبحث</p></div>`;
         return;
     }
-
-    grid.innerHTML =
-        filteredProducts
-        .map(product=>productCard(product))
-        .join("");
-
+    grid.innerHTML = allVisibleProducts.map(product=>productCard(product)).join("");
 }
+
+window.changeProductBatch = function(direction){
+    const totalBatches = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_BATCH));
+    const nextIndex = productBatchIndex + Number(direction || 0);
+    if(nextIndex < 0 || nextIndex >= totalBatches) return;
+    productBatchIndex = nextIndex;
+    renderProducts();
+    if (document.getElementById("productsGrid")) document.getElementById("productsGrid").scrollLeft = 0;
+};
 
 
 function renderBestSellers(){
@@ -3990,28 +4250,38 @@ function subscribeProductReviews(productId){
 }
 function renderProductReviews(reviews){
     const list=document.getElementById("reviewsList"), summary=document.getElementById("reviewSummary");
-    if(!reviews.length){summary.textContent="لا توجد تقييمات بعد";list.innerHTML='<div class="notification-empty">كن أول عميل يقيّم هذا المنتج ⭐</div>';return;}
+    if(!reviews.length){summary.textContent="لا توجد تقييمات بعد";list.innerHTML='<div class="notification-empty">كن أول عميل اشترى المنتج ويقيّمه ⭐</div>';return;}
     const avg=reviews.reduce((a,r)=>a+Number(r.rating||0),0)/reviews.length;
     summary.innerHTML=`${avg.toFixed(1)}/5 ⭐ — ${reviews.length} تقييم`;
     list.innerHTML=reviews.map(r=>{
         const rating=Math.max(0,Math.min(5,Number(r.rating||0)));
         const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString("ar-EG"):"";
-        return `<div class="review-item"><div class="review-item-top"><span class="review-item-name">${escapeHTML(r.customerName||"عميل")}</span><span class="review-item-date">${date}</span></div><div style="color:#fbbf24;font-size:12px;margin-top:4px">${"★".repeat(rating)}${"☆".repeat(5-rating)}</div><div class="review-comment">${escapeHTML(r.comment||"")}</div></div>`;
+        const verified=r.verifiedPurchase===true?`<div class="review-purchase-proof"><i class="fa-solid fa-circle-check"></i> شراء موثّق · ${escapeHTML(r.purchasedProductName||"هذا المنتج")}</div>`:"";
+        return `<div class="review-item"><div class="review-item-top"><span class="review-item-name">${escapeHTML(r.customerName||"عميل")}</span><span class="review-item-date">${date}</span></div>${verified}<div style="color:#fbbf24;font-size:12px;margin-top:4px">${"★".repeat(rating)}${"☆".repeat(5-rating)}</div><div class="review-comment">${escapeHTML(r.comment||"")}</div></div>`;
     }).join("");
 }
 window.submitProductReview=async function(){
-    if(!ensureCustomer()) return;
+    if(!ensureCustomer()||!await verifyCustomerAllowed()) return;
     if(!currentReviewProductId) return;
     const comment=document.getElementById("reviewComment").value.trim(), rating=Number(window.currentReviewRating||5);
     if(comment.length<2){toast("اكتب تعليقك أولاً","error");return;}
     try{
+        // لا يُنشر تقييم موثّق إلا بعد العثور على طلب فعلي للعميل يتضمن المنتج نفسه.
+        const ordersSnap=await getDocs(query(collection(db,"orders"),where("customerId","==",customer.id)));
+        const purchase=ordersSnap.docs.map(d=>({id:d.id,...d.data()})).find(order=>{
+            const status=String(order.status||"").toLowerCase();
+            if(["cancelled","canceled","rejected","returned","refunded"].includes(status)) return false;
+            return Array.isArray(order.items)&&order.items.some(item=>String(item.productId||item.id||"")===String(currentReviewProductId));
+        });
+        if(!purchase){toast("تقدر تقيّم المنتج بعد ما تطلبه من متجر النور","error");return;}
         const ref=collection(db,"products",currentReviewProductId,"reviews");
         const existing=await getDocs(query(ref,where("customerId","==",customer.id)));
         if(!existing.empty){toast("أنت قيّمت هذا المنتج من قبل","error");return;}
-        await addDoc(ref,{customerId:customer.id,customerName:customer.name,rating,comment,createdAt:serverTimestamp()});
+        const product=products.map(normalizeProduct).find(p=>p.id===currentReviewProductId);
+        await addDoc(ref,{customerId:customer.id,customerName:customer.name,rating,comment,verifiedPurchase:true,purchasedProductName:product?.name||purchase.items.find(item=>String(item.productId||item.id||"")===String(currentReviewProductId))?.name||"المنتج",orderId:purchase.id,createdAt:serverTimestamp()});
         document.getElementById("reviewComment").value="";
-        toast("تم نشر تقييمك وتعليقك بنجاح ⭐");
-    }catch(e){console.error(e);toast("تعذر حفظ التقييم","error");}
+        toast("تم نشر تقييم الشراء وتعليقك بنجاح ⭐");
+    }catch(e){console.error(e);toast("تعذر التحقق من الشراء أو حفظ التقييم. راجع صلاحيات Firebase.","error");}
 };
 
 /* ================= FAVORITES ================= */
@@ -4157,21 +4427,24 @@ function calculateSubtotal(){
 
 function renderCart(){
 
-    const container =
-        document.getElementById("cartItems");
-
-    const items =
-        getCartDetails();
+    const container = document.getElementById("cartItems");
+    const cartPanel = document.getElementById("cart");
+    const items = getCartDetails();
+    if(cartPanel) cartPanel.dataset.empty = items.length ? "false" : "true";
 
     if(!items.length){
-
+        const picks = products.map(normalizeProduct).filter(p=>p.stock>0)
+            .sort((a,b)=>(Number(b.soldCount)-Number(a.soldCount)) || Number(b.featured)-Number(a.featured) || b.rating-a.rating)
+            .slice(0,4);
         container.innerHTML = `
-            <div class="empty">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <p>السلة فارغة</p>
+            <div class="cart-empty-state">
+                <div class="cart-empty-illustration"><i class="fa-solid fa-cart-shopping"></i><span>+</span></div>
+                <h3>عربة التسوق فاضية!</h3>
+                <p>لسه ما اخترتش منتجاتك. ابدأ جولتك في متجر النور واكتشف العروض والمنتجات المميزة.</p>
+                <button type="button" class="cart-start-shopping" onclick="closeCart();scrollToProducts()"><i class="fa-solid fa-bag-shopping"></i> ابدأ تسوق دلوقتي</button>
             </div>
+            ${picks.length ? `<div class="cart-empty-suggestions"><div class="cart-empty-suggestions-head"><strong>الأفضل مبيعًا عشان تبدأ</strong><span>اختيارات مميزة</span></div><div class="cart-empty-suggestion-grid">${picks.map(productCard).join("")}</div></div>` : ""}
         `;
-
     }else{
 
         container.innerHTML =
@@ -4870,104 +5143,61 @@ function subscribeAds(){
 }
 
 
+function safeAdHref(raw){
+    const value = String(raw || "").trim();
+    if (/^https?:\/\//i.test(value)) return value;
+    if (/^#[A-Za-z][\w-]*$/.test(value)) return value;
+    return "";
+}
+
+window.scrollAds = function(direction){
+    const track = document.getElementById("adsContainer");
+    if(!track) return;
+    const amount = Math.max(260, Math.round(track.clientWidth * 0.78));
+    track.scrollBy({left: -Number(direction || 1) * amount, behavior:"smooth"});
+};
+
 function renderAds(ads){
-
-    const container =
-        document.getElementById("adsContainer");
-
+    const container = document.getElementById("adsContainer");
+    if(!container) return;
     if(!ads.length){
-
-        container.innerHTML = `
-            <div class="empty">
-                <i class="fa-solid fa-bullhorn"></i>
-                <p>لا توجد إعلانات حاليًا</p>
-            </div>
-        `;
-
+        container.innerHTML = `<div class="empty ads-empty"><i class="fa-solid fa-bullhorn"></i><p>لا توجد إعلانات حاليًا</p></div>`;
         return;
     }
 
-    container.innerHTML =
-        ads.map(ad=>`
-
-            <article class="ad-card">
-
-                ${
-                    ad.image
-                    ?
-                    `<img decoding="async"
-                        class="ad-image"
-                        src="${escapeHTML(ad.image)}"
-                        alt=""
-                    >`
-                    :
-                    ""
-                }
-
-                <div class="ad-content">
-
-                    <small>
-                        <i class="fa-solid fa-bullhorn"></i>
-                        إعلان متجر النور
-                    </small>
-
-                    <h3>
-                        ${escapeHTML(
-                            ad.title || "عرض جديد"
-                        )}
-                    </h3>
-
-                    <p>
-                        ${escapeHTML(
-                            ad.message ||
-                            ad.description ||
-                            ""
-                        )}
-                    </p>
-
-                    ${
-                        ad.buttonLink
-                        ?
-                        `<a
-                            class="ad-btn"
-                            href="${escapeHTML(ad.buttonLink)}"
-                            target="_blank">
-
-                            ${escapeHTML(
-                                ad.buttonText ||
-                                "اعرف المزيد"
-                            )}
-
-                            <i class="fa-solid fa-arrow-left"></i>
-
-                        </a>`
-                        :
-                        ""
-                    }
-
-                </div>
-
-            </article>
-
-        `)
-        .join("");
-
+    container.innerHTML = ads.map(ad=>{
+        const layout = ["wide","square","portrait"].includes(ad.layout) ? ad.layout : "wide";
+        const imageFit = ad.imageFit === "contain" ? "contain" : "cover";
+        const showText = ad.showText !== false;
+        const effect = ["aurora","glow","pulse","shimmer","none"].includes(ad.effect) ? ad.effect : "none";
+        const speed = ["slow","normal","fast"].includes(ad.speed) ? ad.speed : "normal";
+        const href = safeAdHref(ad.buttonLink);
+        const external = /^https?:\/\//i.test(href);
+        const image = ad.image ? `<img decoding="async" loading="lazy" class="ad-image" src="${escapeHTML(ad.image)}" alt="${escapeHTML(ad.title || "إعلان متجر النور")}" style="object-fit:${imageFit}">` : `<div class="ad-image ad-image-fallback"></div>`;
+        const text = showText && (ad.title || ad.message || ad.buttonText) ? `<div class="ad-content"><small><i class="fa-solid fa-bullhorn"></i> إعلان متجر النور</small>${ad.title ? `<h3>${escapeHTML(ad.title)}</h3>` : ""}${ad.message ? `<p>${escapeHTML(ad.message)}</p>` : ""}${href && ad.buttonText ? `<span class="ad-btn">${escapeHTML(ad.buttonText)} <i class="fa-solid fa-arrow-left"></i></span>` : ""}</div>` : "";
+        const open = href ? `<a class="ad-poster-link" href="${escapeHTML(href)}" ${external ? 'target="_blank" rel="noopener noreferrer"' : ""} aria-label="${escapeHTML(ad.title || "عرض متجر النور")}">` : `<div class="ad-poster-link" aria-label="${escapeHTML(ad.title || "إعلان متجر النور")}">`;
+        const close = href ? "</a>" : "</div>";
+        return `<article class="ad-card ad-card--${layout} ad-effect--${effect} ad-speed--${speed} ${showText ? "has-ad-copy" : "image-only"}" style="--ad-color-one:${escapeHTML(ad.color1 || "#f97316")};--ad-color-two:${escapeHTML(ad.color2 || "#f59e0b")}">${open}${image}${text}${close}</article>`;
+    }).join("");
 }
 
 
 /* ================= CHAT ENHANCED (TEXT, IMAGES, STICKERS, VOICE) ================= */
 
 window.openChat = function(){
-
+    // The existing floating support button continues to open the normal private chat.
     if(!ensureCustomer()) return;
+    document.getElementById("chatWindow").classList.add("open");
+    window.setCustomerChatMode("private");
+};
 
-    document
-        .getElementById("chatWindow")
-        .classList.add("open");
-
-    subscribeChat();
-    markAdminMessagesRead();
-
+window.openPublicChatRoom = function(){
+    // The separate bottom dock opens the public members' room only.
+    if(!ensureCustomer()) return;
+    const win=document.getElementById("chatWindow");
+    if(win) win.classList.add("open");
+    window.setCustomerChatMode("public");
+    setTimeout(()=>document.getElementById("chatInput")?.focus(),180);
 };
 
 
@@ -4980,6 +5210,7 @@ window.closeChat = function(){
     document
         .getElementById("stickerPicker")
         .classList.remove("show");
+    // Keep the public feed subscribed in the background for the fixed bottom preview.
 
 };
 
@@ -4991,6 +5222,88 @@ window.toggleStickerPicker = function(){
 
 };
 
+
+window.setCustomerChatMode=function(mode){
+    if(!["private","public"].includes(mode)) mode="private";
+    currentCustomerChatMode=mode;
+    const win=document.getElementById("chatWindow");
+    const privateTab=document.getElementById("privateChatTab");
+    const publicTab=document.getElementById("publicChatTab");
+    const privateMessages=document.getElementById("chatMessages");
+    const publicMessages=document.getElementById("publicChatMessages");
+    const input=document.getElementById("chatInput");
+    const send=document.querySelector("#chatWindow .chat-send");
+    if(win) win.classList.toggle("chat-public-mode",mode==="public");
+    if(privateTab) privateTab.classList.toggle("active",mode==="private");
+    if(publicTab) publicTab.classList.toggle("active",mode==="public");
+    if(privateMessages) privateMessages.hidden=mode!=="private";
+    if(publicMessages) publicMessages.hidden=mode!=="public";
+    if(input){input.placeholder=mode==="public"?(publicChatEnabled?"اكتب رسالة تظهر لكل العملاء...":"المحادثة العامة متوقفة مؤقتًا"):"اكتب رسالتك...";input.disabled=mode==="public"&&!publicChatEnabled;}
+    if(send) send.disabled=mode==="public"&&!publicChatEnabled;
+    if(mode==="public"){
+        // The group feed is live even while the private chat remains available separately.
+        subscribePublicChat();
+    }else{
+        if(customer){subscribeChat();markAdminMessagesRead();}
+    }
+    updatePublicChatAvailability();
+};
+
+function publicChatTime(value){
+    try{return value?.toDate?value.toDate().toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit"}):"";}catch(e){return "";}
+}
+function publicChatSortTime(value){
+    try{return value?.toDate?value.toDate().getTime():(value instanceof Date?value.getTime():Date.parse(value||"")||0);}catch(e){return 0;}
+}
+function renderPublicChatDock(messages){
+    const lines=document.getElementById("publicChatDockLines");
+    if(!lines) return;
+    if(!messages.length){
+        lines.innerHTML='<span class="public-chat-dock-empty">ابدأوا أول محادثة بين أعضاء المتجر 💬</span>';
+        return;
+    }
+    lines.innerHTML=messages.slice(-2).map(m=>{
+        const name=m.sender==="admin"?"الإدارة":(m.customerName||"عضو");
+        const text=String(m.text||"").replace(/\s+/g," ").trim();
+        return `<span class="public-chat-dock-line"><strong>${escapeHTML(name)}:</strong> ${escapeHTML(text)}</span>`;
+    }).join("");
+}
+function renderPublicChatMessages(messages){
+    const container=document.getElementById("publicChatMessages");
+    renderPublicChatDock(messages);
+    if(!container) return;
+    if(!messages.length){container.innerHTML='<div class="empty" style="padding:30px 10px"><i class="fa-regular fa-comments"></i><p>ابدأوا أول محادثة عامة في متجر النور 💬</p></div>';return;}
+    container.innerHTML=messages.map(m=>{
+        const mine=m.sender==="customer"&&m.customerId===customer?.id;
+        const name=m.sender==="admin"?"إدارة متجر النور":(m.customerName||"عميل");
+        return `<div class="public-chat-line ${mine?"mine":""}"><div class="public-chat-name">${escapeHTML(name)}</div><div class="public-chat-text">${escapeHTML(m.text||"")}</div><time>${publicChatTime(m.createdAt)}</time></div>`;
+    }).join("");
+    container.scrollTop=container.scrollHeight;
+}
+function subscribePublicChat(){
+    // One persistent listener feeds both the chat window and the fixed preview.
+    if(publicChatUnsubscribe) return;
+    publicChatUnsubscribe=onSnapshot(query(collection(db,"publicChatMessages"),orderBy("createdAt","desc"),limit(250)),snapshot=>{
+        const messages=snapshot.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>publicChatSortTime(a.createdAt)-publicChatSortTime(b.createdAt));
+        renderPublicChatMessages(messages);
+    },error=>{
+        console.error("Public chat listener:",error);
+        const box=document.getElementById("publicChatMessages");
+        const lines=document.getElementById("publicChatDockLines");
+        if(box)box.innerHTML='<div class="notification-empty">تعذر تحميل المحادثة العامة. راجع صلاحيات Firebase.</div>';
+        if(lines)lines.innerHTML='<span class="public-chat-dock-empty">تعذر تحميل الرسائل حاليًا</span>';
+    });
+}
+async function sendPublicChatMessage(){
+    if(!ensureCustomer()||!await verifyCustomerAllowed()) return;
+    if(!publicChatEnabled){toast("المحادثة العامة متوقفة حاليًا من إدارة المتجر","error");updatePublicChatAvailability();return;}
+    const input=document.getElementById("chatInput");
+    const text=String(input?.value||"").trim().slice(0,500);
+    if(!text) return;
+    input.value="";
+    try{await addDoc(collection(db,"publicChatMessages"),{sender:"customer",customerId:customer.id,customerName:customer.name||"عميل",text,createdAt:serverTimestamp()});}
+    catch(error){console.error(error);toast("تعذر إرسال الرسالة العامة. راجع صلاحيات Firebase.","error");}
+}
 
 function subscribeChat(){
 
@@ -5148,6 +5461,7 @@ window.handleChatKey = function(event){
 // إرسال رسالة نصية عادية
 window.sendMessage = async function(){
 
+    if(currentCustomerChatMode==="public"){await sendPublicChatMessage();return;}
     if(!ensureCustomer()) return;
     if(!await verifyCustomerAllowed()) return;
 
@@ -5382,6 +5696,7 @@ subscribeProducts();
 
     subscribeAds();
     subscribeStoreSettings();
+    subscribePublicChat();
 
     if(customer){
 
