@@ -1679,6 +1679,45 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
 .cart-loyalty{padding:10px 15px;font-size:11px;color:#fde68a;background:rgba(245,158,11,.07);border-bottom:1px solid var(--border)}.cart-loyalty i{color:#fbbf24;margin-left:5px}.cart-loyalty strong{font-size:14px}
 @media(max-width:800px){.product-gallery,.gallery-stage,.gallery-stage img,.gallery-stage video{min-height:280px}.gallery-stage img,.gallery-stage video{max-height:45vh}}
 
+
+/* ===== NOOR STORE EXPERIENCE UPGRADE ===== */
+.shop-action-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:16px auto 22px;max-width:1200px;padding:0 18px}
+.shop-action-btn{border:1px solid rgba(148,163,184,.22);background:rgba(15,23,42,.72);color:inherit;border-radius:999px;padding:10px 16px;font-weight:800;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:.2s}
+.shop-action-btn:hover{transform:translateY(-2px);border-color:#f59e0b;color:#fbbf24}
+.shop-action-btn .count{background:#f59e0b;color:#111827;border-radius:999px;min-width:21px;height:21px;display:inline-grid;place-items:center;font-size:11px;padding:0 5px}
+.shop-toolbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0 18px}
+.shop-toolbar .input,.shop-toolbar select{min-width:0;width:100%;padding:11px 12px;border-radius:12px;border:1px solid rgba(148,163,184,.25);background:rgba(15,23,42,.72);color:inherit}
+.shop-mini-section{margin:20px auto 28px;max-width:1280px;padding:0 18px}
+.shop-mini-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.shop-mini-head h2{font-size:clamp(19px,3vw,25px);margin:0;font-weight:900}
+.shop-mini-head p{margin:4px 0 0;color:#94a3b8;font-size:12px}
+.shop-mini-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+#favoritesSection[hidden]{display:none!important}
+.track-card,.info-card{border:1px solid rgba(148,163,184,.2);border-radius:22px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(30,41,59,.72));padding:20px;box-shadow:0 16px 40px rgba(0,0,0,.12)}
+.track-fields{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin:16px 0}
+.track-fields .input{min-width:0;width:100%}
+.track-result{display:grid;gap:12px;margin-top:16px}
+.track-order-card{border:1px solid rgba(148,163,184,.2);border-radius:16px;padding:15px;background:rgba(148,163,184,.05)}
+.track-order-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.track-status{display:inline-flex;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:800;background:rgba(245,158,11,.14);color:#fbbf24}
+.track-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:15px}
+.track-step{text-align:center;font-size:11px;color:#94a3b8;position:relative;padding-top:22px}
+.track-step:before{content:"";position:absolute;top:3px;right:calc(50% - 7px);width:14px;height:14px;border-radius:50%;background:#475569;border:2px solid #64748b}
+.track-step.done{color:#86efac;font-weight:800}
+.track-step.done:before{background:#22c55e;border-color:#86efac}
+.shop-info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.shop-info-card h3{margin:0 0 9px;font-size:16px}.shop-info-card p{color:#cbd5e1;line-height:1.9;font-size:13px;margin:0;white-space:pre-line}
+.shop-contact-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.shop-contact-links a{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(148,163,184,.25);border-radius:999px;padding:9px 13px;color:inherit;text-decoration:none;font-weight:800}
+.related-products{grid-column:1/-1;border-top:1px solid rgba(148,163,184,.2);padding-top:18px;margin-top:8px}
+.related-products h3{margin:0 0 12px}
+.related-products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px}
+.related-products-grid .product-desc,.related-products-grid .stock-line{display:none}
+.related-products-grid .product-card{min-width:0}
+.shop-note{font-size:12px;color:#94a3b8;line-height:1.7;margin-top:8px}
+@media(max-width:700px){.shop-toolbar{grid-template-columns:1fr 1fr}.shop-toolbar>*:first-child{grid-column:1/-1}.track-fields{grid-template-columns:1fr}.shop-info-grid{grid-template-columns:1fr}.shop-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.shop-action-row{justify-content:stretch}.shop-action-btn{flex:1;justify-content:center;font-size:12px;padding:10px 8px}}
+@media(prefers-reduced-motion:reduce){.shop-action-btn{transition:none}}
+
 </style>
 </head>
 
@@ -1900,6 +1939,23 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
 </section>
 
 
+<!-- QUICK SHOP TOOLS -->
+<div class="shop-action-row" aria-label="اختصارات المتجر">
+  <button class="shop-action-btn" type="button" onclick="openFavorites()"><i class="fa-regular fa-heart"></i> المفضلة <span class="count" id="favoriteActionCount">0</span></button>
+  <button class="shop-action-btn" type="button" onclick="document.getElementById('orderTrackingSection').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-truck-fast"></i> تتبع طلب</button>
+  <button class="shop-action-btn" type="button" onclick="document.getElementById('bestSellersSection').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-fire"></i> الأكثر مبيعًا</button>
+</div>
+
+<section class="shop-mini-section" id="bestSellersSection">
+  <div class="shop-mini-head"><div><h2>🔥 الأكثر طلبًا</h2><p>منتجات عليها إقبال من عملاء متجر النور</p></div></div>
+  <div class="shop-mini-grid" id="bestSellersGrid"><div class="empty">جاري تجهيز قائمة المنتجات...</div></div>
+</section>
+
+<section class="shop-mini-section" id="favoritesSection" hidden>
+  <div class="shop-mini-head"><div><h2>❤️ منتجاتك المفضلة</h2><p>المنتجات التي حفظتها للرجوع إليها لاحقًا</p></div><button class="shop-action-btn" onclick="closeFavoritesView()">إغلاق</button></div>
+  <div class="shop-mini-grid" id="favoritesGrid"></div>
+</section>
+
 <!-- PRODUCTS -->
 <section class="section">
 
@@ -1919,6 +1975,19 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
             0 منتج
         </span>
 
+    </div>
+
+    <div class="shop-toolbar" aria-label="خيارات ترتيب وتصفية المنتجات">
+        <select id="sortProducts" aria-label="ترتيب المنتجات" onchange="filterProducts()">
+            <option value="popular">الأكثر طلبًا</option>
+            <option value="newest">الأحدث</option>
+            <option value="priceLow">السعر: من الأقل للأعلى</option>
+            <option value="priceHigh">السعر: من الأعلى للأقل</option>
+            <option value="rating">الأعلى تقييمًا</option>
+            <option value="name">الاسم: أ إلى ي</option>
+        </select>
+        <input id="minPriceFilter" class="input" type="number" min="0" placeholder="أقل سعر" oninput="debouncedFilterProducts()" aria-label="أقل سعر">
+        <input id="maxPriceFilter" class="input" type="number" min="0" placeholder="أعلى سعر" oninput="debouncedFilterProducts()" aria-label="أعلى سعر">
     </div>
 
     <div class="products-grid" id="productsGrid">
@@ -1997,6 +2066,31 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
 </div>
 
 <!-- FOOTER -->
+<!-- ORDER TRACKING -->
+<section class="section" id="orderTrackingSection">
+  <div class="section-head"><div><div class="section-title">تابع <span>طلبك</span></div><div class="section-subtitle">اكتب رقم الهاتف المستخدم عند الشراء، ويمكنك إضافة رقم الطلب لتحديده مباشرة.</div></div></div>
+  <div class="track-card">
+    <div class="track-fields">
+      <input id="trackPhone" class="input" type="tel" inputmode="tel" placeholder="رقم الهاتف المستخدم في الطلب">
+      <input id="trackOrderId" class="input" type="text" placeholder="رقم الطلب (اختياري)">
+      <button class="primary-btn" type="button" onclick="trackMyOrders()"><i class="fa-solid fa-magnifying-glass"></i> تتبع الطلب</button>
+    </div>
+    <div class="shop-note">تظهر الطلبات المرتبطة برقم الهاتف الذي أدخلته. إذا لم يظهر طلبك، تأكد من كتابة الرقم بنفس الصيغة المستخدمة عند الشراء.</div>
+    <div id="trackOrderResults" class="track-result" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- STORE INFORMATION -->
+<section class="section" id="storeInfoSection">
+  <div class="section-head"><div><div class="section-title">معلومات <span>المتجر</span></div><div class="section-subtitle">التوصيل، الاستبدال، والإجابات على الأسئلة الشائعة.</div></div></div>
+  <div class="shop-info-grid">
+    <article class="info-card shop-info-card"><h3><i class="fa-solid fa-truck-fast"></i> سياسة التوصيل</h3><p id="storeShippingPolicy">يتم تأكيد تكلفة وموعد التوصيل مع العميل عند مراجعة الطلب.</p></article>
+    <article class="info-card shop-info-card"><h3><i class="fa-solid fa-rotate-left"></i> الاستبدال والاسترجاع</h3><p id="storeReturnPolicy">يرجى التواصل مع خدمة العملاء قبل إرجاع أو استبدال أي منتج.</p></article>
+    <article class="info-card shop-info-card"><h3><i class="fa-solid fa-circle-question"></i> أسئلة شائعة</h3><p id="storeFaqText">للاستفسار عن المنتجات أو التقسيط، تواصل مع خدمة العملاء من خلال الدردشة.</p></article>
+  </div>
+  <div id="storeContactLinks" class="shop-contact-links"></div>
+</section>
+
 <footer>
 
     <div class="footer-grid">
@@ -2056,6 +2150,8 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
         </div>
 
     </div>
+
+    <div id="footerStoreContacts" class="shop-contact-links" style="justify-content:center;padding:8px 18px 20px"></div>
 
     <div class="copyright">
         © 2026 متجر النور — جميع الحقوق محفوظة
@@ -2252,6 +2348,8 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
 
                 </ul>
 
+                <div class="related-products"><h3>منتجات ممكن تعجبك</h3><div id="relatedProductsGrid" class="related-products-grid"></div></div>
+
                 <div class="review-area">
                     <div class="review-head"><h3><i class="fa-solid fa-star" style="color:#fbbf24"></i> تقييمات العملاء</h3><span id="reviewSummary" class="product-rating-summary">لا توجد تقييمات بعد</span></div>
                     <div class="review-form">
@@ -2269,6 +2367,7 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
                     <button class="primary-btn" id="detailAddButton">
                         <i class="fa-solid fa-cart-plus"></i> إضافة للسلة
                     </button>
+                    <button type="button" class="shop-action-btn" onclick="shareCurrentProduct()"><i class="fa-solid fa-share-nodes"></i> مشاركة المنتج</button>
                     <a id="detailDownloadButton" class="download-btn" style="padding:13px 16px" target="_blank" download>
                         <i class="fa-solid fa-download"></i> تحميل الصورة
                     </a>
@@ -2548,6 +2647,7 @@ let storeIsOpen = (() => {
         return true;
     }
 })();
+let storeSettings = { shippingFee:null, freeShippingThreshold:1000, whatsapp:"", facebook:"", faqText:"", returnPolicy:"", shippingPolicy:"" };
 let currentReviewProductId = null;
 let currentReviewUnsubscribe = null;
 
@@ -2924,6 +3024,8 @@ function subscribeStoreSettings(){
             }
 
             const data=snap.data();
+            storeSettings={...storeSettings,...data};
+            renderStoreInformation();
             const logo=data.logo||data.logoUrl||data.storeLogo||"";
 
             if(logo){
@@ -3023,8 +3125,9 @@ function subscribeProducts(){
                 [...products];
 
             createCategories();
-
             filterProducts();
+            renderBestSellers();
+            renderFavoritesSection();
 
         },
         error => {
@@ -3078,6 +3181,8 @@ function normalizeProduct(product){
             product.badge || "",
 
         featured:Boolean(product.featured),
+        soldCount:Number(product.soldCount||0),
+        createdAt:product.createdAt||null,
         downloadUrl:product.downloadUrl || product.fileUrl || "",
         gallery:Array.isArray(product.gallery)?product.gallery:(Array.isArray(product.media)?product.media:[]),
         videoUrl:product.videoUrl || product.video || ""
@@ -3149,39 +3254,31 @@ window.selectCategory = function(category,button){
 let productFilterTimer=null;
 window.debouncedFilterProducts=function(){clearTimeout(productFilterTimer);productFilterTimer=setTimeout(()=>window.filterProducts(),180);};
 window.filterProducts = function(){
+    const search = (document.getElementById("searchInput")?.value || "").trim().toLowerCase();
+    const minRaw = document.getElementById("minPriceFilter")?.value || "";
+    const maxRaw = document.getElementById("maxPriceFilter")?.value || "";
+    const minPrice = minRaw === "" ? null : Number(minRaw);
+    const maxPrice = maxRaw === "" ? null : Number(maxRaw);
+    const sort = document.getElementById("sortProducts")?.value || "popular";
 
-    const search =
-        document
-            .getElementById("searchInput")
-            .value
-            .trim()
-            .toLowerCase();
+    filteredProducts = products.map(normalizeProduct).filter(product=>{
+        const categoryMatch = currentCategory === "all" || product.category === currentCategory;
+        const text = `${product.name} ${product.description} ${product.category}`.toLowerCase();
+        const minMatch = minPrice === null || !Number.isFinite(minPrice) || product.price >= minPrice;
+        const maxMatch = maxPrice === null || !Number.isFinite(maxPrice) || product.price <= maxPrice;
+        return categoryMatch && text.includes(search) && minMatch && maxMatch;
+    });
 
-    filteredProducts =
-        products
-        .map(normalizeProduct)
-        .filter(product=>{
-
-            const categoryMatch =
-                currentCategory === "all" ||
-                product.category === currentCategory;
-
-            const text =
-                (
-                    product.name +
-                    " " +
-                    product.description +
-                    " " +
-                    product.category
-                ).toLowerCase();
-
-            return categoryMatch &&
-                text.includes(search);
-
-        });
-
+    const timeOf = value => value?.toDate ? value.toDate().getTime() : (typeof value === "number" ? value : Date.parse(value||"") || 0);
+    filteredProducts.sort((a,b)=>{
+        if(sort === "priceLow") return a.price-b.price;
+        if(sort === "priceHigh") return b.price-a.price;
+        if(sort === "rating") return b.rating-a.rating;
+        if(sort === "name") return a.name.localeCompare(b.name,"ar");
+        if(sort === "newest") return timeOf(b.createdAt)-timeOf(a.createdAt);
+        return (b.soldCount-a.soldCount) || Number(b.featured)-Number(a.featured) || (b.rating-a.rating);
+    });
     renderProducts();
-
 };
 
 
@@ -3213,6 +3310,97 @@ function renderProducts(){
 
 }
 
+
+function renderBestSellers(){
+    const grid=document.getElementById("bestSellersGrid");
+    if(!grid) return;
+    const all=products.map(normalizeProduct).filter(p=>p.stock>0);
+    const withSales=all.filter(p=>p.soldCount>0).sort((a,b)=>b.soldCount-a.soldCount);
+    const curated=all.filter(p=>!withSales.some(x=>x.id===p.id)).sort((a,b)=>(Number(b.featured)-Number(a.featured))||(b.rating-a.rating));
+    const list=[...withSales.slice(0,4),...curated].slice(0,4);
+    const fallback=list.length?list:all.sort((a,b)=>b.rating-a.rating).slice(0,4);
+    grid.innerHTML=fallback.length?fallback.map(productCard).join(""):'<div class="empty">ستظهر المنتجات هنا بعد توفر المنتجات في المتجر.</div>';
+}
+
+function renderRelatedProducts(currentId){
+    const grid=document.getElementById("relatedProductsGrid");
+    if(!grid) return;
+    const current=products.map(normalizeProduct).find(p=>p.id===currentId);
+    if(!current){grid.innerHTML="";return;}
+    let list=products.map(normalizeProduct).filter(p=>p.id!==currentId&&p.stock>0&&p.category===current.category);
+    if(list.length<2) list=products.map(normalizeProduct).filter(p=>p.id!==currentId&&p.stock>0);
+    list.sort((a,b)=>(Number(b.featured)-Number(a.featured))||(b.soldCount-a.soldCount)||(b.rating-a.rating));
+    grid.innerHTML=list.slice(0,4).map(productCard).join("")||'<div class="shop-note">لا توجد منتجات مشابهة حاليًا.</div>';
+}
+
+function shippingInfo(subtotal){
+    const raw=storeSettings?.shippingFee;
+    const configured=raw!==null&&raw!==undefined&&raw!==""&&Number.isFinite(Number(raw));
+    if(!configured) return {configured:false,fee:0,free:false};
+    const threshold=Number(storeSettings?.freeShippingThreshold||0);
+    if(threshold>0&&subtotal>=threshold) return {configured:true,fee:0,free:true};
+    return {configured:true,fee:Math.max(0,Number(raw)||0),free:Number(raw)<=0};
+}
+
+function renderStoreInformation(){
+    const shipping=document.getElementById("storeShippingPolicy");
+    const returns=document.getElementById("storeReturnPolicy");
+    const faq=document.getElementById("storeFaqText");
+    const contacts=document.getElementById("storeContactLinks");
+    const footer=document.getElementById("footerStoreContacts");
+    if(shipping) shipping.textContent=storeSettings.shippingPolicy||"يتم تأكيد تكلفة وموعد التوصيل مع العميل عند مراجعة الطلب.";
+    if(returns) returns.textContent=storeSettings.returnPolicy||"يرجى التواصل مع خدمة العملاء قبل إرجاع أو استبدال أي منتج.";
+    if(faq) faq.textContent=storeSettings.faqText||"للاستفسار عن المنتجات أو التقسيط، تواصل مع خدمة العملاء من خلال الدردشة.";
+    const links=[];
+    const rawPhone=String(storeSettings.whatsapp||"").trim();
+    if(rawPhone){let digits=rawPhone.replace(/\D/g,"");if(digits.startsWith("0"))digits="20"+digits.slice(1);links.push(`<a href="https://wa.me/${digits}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> تواصل واتساب</a>`);}
+    const facebook=String(storeSettings.facebook||"").trim();
+    if(facebook&&/^https?:\/\//i.test(facebook)) links.push(`<a href="${escapeHTML(facebook)}" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> صفحة فيسبوك</a>`);
+    const markup=links.join("");
+    if(contacts) contacts.innerHTML=markup;
+    if(footer) footer.innerHTML=markup;
+}
+
+function orderStatusLabel(status){
+    const map={new:"تم استلام الطلب",processing:"قيد التجهيز",shipping:"تم الشحن",completed:"تم التسليم",delivered:"تم التسليم",cancelled:"تم إلغاء الطلب"};
+    return map[status]||"تم تحديث حالة الطلب";
+}
+
+function renderTrackedOrder(order){
+    const status=order.status||"new";
+    const stages=["new","processing","shipping","completed"];
+    const current=status==="delivered"?3:stages.indexOf(status);
+    const steps=["استلام الطلب","قيد التجهيز","تم الشحن","تم التسليم"];
+    const timeline=status==="cancelled"?'<div class="shop-note" style="color:#fca5a5">هذا الطلب ملغي. تواصل مع خدمة العملاء إذا كنت تحتاج توضيحًا.</div>':`<div class="track-timeline">${steps.map((label,i)=>`<div class="track-step ${i<=current?"done":""}">${label}</div>`).join("")}</div>`;
+    const date=order.createdAt?.toDate?order.createdAt.toDate().toLocaleString("ar-EG"):(order.createdAt?new Date(order.createdAt).toLocaleString("ar-EG"):"-");
+    const items=Array.isArray(order.items)?order.items.map(x=>`${escapeHTML(x.name||"منتج")} × ${Number(x.quantity||x.qty||1)}`).join("، "):"";
+    return `<article class="track-order-card"><div class="track-order-top"><div><strong>طلب رقم: ${escapeHTML(order.id)}</strong><div class="shop-note">تاريخ الطلب: ${escapeHTML(date)}</div></div><span class="track-status">${orderStatusLabel(status)}</span></div><div class="shop-note" style="margin-top:8px">${items}</div><div style="margin-top:9px;font-weight:900">الإجمالي: ${money(order.total||0)}</div>${timeline}</article>`;
+}
+
+window.trackMyOrders=async function(){
+    const phone=document.getElementById("trackPhone")?.value.trim()||"";
+    const orderId=document.getElementById("trackOrderId")?.value.trim()||"";
+    const target=document.getElementById("trackOrderResults");
+    if(!target) return;
+    if(phone.replace(/\D/g,"").length<7){target.innerHTML='<div class="shop-note" style="color:#fca5a5">اكتب رقم هاتف صحيحًا.</div>';return;}
+    target.innerHTML='<div class="shop-note">جاري البحث عن طلباتك...</div>';
+    try{
+        const digits=phone.replace(/\D/g,"");
+        const queries=[query(collection(db,"orders"),where("customerPhone","==",phone)),query(collection(db,"orders"),where("customerPhoneNormalized","==",digits))];
+        const found=new Map();
+        for(const q of queries){const snap=await getDocs(q);snap.forEach(d=>found.set(d.id,{id:d.id,...d.data()}));}
+        let list=[...found.values()];
+        if(orderId) list=list.filter(o=>o.id.toLowerCase()===orderId.toLowerCase()||o.id.toLowerCase().includes(orderId.toLowerCase()));
+        list.sort((a,b)=>{const t=x=>x?.toDate?x.toDate().getTime():Date.parse(x||"")||0;return t(b.createdAt)-t(a.createdAt);});
+        target.innerHTML=list.length?list.map(renderTrackedOrder).join(""):'<div class="shop-note">لم نعثر على طلب بهذا الرقم. راجع الرقم أو تأكد من إدخاله بنفس الصيغة المستخدمة وقت الشراء.</div>';
+    }catch(error){console.error("Order tracking:",error);target.innerHTML='<div class="shop-note" style="color:#fca5a5">تعذر تحميل الطلبات. تأكد من اتصال المتجر وصلاحيات قراءة الطلبات في Firebase.</div>';}
+};
+
+window.shareCurrentProduct=async function(){
+    const name=document.getElementById("detailName")?.textContent||"منتج من متجر النور";
+    const url=location.href.split("#")[0]+"#productsSection";
+    try{if(navigator.share) await navigator.share({title:name,text:`شاهد ${name} في متجر النور`,url});else{await navigator.clipboard.writeText(`${name} - متجر النور ${url}`);toast("تم نسخ رابط المتجر للمشاركة");}}catch(e){if(e?.name!=="AbortError")toast("تعذرت مشاركة الرابط","error");}
+};
 
 function productCard(product){
 
@@ -3611,6 +3799,7 @@ window.openProduct = function(id){
     document.getElementById("reviewComment").value="";
     setReviewRating(5);
     subscribeProductReviews(product.id);
+    renderRelatedProducts(product.id);
     document.getElementById("productModal").classList.add("show");
 };
 
@@ -3664,73 +3853,44 @@ window.submitProductReview=async function(){
 /* ================= FAVORITES ================= */
 
 window.toggleFavorite = function(id){
-
     if(favorites.includes(id)){
-
-        favorites =
-            favorites.filter(x=>x!==id);
-
+        favorites = favorites.filter(x=>x!==id);
         toast("تمت إزالة المنتج من المفضلة");
-
     }else{
-
         favorites.push(id);
-
         toast("تمت إضافة المنتج للمفضلة ❤");
-
     }
-
-    localStorage.setItem(
-        "noor_favorites",
-        JSON.stringify(favorites)
-    );
-
+    localStorage.setItem("noor_favorites",JSON.stringify(favorites));
     updateFavoriteCount();
-
     renderProducts();
-
+    renderFavoritesSection();
 };
 
 
 function updateFavoriteCount(){
-
-    document.getElementById("favoriteCount")
-        .textContent =
-        favorites.length;
-
+    const count = favorites.length;
+    const badge = document.getElementById("favoriteCount");
+    const actionBadge = document.getElementById("favoriteActionCount");
+    if(badge) badge.textContent = count;
+    if(actionBadge) actionBadge.textContent = count;
 }
 
+function renderFavoritesSection(){
+    const section=document.getElementById("favoritesSection");
+    const grid=document.getElementById("favoritesGrid");
+    if(!section||!grid) return;
+    const favs=products.map(normalizeProduct).filter(p=>favorites.includes(p.id));
+    grid.innerHTML=favs.length?favs.map(productCard).join():'<div class="empty">لم تحفظ أي منتجات في المفضلة بعد.</div>';
+}
 
 window.openFavorites = function(){
-
-    const favs =
-        products
-        .map(normalizeProduct)
-        .filter(p=>favorites.includes(p.id));
-
-    if(!favs.length){
-
-        toast(
-            "قائمة المفضلة فارغة",
-            "error"
-        );
-
-        return;
-    }
-
-    filteredProducts = favs;
-
-    document
-        .getElementById("productsSection")
-        .scrollIntoView({
-            behavior:"smooth"
-        });
-
-    document.getElementById("productsGrid")
-        .innerHTML =
-        favs.map(productCard).join("");
-
+    const section=document.getElementById("favoritesSection");
+    if(!section) return;
+    renderFavoritesSection();
+    section.hidden=false;
+    section.scrollIntoView({behavior:"smooth",block:"start"});
 };
+window.closeFavoritesView=function(){const section=document.getElementById("favoritesSection");if(section)section.hidden=true;};
 
 
 /* ================= CART ================= */
@@ -4199,12 +4359,12 @@ function updateCartSummary(){
     const progressText=document.getElementById("cartProgressText");
     if(progressFill&&progressText){
         const subtotalValue=Number(calculateSubtotal())||0;
-        const target=1000;
-        const percent=Math.min(100,Math.round(subtotalValue/target*100));
+        const target=Number(storeSettings?.freeShippingThreshold ?? 1000);
+        const percent=target>0?Math.min(100,Math.round(subtotalValue/target*100)):100;
         progressFill.style.width=percent+"%";
         const progressBox=progressText.closest(".cart-progress");
         if(progressBox) progressBox.classList.toggle("free-shipping-achieved",subtotalValue>=target);
-        progressText.innerHTML=subtotalValue<=0?'أضف منتجاتك للسلة لتحصل على شحن مجاني عند الوصول إلى <strong>1000 ج.م</strong> ✨':subtotalValue<target?`أضف <strong>${(target-subtotalValue).toLocaleString("ar-EG")} ج.م</strong> لتحصل على الشحن المجاني`:'🎉 <strong>مبروك! حصلت على الشحن المجاني</strong>';
+        progressText.innerHTML=target<=0?'استمتع بتجربة التسوق من متجر النور ✨':subtotalValue<=0?`أضف منتجاتك للسلة لتحصل على شحن مجاني عند الوصول إلى <strong>${money(target)}</strong> ✨`:subtotalValue<target?`أضف <strong>${money(target-subtotalValue)}</strong> لتحصل على الشحن المجاني`:'🎉 <strong>مبروك! حصلت على الشحن المجاني</strong>';
     }
     const pointsEl=document.getElementById("loyaltyPoints");
     if(pointsEl) pointsEl.textContent=Math.floor((Number(calculateSubtotal())||0)/10).toLocaleString("ar-EG");
@@ -4221,8 +4381,10 @@ function updateCartSummary(){
     const discount =
         calculateDiscount(subtotal);
 
-    const total =
-        subtotal - discount;
+    const delivery=shippingInfo(subtotal);
+    const total = subtotal - discount + delivery.fee;
+    const shippingEl=document.getElementById("shipping");
+    if(shippingEl) shippingEl.textContent=delivery.configured?(delivery.free?"مجاني":money(delivery.fee)):"يحدد عند التأكيد";
 
     document.getElementById("subtotal")
         .textContent = money(subtotal);
@@ -4261,7 +4423,8 @@ function makeInstallmentSignature(items, total, months){
 function currentInstallmentSignature(months){
     const items = getCartDetails();
     const subtotal = Number(calculateSubtotal())||0;
-    const total = subtotal - (Number(calculateDiscount(subtotal))||0);
+    const delivery=shippingInfo(subtotal);
+    const total = subtotal - (Number(calculateDiscount(subtotal))||0) + delivery.fee;
     return makeInstallmentSignature(items,total,months);
 }
 
@@ -4291,7 +4454,8 @@ window.updateCartInstallmentUI = function(){
     if(!select || !summary) return;
     const months = installmentMonthsFromSelection(select.value);
     const subtotal = Number(calculateSubtotal())||0;
-    const total = Math.max(0,subtotal-(Number(calculateDiscount(subtotal))||0));
+    const delivery=shippingInfo(subtotal);
+    const total = Math.max(0,subtotal-(Number(calculateDiscount(subtotal))||0)+delivery.fee);
     const signature = months ? makeInstallmentSignature(getCartDetails(),total,months) : "";
     const status = signature && signature === activeInstallmentSignature ? activeInstallmentRequestStatus : null;
     summary.className = "cart-installment-summary";
@@ -4347,7 +4511,9 @@ window.checkout = async function(){
 
     const subtotal=Number(calculateSubtotal())||0;
     const discount=Number(calculateDiscount(subtotal))||0;
-    const total=Math.max(0,subtotal-discount);
+    const delivery=shippingInfo(subtotal);
+    const shippingFee=delivery.configured?delivery.fee:null;
+    const total=Math.max(0,subtotal-discount+delivery.fee);
     const planValue=document.getElementById("cartPaymentPlan")?.value||"full";
     const installmentMonths=installmentMonthsFromSelection(planValue);
     const signature=installmentMonths?makeInstallmentSignature(items,total,installmentMonths):"";
@@ -4378,7 +4544,7 @@ window.checkout = async function(){
                     customerPhone:checkoutPhone,
                     customerAddress:checkoutAddress,
                     items:items.map(item=>({productId:item.id,name:item.name,price:Number(item.price)||0,quantity:Number(item.qty)||1})),
-                    subtotal,discount,total,
+                    subtotal,discount,shippingFee,total,
                     coupon:appliedCoupon?(appliedCoupon.code||null):null,
                     months:installmentMonths,
                     monthlyAmount,
@@ -4415,16 +4581,18 @@ window.checkout = async function(){
                 if(!snap.exists()) throw new Error("PRODUCT_NOT_FOUND");
                 const stock=Number(snap.data().stock??999);
                 if(stock<item.qty) throw new Error("OUT_OF_STOCK:"+item.name+":"+stock);
-                fresh.push({ref,stock,qty:item.qty});
+                const soldCount=Number(snap.data().soldCount||0);
+                fresh.push({ref,stock,soldCount,qty:item.qty});
             }
-            for(const p of fresh) transaction.update(p.ref,{stock:p.stock-p.qty});
+            for(const p of fresh) transaction.update(p.ref,{stock:p.stock-p.qty,soldCount:p.soldCount+p.qty});
             const orderData={
                 customerId:customer.id,
                 customerName:checkoutName,
                 items:items.map(item=>({productId:item.id,name:item.name,price:item.price,quantity:item.qty})),
-                subtotal,discount,total,
+                subtotal,discount,shippingFee,total,
                 coupon:appliedCoupon?(appliedCoupon.code||null):null,
                 customerPhone:checkoutPhone,
+                customerPhoneNormalized:checkoutPhone.replace(/\D/g,""),
                 customerAddress:checkoutAddress,
                 status:"new",
                 paymentPlan:installmentMonths?"installment":"full",
@@ -4466,11 +4634,16 @@ window.checkout = async function(){
             : "تم إرسال طلبك بنجاح وسيتم مراجعته من متجر النور.";
         await addDoc(collection(db,"notifications"),{targetId:customer.id,target:"customer",title:installmentMonths?"تم تأكيد طلب التقسيط":"تم استلام طلبك",message:successMessage,type:"order",orderId:orderRef.id,createdAt:serverTimestamp()});
         toast(installmentMonths?"تم إتمام الطلب بعد الموافقة على التقسيط ✅":`تم إرسال طلبك بنجاح ✅ كسبت ${Math.floor(total/10)} نقطة ولاء`);
+        const trackPhoneEl=document.getElementById("trackPhone");
+        const trackOrderEl=document.getElementById("trackOrderId");
+        if(trackPhoneEl) trackPhoneEl.value=checkoutPhone;
+        if(trackOrderEl) trackOrderEl.value=orderRef.id;
         cart=[]; appliedCoupon=null;
         const paymentPlanSelect=document.getElementById("cartPaymentPlan"); if(paymentPlanSelect) paymentPlanSelect.value="full";
         activeInstallmentRequestId=null;activeInstallmentRequestStatus=null;activeInstallmentSignature="";
         if(installmentRequestUnsubscribe){installmentRequestUnsubscribe();installmentRequestUnsubscribe=null;}
-        saveCart(); renderCart(); renderProducts(); closeCart(); toast("يمكنك التواصل معنا من الدردشة لمتابعة الطلب");
+        saveCart(); renderCart(); renderProducts(); closeCart(); toast("يمكنك متابعة حالة طلبك من قسم تتبع الطلب أسفل المتجر");
+        if(document.getElementById("trackOrderId")){document.getElementById("orderTrackingSection")?.scrollIntoView({behavior:"smooth",block:"center"});window.trackMyOrders();}
     }catch(error){
         console.error(error);
         if(error.message==="INSTALLMENT_NOT_APPROVED"){toast("موافقة التقسيط لم تعد سارية. تحقق من الحالة في السلة.","error");return;}
@@ -5027,6 +5200,8 @@ function init(){
     },700);
 
     updateFavoriteCount();
+    renderFavoritesSection();
+    renderStoreInformation();
 
     renderCart();
     if(customer){
