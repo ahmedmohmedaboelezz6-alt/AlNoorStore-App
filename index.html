@@ -7,6 +7,8 @@
 
 <title>متجر النور | أدوات منزلية فاخرة</title>
 
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -2181,6 +2183,51 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
 @media(max-width:600px){.public-room-icon-btn{width:34px;height:34px;flex-basis:34px}.public-room-header{gap:7px}.public-room-toolbar{padding:7px 9px}.public-room-toolbar input{width:53%;font-size:10px}.public-room-messages{padding-bottom:12px}.public-chat-notifications{top:64px}}
 </style>
 
+
+<style id="noor-live-broadcast-v1-style">
+.noor-live-banner{margin:14px auto;max-width:1180px;padding:13px 16px;border-radius:18px;background:linear-gradient(115deg,#7f1d1d,#dc2626 55%,#991b1b);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 12px 32px rgba(220,38,38,.22);animation:noorLiveGlow 2.4s ease-in-out infinite}.noor-live-banner[hidden]{display:none!important}.noor-live-banner-copy{display:flex;align-items:center;gap:11px;min-width:0}.noor-live-pulse{width:12px;height:12px;flex:0 0 12px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.75);animation:noorLivePulse 1.5s infinite}.noor-live-banner strong{display:block;font-weight:900}.noor-live-banner small{display:block;color:#fee2e2;font-size:11px;margin-top:3px}.noor-live-banner button{border:0;border-radius:12px;padding:10px 16px;background:#fff;color:#991b1b;font:inherit;font-weight:900;white-space:nowrap;cursor:pointer}.noor-live-modal{position:fixed;inset:0;z-index:30000;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(2,6,23,.88);backdrop-filter:blur(8px)}.noor-live-modal.open{display:flex}.noor-live-shell{width:min(980px,100%);max-height:94dvh;overflow:auto;border:1px solid rgba(255,255,255,.13);border-radius:22px;background:#0b1422;color:#fff;box-shadow:0 25px 80px rgba(0,0,0,.55)}.noor-live-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.1)}.noor-live-head strong{font-size:15px}.noor-live-close{border:0;background:rgba(255,255,255,.1);color:#fff;border-radius:10px;width:38px;height:38px;font-size:20px;cursor:pointer}.noor-live-stage{position:relative;background:#000;aspect-ratio:16/9;max-height:65dvh}.noor-live-stage video{width:100%;height:100%;object-fit:contain;background:#000}.noor-live-stage-status{position:absolute;top:12px;right:12px;background:#dc2626;color:#fff;padding:5px 10px;border-radius:30px;font-size:10px;font-weight:900;display:flex;align-items:center;gap:6px}.noor-live-stage-status:before{content:"";width:7px;height:7px;border-radius:50%;background:#fff;animation:noorLivePulse 1.2s infinite}.noor-live-info{padding:12px 16px;color:#cbd5e1;font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.noor-live-join{border:0;border-radius:12px;padding:11px 16px;background:#dc2626;color:#fff;font:inherit;font-weight:900;cursor:pointer}.noor-live-join:disabled{opacity:.55;cursor:not-allowed}.noor-live-note{padding:10px 16px;color:#94a3b8;font-size:10px;line-height:1.7}.noor-live-error{color:#fecaca}.noor-live-viewer-count{display:inline-flex;align-items:center;gap:6px;color:#fecaca}.noor-live-banner button:focus-visible,.noor-live-close:focus-visible,.noor-live-join:focus-visible{outline:3px solid #fbbf24;outline-offset:2px}@keyframes noorLivePulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}70%{box-shadow:0 0 0 9px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}@keyframes noorLiveGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.12)}}@media(max-width:600px){.noor-live-banner{margin:10px 10px;padding:11px 12px;border-radius:14px}.noor-live-banner button{padding:9px 12px;font-size:11px}.noor-live-banner strong{font-size:12px}.noor-live-banner small{font-size:9px}.noor-live-modal{padding:0}.noor-live-shell{width:100%;height:100dvh;max-height:100dvh;border-radius:0;border:0}.noor-live-head{padding:10px 12px}.noor-live-stage{aspect-ratio:9/16;max-height:62dvh}.noor-live-stage video{object-fit:contain}}
+</style>
+
+<style id="noor-live-interactive-v2-style">
+.noor-live-extra{padding:0 16px 16px;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.noor-live-comment-box{border:1px solid rgba(148,163,184,.18);border-radius:15px;background:#101c2d;overflow:hidden}
+.noor-live-comment-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid rgba(148,163,184,.13);font-size:12px;font-weight:900}
+.noor-live-comment-head button,.noor-live-secondary{border:1px solid rgba(148,163,184,.24);background:rgba(255,255,255,.07);color:#e2e8f0;border-radius:9px;padding:7px 10px;font:inherit;font-size:11px;cursor:pointer}
+.noor-live-comment-list{height:170px;overflow:auto;padding:9px 11px;display:flex;flex-direction:column;gap:8px}
+.noor-live-comment{font-size:11px;line-height:1.7;color:#e2e8f0;overflow-wrap:anywhere}
+.noor-live-comment strong{color:#fbbf24;margin-left:5px}
+.noor-live-comment.admin strong{color:#60a5fa}
+.noor-live-comment-form{display:flex;gap:7px;padding:9px;border-top:1px solid rgba(148,163,184,.13)}
+.noor-live-comment-form input{flex:1;min-width:0;border:1px solid rgba(148,163,184,.2);background:#0b1422;color:#fff;border-radius:10px;padding:10px;font:inherit;font-size:12px}
+.noor-live-comment-form button{border:0;background:#dc2626;color:#fff;border-radius:10px;padding:0 14px;font-weight:900}
+.noor-live-speaker-area{border:1px solid rgba(148,163,184,.18);border-radius:15px;background:#101c2d;padding:12px}
+.noor-live-speaker-area strong{font-size:12px}.noor-live-speaker-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.noor-live-speaker-actions button{border:0;border-radius:10px;padding:9px 12px;font:inherit;font-size:11px;font-weight:900;cursor:pointer}
+.noor-live-speaker-request{background:#7c3aed;color:#fff}.noor-live-speaker-start{background:#16a34a;color:#fff}.noor-live-speaker-leave{background:#475569;color:#fff}
+.noor-live-local-preview{width:104px;height:78px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:#000;display:none;margin-top:9px}
+.noor-live-comment-overlay{position:absolute;right:12px;bottom:12px;max-width:min(72%,440px);display:flex;flex-direction:column;gap:5px;pointer-events:none;transition:opacity .2s}
+.noor-live-comment-overlay[hidden]{display:none!important}
+.noor-live-overlay-line{align-self:flex-start;background:rgba(2,6,23,.72);backdrop-filter:blur(7px);color:#fff;border-radius:12px;padding:5px 9px;font-size:10px;line-height:1.55;max-width:100%;overflow-wrap:anywhere}
+.noor-live-overlay-line b{color:#fcd34d;margin-left:4px}
+.noor-live-comment-box.local-hidden .noor-live-comment-list,.noor-live-comment-box.local-hidden .noor-live-comment-form{display:none}
+.noor-live-muted-note{font-size:10px;color:#fca5a5;margin-top:7px;line-height:1.6}
+@media(max-width:600px){.noor-live-extra{padding:0 10px 12px}.noor-live-comment-list{height:145px}.noor-live-stage{aspect-ratio:9/16;max-height:55dvh}.noor-live-local-preview{width:88px;height:66px}}
+</style>
+
+<style>
+
+/* V16 performance: reduce layout/paint work on mobile and large product lists. */
+.products-grid > .product-card{content-visibility:auto;contain-intrinsic-size:360px 520px;}
+.product-card{contain:layout paint;}
+.product-image{background:#0d131d;overflow:hidden;aspect-ratio:1/1;}
+.product-image img{display:block;content-visibility:auto;}
+.products-load-more{grid-column:1/-1;display:flex;justify-content:center;align-items:center;min-height:58px;padding:10px;}
+.products-load-more button{border:1px solid rgba(249,115,22,.35);border-radius:14px;background:rgba(249,115,22,.10);color:#fed7aa;font:800 13px Cairo,sans-serif;padding:10px 18px;}
+.products-load-more small{display:block;color:#94a3b8;font-size:11px;margin-top:5px;text-align:center;}
+@media(max-width:700px){.navbar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}.product-card{box-shadow:0 8px 24px rgba(0,0,0,.16)!important}.product-card:hover .product-image img{transform:none!important}}
+@media(prefers-reduced-motion:reduce){.product-card,.product-card *{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+</style>
 </head>
 
 <body>
@@ -2362,6 +2409,13 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
 </section>
 
 
+
+<!-- NOOR LIVE BROADCAST NOTICE -->
+<section id="noorLiveBanner" class="noor-live-banner" hidden aria-live="polite">
+  <div class="noor-live-banner-copy"><span class="noor-live-pulse"></span><div><strong id="noorLiveBannerTitle">متجر النور مباشر الآن</strong><small>انضم لمشاهدة العرض المباشر من المتجر</small></div></div>
+  <button type="button" onclick="openNoorLiveViewer()"><i class="fa-solid fa-play"></i> شاهد البث</button>
+</section>
+
 <!-- SEARCH -->
 <div class="search-area" id="productsSection">
 
@@ -2463,13 +2517,8 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
         <input id="maxPriceFilter" class="input" type="number" min="0" placeholder="أعلى سعر" oninput="debouncedFilterProducts()" aria-label="أعلى سعر">
     </div>
 
-    <div class="products-grid" id="productsGrid">
-
-        <div class="empty">
-            <i class="fa-solid fa-box-open"></i>
-            <p>جاري تحميل المنتجات...</p>
-        </div>
-
+    <div class="products-grid" id="productsGrid" aria-live="polite" aria-busy="true">
+        <div class="empty"><i class="fa-solid fa-box-open"></i><p>جاري تحميل المنتجات بسرعة...</p></div>
     </div>
 
 </section>
@@ -3088,6 +3137,33 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
   <div class="public-chat-modal-card"><button class="public-chat-modal-close" onclick="closePublicChatProfileModal()" aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button><div class="public-chat-profile-avatar" id="publicChatProfileAvatar">ن</div><h3 id="publicChatProfileTitle">الملف الشخصي</h3><p id="publicChatProfileSubtitle">عضو في متجر النور</p><label>الاسم الظاهر<input id="publicChatProfileName" maxlength="40"></label><label>نبذة قصيرة<input id="publicChatProfileBio" maxlength="120" placeholder="اكتب نبذة عنك"></label><div class="public-chat-profile-actions"><button type="button" class="btn btn-secondary" onclick="closePublicChatProfileModal()">إلغاء</button><button type="button" class="btn btn-primary" id="publicChatProfileSave" onclick="saveMyPublicChatProfile()">حفظ الملف</button></div></div>
 </div>
 
+
+<!-- NOOR LIVE VIEWER -->
+<div id="noorLiveViewerModal" class="noor-live-modal" role="dialog" aria-modal="true" aria-labelledby="noorLiveViewerTitle" onclick="if(event.target===this)closeNoorLiveViewer()">
+  <div class="noor-live-shell">
+    <div class="noor-live-head"><div><strong id="noorLiveViewerTitle">بث متجر النور المباشر</strong><div style="font-size:10px;color:#94a3b8;margin-top:3px">مشاهدة ومشاركة مباشرة من داخل المتجر</div></div><button class="noor-live-close" type="button" onclick="closeNoorLiveViewer()" aria-label="إغلاق">×</button></div>
+    <div class="noor-live-stage"><video id="noorLiveViewerVideo" playsinline autoplay controls></video><span class="noor-live-stage-status">مباشر</span><div id="noorLiveCommentOverlay" class="noor-live-comment-overlay" aria-live="polite"></div></div>
+    <div class="noor-live-info"><span id="noorLiveViewerStatus">اضغط للانضمام إلى البث.</span><span class="noor-live-viewer-count"><i class="fa-solid fa-eye"></i><b id="noorLiveViewerCount">0</b> مشاهد</span></div>
+    <div style="padding:0 16px 10px"><button id="noorLiveJoinButton" class="noor-live-join" type="button" onclick="joinNoorLiveBroadcast()">انضم للمشاهدة</button></div>
+    <div class="noor-live-extra">
+      <section class="noor-live-comment-box" id="noorLiveCommentBox">
+        <div class="noor-live-comment-head"><span><i class="fa-regular fa-comments"></i> تعليقات البث المباشر</span><button type="button" onclick="toggleNoorLiveComments()" id="noorLiveHideCommentsBtn">إخفاء التعليقات</button></div>
+        <div class="noor-live-comment-list" id="noorLiveCommentList"><div class="noor-live-comment">ستظهر رسائل المشاهدين هنا أثناء البث.</div></div>
+        <div class="noor-live-comment-form"><input id="noorLiveCommentInput" maxlength="300" placeholder="اكتب تعليقًا للجميع..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendNoorLiveComment()}"><button type="button" onclick="sendNoorLiveComment()" aria-label="إرسال التعليق"><i class="fa-solid fa-paper-plane"></i></button></div>
+        <div id="noorLiveCommentsDisabledNote" class="noor-live-muted-note" hidden>التعليقات مغلقة من إدارة البث.</div>
+      </section>
+      <section class="noor-live-speaker-area" id="noorLiveSpeakerArea" hidden>
+        <strong><i class="fa-solid fa-microphone-lines"></i> المشاركة بالصوت والصورة</strong>
+        <div id="noorLiveSpeakerStatus" class="noor-live-note" style="padding:6px 0">يمكنك طلب الانضمام للبث كمتحدث، والإدارة ستراجع الطلب.</div>
+        <label style="display:flex;align-items:center;gap:7px;color:#cbd5e1;font-size:11px;margin:6px 0"><input type="checkbox" id="noorLiveGuestVideoEnabled" checked> تشغيل الكاميرا أثناء المشاركة (يمكنك المشاركة بالصوت فقط)</label>
+        <div class="noor-live-speaker-actions"><button type="button" class="noor-live-speaker-request" id="noorLiveSpeakerRequestBtn" onclick="requestNoorLiveSpeaker()">اطلب المشاركة</button><button type="button" class="noor-live-speaker-start" id="noorLiveSpeakerStartBtn" onclick="startNoorLiveGuestParticipation()" hidden>انضم بالصوت والصورة</button><button type="button" class="noor-live-speaker-leave" id="noorLiveSpeakerLeaveBtn" onclick="leaveNoorLiveGuestParticipation()" hidden>مغادرة البث</button></div>
+        <video id="noorLiveGuestPreview" class="noor-live-local-preview" autoplay muted playsinline></video>
+      </section>
+    </div>
+    <div class="noor-live-note">تشغيل الكاميرا والميكروفون اختياري ولا يبدأ إلا بعد موافقتك وبعد قبول الإدارة طلب المشاركة. عند إغلاق النافذة تنتهي مشاركتك بالصوت والصورة.</div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast-container" id="toastContainer"></div>
 
@@ -3165,7 +3241,14 @@ let products = [];
 
 let filteredProducts = [];
 let productBatchIndex = 0;
-const PRODUCTS_PER_BATCH = 10;
+const PRODUCTS_PER_BATCH = 10; // Legacy setting kept for compatibility.
+const PRODUCTS_RENDER_CHUNK = 20;
+let productsRenderedCount = 0;
+let productsRenderVersion = 0;
+let productsLoadObserver = null;
+let publicChatDockUnsubscribe = null;
+let noorCustomerChatLoaded = false;
+let noorNotificationsLoaded = false;
 
 let cart = JSON.parse(
     localStorage.getItem("noor_cart") || "[]"
@@ -3293,7 +3376,7 @@ window.signInWithGoogle=async function(){
         document.getElementById("nameModal").classList.remove("show");
         document.getElementById("checkoutName").value=name;
         document.getElementById("applicationName").value=name;
-        subscribeChat();subscribeNotifications();subscribeCustomerQuoteRequests();watchCustomerBlockState();
+        subscribeCustomerQuoteRequests();watchCustomerBlockState();
         toast("تم تسجيل الدخول بحساب جوجل بنجاح");
     }catch(error){
         console.error("Google sign-in failed",error);
@@ -3371,8 +3454,6 @@ window.saveCustomerName = async function(){
         " ❤️"
     );
 
-    subscribeChat();
-    subscribeNotifications();
     subscribeCustomerQuoteRequests();
 
 };
@@ -3457,7 +3538,7 @@ function updateNotificationBadge(){
 window.toggleNotifications=function(){
     if(!ensureCustomer()) return;
     const panel=document.getElementById("notificationPanel"); panel.classList.toggle("show");
-    if(panel.classList.contains("show")){allNotifications.forEach(n=>{});}
+    if(panel.classList.contains("show")&&!noorNotificationsLoaded){subscribeNotifications();noorNotificationsLoaded=true;}
 };
 let notificationsReady = false;
 
@@ -3651,6 +3732,8 @@ function subscribeStoreSettings(){
 
             const data=snap.data();
             storeSettings={...storeSettings,...data};
+            publicChatPinnedMessage=data.publicChatPinnedMessage||null;
+            if(typeof renderPublicChatDock==="function")renderPublicChatDock(window.__noorPublicChatLatestMessages||[]);
             const previousAdminBadgeStyle=publicChatAdminBadgeStyle;
             publicChatAdminBadgeStyle=noorNormalizeChatBadgeStyle(data.adminVerifiedBadgeStyle||"gold");
             if(previousAdminBadgeStyle!==publicChatAdminBadgeStyle && window.__noorPublicChatLatestMessages && typeof renderPublicChatMessages==="function") renderPublicChatMessages(window.__noorPublicChatLatestMessages);
@@ -3917,34 +4000,84 @@ window.filterProducts = function(){
 
 
 function renderProducts(){
-    const grid = document.getElementById("productsGrid");
-    if(!grid) return;
-    // اعرض كل المنتجات المطابقة مرة واحدة؛ لا يوجد تقسيم إلى مجموعات أو حد 10 منتجات.
-    const allVisibleProducts = filteredProducts;
-    const count = allVisibleProducts.length;
-    const countEl = document.getElementById("productsCount");
-    const pageInfo = document.getElementById("productsPageInfo");
-    const controls = document.querySelector(".product-batch-controls");
-    if(countEl) countEl.textContent = `${count} منتج`;
-    if(pageInfo) pageInfo.textContent = count ? `جميع المنتجات (${count})` : "لا توجد منتجات";
-    if(controls) controls.hidden = true;
-
+    const grid=document.getElementById("productsGrid");
+    if(!grid)return;
+    const token=++productsRenderVersion;
+    productsRenderedCount=0;
+    if(productsLoadObserver){productsLoadObserver.disconnect();productsLoadObserver=null;}
+    grid.innerHTML="";
+    grid.setAttribute("aria-busy","false");
+    const count=filteredProducts.length;
+    const countEl=document.getElementById("productsCount");
+    const pageInfo=document.getElementById("productsPageInfo");
+    const controls=document.querySelector(".product-batch-controls");
+    if(countEl)countEl.textContent=`${count} منتج`;
+    if(controls)controls.hidden=true;
     if(!count){
-        grid.innerHTML = `<div class="empty"><i class="fa-solid fa-box-open"></i><p>لا توجد منتجات مطابقة للبحث</p></div>`;
+        grid.innerHTML='<div class="empty"><i class="fa-solid fa-box-open"></i><p>لا توجد منتجات مطابقة للبحث</p></div>';
+        if(pageInfo)pageInfo.textContent="لا توجد منتجات";
         return;
     }
-    grid.innerHTML = allVisibleProducts.map(product=>productCard(product)).join("");
+    appendProductsChunk(token);
 }
 
-window.changeProductBatch = function(direction){
-    const totalBatches = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_BATCH));
-    const nextIndex = productBatchIndex + Number(direction || 0);
-    if(nextIndex < 0 || nextIndex >= totalBatches) return;
-    productBatchIndex = nextIndex;
-    renderProducts();
-    if (document.getElementById("productsGrid")) document.getElementById("productsGrid").scrollLeft = 0;
+function appendProductsChunk(token=productsRenderVersion){
+    const grid=document.getElementById("productsGrid");
+    if(!grid||token!==productsRenderVersion)return;
+    if(productsLoadObserver){productsLoadObserver.disconnect();productsLoadObserver=null;}
+    const start=productsRenderedCount;
+    const end=Math.min(filteredProducts.length,start+PRODUCTS_RENDER_CHUNK);
+    if(end<=start)return;
+    const oldSentinel=document.getElementById("productsLoadMore");
+    if(oldSentinel)oldSentinel.remove();
+    const html=filteredProducts.slice(start,end).map(productCard).join("");
+    grid.insertAdjacentHTML("beforeend",html);
+    productsRenderedCount=end;
+    const pageInfo=document.getElementById("productsPageInfo");
+    if(pageInfo)pageInfo.textContent=`عرض ${productsRenderedCount} من ${filteredProducts.length}`;
+    let sentinel=document.getElementById("productsLoadMore");
+    if(end<filteredProducts.length){
+        if(!sentinel){
+            sentinel=document.createElement("div");
+            sentinel.id="productsLoadMore";
+            sentinel.className="products-load-more";
+            sentinel.innerHTML='<div><button type="button" onclick="loadMoreProducts()">تحميل المزيد</button><small>سيتم تحميل باقي المنتجات تلقائيًا أثناء التمرير</small></div>';
+            grid.appendChild(sentinel);
+        }
+        if("IntersectionObserver" in window){
+            productsLoadObserver=new IntersectionObserver(entries=>{
+                if(entries.some(entry=>entry.isIntersecting))appendProductsChunk(token);
+            },{root:null,rootMargin:"650px 0px",threshold:0});
+            productsLoadObserver.observe(sentinel);
+        }
+    }else if(sentinel){sentinel.remove();}
+}
+
+window.loadMoreProducts=function(){appendProductsChunk(productsRenderVersion);};
+window.changeProductBatch=function(direction){
+    // Backward compatibility: old arrows now progressively reveal the next/previous chunk.
+    if(Number(direction)>0)appendProductsChunk(productsRenderVersion);
+    else if(Number(direction)<0){
+        const grid=document.getElementById("productsGrid");
+        if(grid)grid.scrollIntoView({behavior:"smooth",block:"start"});
+    }
 };
 
+function updateProductCardControls(){
+    document.querySelectorAll("[data-qty-product]").forEach(el=>{
+        const id=el.getAttribute("data-qty-product");
+        const item=cart.find(row=>String(row.id)===String(id));
+        el.textContent=String(item?.qty||0);
+    });
+    document.querySelectorAll("[data-fav-product]").forEach(button=>{
+        const id=button.getAttribute("data-fav-product");
+        const liked=favorites.includes(id);
+        button.classList.toggle("liked",liked);
+        const icon=button.querySelector("i");
+        if(icon)icon.className=`${liked?"fa-solid":"fa-regular"} fa-heart`;
+        button.setAttribute("aria-pressed",liked?"true":"false");
+    });
+}
 
 function renderBestSellers(){
     const grid=document.getElementById("bestSellersGrid");
@@ -4063,7 +4196,9 @@ function productCard(product){
                     src="${escapeHTML(product.image)}"
                     alt="${escapeHTML(product.name)}"
                     loading="lazy"
-                    onerror="this.src='https://via.placeholder.com/700x500/151d29/ffffff?text=Noor+Store'"
+                    fetchpriority="low"
+                    width="640" height="640"
+                    onerror="this.onerror=null;this.style.opacity='.35';this.alt='صورة المنتج غير متاحة'"
                 >
 
                 ${
@@ -4084,7 +4219,7 @@ function productCard(product){
 
                 <div class="product-quick-qty" onclick="event.stopPropagation()">
                     <button onclick="quickQty('${product.id}',-1)">−</button>
-                    <span id="qty-${product.id}">${(cart.find(x=>x.id===product.id)||{}).qty||0}</span>
+                    <span id="qty-${product.id}" data-qty-product="${escapeHTML(product.id)}">${(cart.find(x=>x.id===product.id)||{}).qty||0}</span>
                     <button onclick="quickQty('${product.id}',1)">+</button>
                 </div>
 
@@ -4092,6 +4227,7 @@ function productCard(product){
 
                     <button
                         class="product-action ${liked?"liked":""}"
+                        data-fav-product="${escapeHTML(product.id)}" aria-pressed="${liked?"true":"false"}"
                         onclick="toggleFavorite('${product.id}')">
 
                         <i class="${liked?"fa-solid":"fa-regular"} fa-heart"></i>
@@ -4507,7 +4643,7 @@ window.toggleFavorite = function(id){
     }
     localStorage.setItem("noor_favorites",JSON.stringify(favorites));
     updateFavoriteCount();
-    renderProducts();
+    updateProductCardControls();
     renderFavoritesSection();
 };
 
@@ -4573,6 +4709,7 @@ window.addToCart = function(id){
     saveCart();
 
     renderCart();
+    updateProductCardControls();
 
     toast(
         "تمت إضافة " +
@@ -4588,7 +4725,7 @@ window.quickQty=function(id,change){
     if(change>0){addToCart(id);return;}
     if(!item) return;
     item.qty--; if(item.qty<=0) cart=cart.filter(x=>x.id!==id);
-    saveCart(); renderCart(); renderProducts();
+    saveCart(); renderCart(); updateProductCardControls();
 };
 
 function saveCart(){
@@ -4750,7 +4887,7 @@ window.changeQty = function(id,change){
     saveCart();
 
     renderCart();
-    renderProducts();
+    updateProductCardControls();
 
 };
 
@@ -4763,6 +4900,7 @@ window.removeFromCart = function(id){
     saveCart();
 
     renderCart();
+    updateProductCardControls();
 
     toast(
         "تم حذف المنتج من السلة"
@@ -5294,7 +5432,7 @@ window.checkout = async function(){
         const paymentPlanSelect=document.getElementById("cartPaymentPlan"); if(paymentPlanSelect) paymentPlanSelect.value="full";
         activeInstallmentRequestId=null;activeInstallmentRequestStatus=null;activeInstallmentSignature="";
         if(installmentRequestUnsubscribe){installmentRequestUnsubscribe();installmentRequestUnsubscribe=null;}
-        saveCart(); renderCart(); renderProducts(); closeCart(); toast("يمكنك متابعة حالة طلبك من قسم تتبع الطلب أسفل المتجر");
+        saveCart(); renderCart(); updateProductCardControls(); closeCart(); toast("يمكنك متابعة حالة طلبك من قسم تتبع الطلب أسفل المتجر");
         if(document.getElementById("trackOrderId")){document.getElementById("orderTrackingSection")?.scrollIntoView({behavior:"smooth",block:"center"});window.trackMyOrders();}
     }catch(error){
         console.error(error);
@@ -5403,6 +5541,7 @@ window.openChat = function(){
     // The existing floating support button continues to open the normal private chat.
     if(!ensureCustomer()) return;
     document.getElementById("chatWindow").classList.add("open");
+    if(customer&&!noorCustomerChatLoaded){subscribeChat();noorCustomerChatLoaded=true;}
     window.setCustomerChatMode("private");
 };
 
@@ -5420,10 +5559,20 @@ window.openPublicChatRoom = function(){
 };
 window.closePublicChatRoom = function(){
     const page=document.getElementById("publicChatPage");
-    if(!page) return;
-    page.classList.remove("open");
-    page.setAttribute("aria-hidden","true");
+    if(page){page.classList.remove("open");page.setAttribute("aria-hidden","true");}
     document.body.classList.remove("public-room-open");
+    // Release the room's larger live queries after leaving; the compact 2-message dock stays active.
+    noorPublicChatStopPresence();
+    [
+        ["publicChatUnsubscribe",()=>publicChatUnsubscribe=null],
+        ["publicChatVerifiedUnsubscribe",()=>publicChatVerifiedUnsubscribe=null],
+        ["publicChatReactionUnsubscribe",()=>publicChatReactionUnsubscribe=null],
+        ["publicChatProfilesUnsubscribe",()=>publicChatProfilesUnsubscribe=null],
+        ["publicChatPresenceUnsubscribe",()=>publicChatPresenceUnsubscribe=null],
+        ["publicChatModerationUnsubscribe",()=>publicChatModerationUnsubscribe=null],
+        ["publicChatNotifUnsubscribe",()=>publicChatNotifUnsubscribe=null]
+    ].forEach(([key,reset])=>{try{const unsub=({publicChatUnsubscribe,publicChatVerifiedUnsubscribe,publicChatReactionUnsubscribe,publicChatProfilesUnsubscribe,publicChatPresenceUnsubscribe,publicChatModerationUnsubscribe,publicChatNotifUnsubscribe})[key];if(unsub)unsub();}catch(e){}reset();});
+    if(publicChatEditExpiryTimer){clearTimeout(publicChatEditExpiryTimer);publicChatEditExpiryTimer=null;}
 };
 window.handlePublicRoomKey = function(event){
     if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();window.sendPublicRoomMessage();}
@@ -5435,6 +5584,8 @@ window.closeChat = function(){
     document
         .getElementById("chatWindow")
         .classList.remove("open");
+    if(chatUnsubscribe){chatUnsubscribe();chatUnsubscribe=null;}
+    noorCustomerChatLoaded=false;
 
     document
         .getElementById("stickerPicker")
@@ -5473,7 +5624,7 @@ window.setCustomerChatMode=function(mode){
         // The group feed is live even while the private chat remains available separately.
         subscribePublicChat();
     }else{
-        if(customer){subscribeChat();markAdminMessagesRead();}
+        if(customer){if(!noorCustomerChatLoaded){subscribeChat();noorCustomerChatLoaded=true;}markAdminMessagesRead();}
     }
     updatePublicChatAvailability();
 };
@@ -5662,7 +5813,8 @@ function subscribeChat(){
     const messagesQuery =
         query(
             messagesRef,
-            orderBy("createdAt","asc")
+            orderBy("createdAt","desc"),
+            limit(100)
         );
 
     chatUnsubscribe =
@@ -5670,7 +5822,7 @@ function subscribeChat(){
             messagesQuery,
             snapshot=>{
 
-                const msgs=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+                const msgs=snapshot.docs.map(d=>({id:d.id,...d.data()})).reverse();
                 renderMessages(msgs);
                 const synthetic=msgs.filter(m=>m.sender==="admin").slice(-20).map(m=>({id:"chat_"+m.id,title:"رسالة جديدة من متجر النور",message:m.text||(m.type==="image"?"أرسل لك صورة":"أرسل لك محتوى جديد"),createdAt:m.createdAt,readByCustomer:m.readByCustomer===true,syntheticChat:true}));
                 mergeNotifications(synthetic);
@@ -6054,15 +6206,22 @@ function noorPublicChatRenderNotifications(){
     if(badge){badge.hidden=!unread.length;badge.textContent=String(unread.length);}
     if(panel)panel.innerHTML=mine.length?mine.slice(0,30).map(n=>`<div class="public-chat-notification-item ${n.read?"":"unread"}" onclick='openPublicChatNotification(${JSON.stringify(n.id)})'>${escapeHTML(n.text||"لديك إشعار جديد") }<small>${noorPublicChatMessageTime(n.createdAt)}</small></div>`).join(""):'<div class="public-chat-notification-item">لا توجد إشعارات حتى الآن.</div>';
 }
+function subscribePublicChatDock(){
+    if(publicChatDockUnsubscribe)return;
+    publicChatDockUnsubscribe=onSnapshot(query(collection(db,"publicChatMessages"),orderBy("createdAt","desc"),limit(2)),snap=>{
+        const rows=snap.docs.map(d=>({id:d.id,...d.data()})).reverse();
+        renderPublicChatDock(rows);
+    },err=>console.warn("Public chat dock listener:",err));
+}
+
 subscribePublicChat = function(){
-    if(!publicChatUnsubscribe){publicChatUnsubscribe=onSnapshot(query(collection(db,"publicChatMessages"),orderBy("createdAt","desc"),limit(300)),snap=>{const rows=snap.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>publicChatSortTime(x.createdAt)-publicChatSortTime(y.createdAt));window.__noorPublicChatLatestMessages=rows;renderPublicChatMessages(rows);},err=>{console.error("Public chat listener",err);const el=document.getElementById("publicRoomMessages");if(el)el.innerHTML='<div class="public-room-empty">تعذر تحميل الرسائل. راجع صلاحيات Firestore.</div>';});}
+    if(!publicChatUnsubscribe){publicChatUnsubscribe=onSnapshot(query(collection(db,"publicChatMessages"),orderBy("createdAt","desc"),limit(100)),snap=>{const rows=snap.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>publicChatSortTime(x.createdAt)-publicChatSortTime(y.createdAt));window.__noorPublicChatLatestMessages=rows;renderPublicChatMessages(rows);},err=>{console.error("Public chat listener",err);const el=document.getElementById("publicRoomMessages");if(el)el.innerHTML='<div class="public-room-empty">تعذر تحميل الرسائل. راجع صلاحيات Firestore.</div>';});}
     if(!publicChatVerifiedUnsubscribe){publicChatVerifiedUnsubscribe=onSnapshot(collection(db,"publicChatVerifiedMembers"),snap=>{publicChatVerifiedMembers=new Map(snap.docs.filter(d=>d.data()?.verified===true).map(d=>[d.id,{id:d.id,...d.data()}]));renderPublicChatMessages(window.__noorPublicChatLatestMessages||[]);},err=>console.warn("Verified badge listener",err));}
-    if(!publicChatReactionUnsubscribe){publicChatReactionUnsubscribe=onSnapshot(query(collection(db,"publicChatReactions"),orderBy("updatedAt","desc"),limit(900)),snap=>{publicChatReactionRows=snap.docs.map(d=>({id:d.id,...d.data()}));renderPublicChatMessages(window.__noorPublicChatLatestMessages||[]);},err=>console.warn("Public reactions listener",err));}
-    if(!publicChatProfilesUnsubscribe){publicChatProfilesUnsubscribe=onSnapshot(query(collection(db,"publicChatProfiles"),orderBy("updatedAt","desc"),limit(250)),snap=>{publicChatProfiles=new Map(snap.docs.map(d=>[d.id,{id:d.id,...d.data()}]));renderPublicChatMessages(window.__noorPublicChatLatestMessages||[]);},err=>console.warn("Public profiles listener",err));}
-    if(!publicChatPresenceUnsubscribe){publicChatPresenceUnsubscribe=onSnapshot(query(collection(db,"publicChatPresence"),orderBy("lastSeen","desc"),limit(120)),snap=>{publicChatPresenceRows=snap.docs.map(d=>({id:d.id,...d.data()}));noorPublicChatRenderPresence();},err=>console.warn("Presence listener",err));}
-    if(!publicChatSettingsUnsubscribe){publicChatSettingsUnsubscribe=onSnapshot(doc(db,"settings","store"),snap=>{const d=snap.exists()?snap.data():{};publicChatEnabled=d.publicChatEnabled!==false;publicChatPinnedMessage=d.publicChatPinnedMessage||null;updatePublicChatAvailability();renderPublicChatMessages(window.__noorPublicChatLatestMessages||[]);},err=>console.warn("Chat settings listener",err));}
+    if(!publicChatReactionUnsubscribe){publicChatReactionUnsubscribe=onSnapshot(query(collection(db,"publicChatReactions"),orderBy("updatedAt","desc"),limit(180)),snap=>{publicChatReactionRows=snap.docs.map(d=>({id:d.id,...d.data()}));renderPublicChatMessages(window.__noorPublicChatLatestMessages||[]);},err=>console.warn("Public reactions listener",err));}
+    if(!publicChatProfilesUnsubscribe){publicChatProfilesUnsubscribe=onSnapshot(query(collection(db,"publicChatProfiles"),orderBy("updatedAt","desc"),limit(100)),snap=>{publicChatProfiles=new Map(snap.docs.map(d=>[d.id,{id:d.id,...d.data()}]));renderPublicChatMessages(window.__noorPublicChatLatestMessages||[]);},err=>console.warn("Public profiles listener",err));}
+    if(!publicChatPresenceUnsubscribe){publicChatPresenceUnsubscribe=onSnapshot(query(collection(db,"publicChatPresence"),orderBy("lastSeen","desc"),limit(60)),snap=>{publicChatPresenceRows=snap.docs.map(d=>({id:d.id,...d.data()}));noorPublicChatRenderPresence();},err=>console.warn("Presence listener",err));}
     if(customer?.id&&!publicChatModerationUnsubscribe){publicChatModerationUnsubscribe=onSnapshot(doc(db,"publicChatModeration",customer.id),snap=>{publicChatModerationState=snap.exists()?snap.data():null;updatePublicChatAvailability();const mutedUntil=publicChatModerationState?.mutedUntil?.toDate?publicChatModerationState.mutedUntil.toDate().getTime():Number(publicChatModerationState?.mutedUntil||0);if(mutedUntil>Date.now())setTimeout(updatePublicChatAvailability,Math.min(mutedUntil-Date.now()+100,2147483000));},err=>console.warn("Chat moderation listener",err));}
-    if(customer?.id&&!publicChatNotifUnsubscribe){publicChatNotifUnsubscribe=onSnapshot(query(collection(db,"publicChatNotifications"),where("targetCustomerId","==",customer.id),limit(120)),snap=>{publicChatNotificationRows=snap.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>publicChatSortTime(y.createdAt)-publicChatSortTime(x.createdAt));noorPublicChatRenderNotifications();},err=>console.warn("Chat notifications listener",err));}
+    if(customer?.id&&!publicChatNotifUnsubscribe){publicChatNotifUnsubscribe=onSnapshot(query(collection(db,"publicChatNotifications"),where("targetCustomerId","==",customer.id),limit(50)),snap=>{publicChatNotificationRows=snap.docs.map(d=>({id:d.id,...d.data()})).sort((x,y)=>publicChatSortTime(y.createdAt)-publicChatSortTime(x.createdAt));noorPublicChatRenderNotifications();},err=>console.warn("Chat notifications listener",err));}
 };
 function noorPublicChatStartPresence(){
     if(!customer?.id)return;publicChatRoomIsActive=true;const update=()=>{if(!customer?.id||!publicChatRoomIsActive)return;setDoc(doc(db,"publicChatPresence",customer.id),{customerId:customer.id,name:customer.name||"عضو",isOnline:!document.hidden,isTyping:false,lastSeen:serverTimestamp()},{merge:true}).catch(e=>console.warn("Presence heartbeat",e));};
@@ -6101,7 +6260,22 @@ window.sendPublicRoomMessage=async function(){
     }catch(e){console.error("Send public room message",e);toast(e?.code==="storage/unauthorized"?"رفع الملفات غير مفعّل في صلاحيات Firebase Storage.":"تعذر إرسال الرسالة. راجع اتصال وقواعد Firebase.","error");}
 };
 window.openPublicChatRoom=(function(previous){return function(){if(!ensureCustomer())return;const page=document.getElementById("publicChatPage");if(!page)return;page.classList.add("open");page.setAttribute("aria-hidden","false");document.body.classList.add("public-room-open");subscribePublicChat();noorPublicChatStartPresence();updatePublicChatAvailability();setTimeout(()=>document.getElementById("publicRoomInput")?.focus(),160);};})(window.openPublicChatRoom);
-window.closePublicChatRoom=(function(previous){return function(){noorPublicChatStopPresence();const page=document.getElementById("publicChatPage");if(!page)return;page.classList.remove("open");page.setAttribute("aria-hidden","true");document.body.classList.remove("public-room-open");};})(window.closePublicChatRoom);
+window.closePublicChatRoom=(function(previous){return function(){
+    noorPublicChatStopPresence();
+    const page=document.getElementById("publicChatPage");
+    if(page){page.classList.remove("open");page.setAttribute("aria-hidden","true");}
+    document.body.classList.remove("public-room-open");
+    ["publicChatUnsubscribe","publicChatVerifiedUnsubscribe","publicChatReactionUnsubscribe","publicChatProfilesUnsubscribe","publicChatPresenceUnsubscribe","publicChatModerationUnsubscribe","publicChatNotifUnsubscribe"].forEach(key=>{
+        try{if(window[key]&&typeof window[key]==="function")window[key]();}catch(e){}
+    });
+    if(publicChatUnsubscribe){publicChatUnsubscribe();publicChatUnsubscribe=null;}
+    if(publicChatVerifiedUnsubscribe){publicChatVerifiedUnsubscribe();publicChatVerifiedUnsubscribe=null;}
+    if(publicChatReactionUnsubscribe){publicChatReactionUnsubscribe();publicChatReactionUnsubscribe=null;}
+    if(publicChatProfilesUnsubscribe){publicChatProfilesUnsubscribe();publicChatProfilesUnsubscribe=null;}
+    if(publicChatPresenceUnsubscribe){publicChatPresenceUnsubscribe();publicChatPresenceUnsubscribe=null;}
+    if(publicChatModerationUnsubscribe){publicChatModerationUnsubscribe();publicChatModerationUnsubscribe=null;}
+    if(publicChatNotifUnsubscribe){publicChatNotifUnsubscribe();publicChatNotifUnsubscribe=null;}
+};})(window.closePublicChatRoom);
 window.handlePublicRoomKey=function(event){if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();window.sendPublicRoomMessage();}};
 window.togglePublicChatNotifications=function(){publicChatNotificationsOpen=!publicChatNotificationsOpen;const p=document.getElementById("publicChatNotificationsPanel");if(p)p.hidden=!publicChatNotificationsOpen;};
 window.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=document.getElementById("publicChatProfileModal");if(m&&!m.hidden)closePublicChatProfileModal();}});
@@ -6173,13 +6347,9 @@ function init(){
 
     initNoorMovableWidgets();
 
-    setTimeout(()=>{
-
-        document
-            .getElementById("loader")
-            .classList.add("hide");
-
-    },700);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        document.getElementById("loader")?.classList.add("hide");
+    }));
 
     updateFavoriteCount();
     renderFavoritesSection();
@@ -6200,12 +6370,11 @@ subscribeProducts();
 
     subscribeAds();
     subscribeStoreSettings();
-    subscribePublicChat();
+    subscribePublicChatDock();
 
     if(customer){
-
-        subscribeChat();
-        subscribeNotifications();
+        // Private chat and notifications are loaded only when the customer opens them.
+        // This avoids opening several real-time listeners during the initial store load.
         subscribeCustomerQuoteRequests();
 
     }else{
@@ -6267,6 +6436,50 @@ updateInstallButton();
 if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
     window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(err=>console.warn("Service worker registration failed",err)));
 }
+
+
+/* ================= NOOR LIVE BROADCAST VIEWER V2 ================= */
+let noorLiveState=null,noorLiveStateUnsubscribe=null,noorLiveViewersUnsubscribe=null,noorLiveCommentsUnsubscribe=null;
+let noorLiveViewerPc=null,noorLiveViewerDoc=null,noorLiveViewerDocUnsub=null,noorLiveAdminCandidatesUnsub=null,noorLiveStaleTimer=null;
+let noorLiveViewerSessionId=null,noorLiveViewerJoined=false,noorLiveViewerRemoteStream=null;
+let noorLiveCommentsRows=[],noorLiveCommentsHidden=false,noorLiveCommentLastSentAt=0;
+let noorLiveSpeakerRequestRef=null,noorLiveSpeakerRequestUnsub=null,noorLiveGuestPc=null,noorLiveGuestStream=null,noorLiveGuestCandidatesUnsub=null,noorLiveGuestPendingIce=[],noorLiveGuestRemoteSet=false;
+const noorLiveIceConfig={iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}]};
+function noorLiveSetStatus(text,isError=false){const el=document.getElementById("noorLiveViewerStatus");if(el){el.textContent=text;el.classList.toggle("noor-live-error",!!isError);}}
+function noorLiveUpdateCommentsAccess(){const enabled=noorLiveState?.commentsEnabled!==false;const input=document.getElementById("noorLiveCommentInput"),send=document.querySelector(".noor-live-comment-form button"),note=document.getElementById("noorLiveCommentsDisabledNote");if(input)input.disabled=!enabled;if(send)send.disabled=!enabled;if(note)note.hidden=enabled;if(input)input.placeholder=enabled?"اكتب تعليقًا للجميع...":"التعليقات مغلقة من الإدارة";const area=document.getElementById("noorLiveSpeakerArea"),request=document.getElementById("noorLiveSpeakerRequestBtn");if(area)area.hidden=!noorLiveViewerJoined||noorLiveState?.speakerEnabled===false;if(request)request.disabled=noorLiveState?.speakerEnabled===false;}
+function noorLiveRenderComments(){const list=document.getElementById("noorLiveCommentList"),overlay=document.getElementById("noorLiveCommentOverlay");const rows=noorLiveCommentsRows.slice(-80);if(list){list.innerHTML=rows.length?rows.map(m=>`<div class="noor-live-comment ${m.role==="admin"?"admin":""}"><strong>${window.escapeHTML(m.name||"عضو")}${m.role==="admin"?" ✓":""}</strong>${window.escapeHTML(m.text||"")}</div>`).join(""):'<div class="noor-live-comment">لا توجد تعليقات حتى الآن. كن أول من يشارك!</div>';list.scrollTop=list.scrollHeight;}if(overlay){overlay.innerHTML=(!noorLiveCommentsHidden&&noorLiveState?.commentsEnabled!==false)?rows.slice(-4).map(m=>`<div class="noor-live-overlay-line"><b>${window.escapeHTML(m.name||"عضو")}:</b>${window.escapeHTML(m.text||"")}</div>`).join(""):"";overlay.hidden=!overlay.innerHTML;}}
+function noorLiveSubscribeComments(){if(noorLiveCommentsUnsubscribe)return;noorLiveCommentsUnsubscribe=onSnapshot(query(collection(db,"liveBroadcasts","current","comments"),orderBy("createdAt","desc"),limit(80)),snap=>{noorLiveCommentsRows=snap.docs.map(d=>({id:d.id,...d.data()})).reverse();noorLiveRenderComments();},err=>{console.warn("Live comments",err);noorLiveSetStatus("تعذر تحميل تعليقات البث. راجع صلاحيات Firebase.",true);});}
+window.toggleNoorLiveComments=function(){noorLiveCommentsHidden=!noorLiveCommentsHidden;const box=document.getElementById("noorLiveCommentBox"),button=document.getElementById("noorLiveHideCommentsBtn");if(box)box.classList.toggle("local-hidden",noorLiveCommentsHidden);if(button)button.textContent=noorLiveCommentsHidden?"إظهار التعليقات":"إخفاء التعليقات";noorLiveRenderComments();};
+window.sendNoorLiveComment=async function(){const input=document.getElementById("noorLiveCommentInput"),text=String(input?.value||"").trim();if(!text)return;if(noorLiveState?.commentsEnabled===false)return toast("التعليقات مغلقة من الإدارة","error");if(Date.now()-noorLiveCommentLastSentAt<1800)return toast("انتظر قليلًا قبل إرسال تعليق آخر","error");if(!noorLiveState?.isLive)return toast("انتهى البث المباشر","error");try{noorLiveCommentLastSentAt=Date.now();await addDoc(collection(db,"liveBroadcasts","current","comments"),{text:text.slice(0,300),name:String(customer?.name||"زائر المتجر").slice(0,40),customerId:customer?.id||null,role:"member",createdAt:serverTimestamp()});if(input)input.value="";}catch(e){console.error(e);toast("تعذر إرسال التعليق. راجع صلاحيات Firebase.","error");}};
+function noorLiveUpdateUI(data){noorLiveState=data||null;const banner=document.getElementById("noorLiveBanner"),title=document.getElementById("noorLiveBannerTitle"),modalTitle=document.getElementById("noorLiveViewerTitle"),live=!!(data&&data.isLive===true);if(banner)banner.hidden=!live;if(title)title.textContent=data?.title||"متجر النور مباشر الآن";if(modalTitle)modalTitle.textContent=data?.title||"بث متجر النور المباشر";noorLiveUpdateCommentsAccess();noorLiveRenderComments();if(!live&&noorLiveViewerDoc){noorLiveSetStatus("انتهى البث المباشر.");cleanupNoorLiveViewer(false);}if(!live&&noorLiveSpeakerRequestRef)cleanupNoorLiveGuest(false);}
+function noorLiveSubscribeViewerCount(){
+    if(noorLiveViewersUnsubscribe)return;
+    noorLiveViewersUnsubscribe=onSnapshot(query(collection(db,"liveBroadcasts","current","viewers"),limit(60)),snap=>{
+        const count=snap.docs.filter(d=>["requesting","offered","connected"].includes(d.data().status)).length;
+        const el=document.getElementById("noorLiveViewerCount");if(el)el.textContent=String(count);
+    },err=>console.warn("Live viewer count",err));
+}
+function initNoorLiveViewer(){
+    if(noorLiveStateUnsubscribe)return;
+    noorLiveStateUnsubscribe=onSnapshot(doc(db,"liveBroadcasts","current"),snap=>{
+        const data=snap.exists()?snap.data():null;noorLiveUpdateUI(data);
+        if(noorLiveState?.isLive){
+            const t=noorLiveState.heartbeatAt?.toMillis?noorLiveState.heartbeatAt.toMillis():(noorLiveState.startedAt?.toMillis?noorLiveState.startedAt.toMillis():Date.now());
+            if(Date.now()-t>75000)noorLiveSetStatus("انقطع البث؛ يبدو أن جهاز الإدارة توقف عن الإرسال.",true);
+        }
+    },err=>console.warn("Live broadcast status",err));
+}
+window.openNoorLiveViewer=function(){if(!noorLiveState?.isLive){toast("لا يوجد بث مباشر حاليًا","error");return;}const modal=document.getElementById("noorLiveViewerModal");if(modal)modal.classList.add("open");noorLiveSetStatus("اضغط للانضمام إلى البث.");noorLiveSubscribeComments();noorLiveSubscribeViewerCount();noorLiveUpdateCommentsAccess();const join=document.getElementById("noorLiveJoinButton");if(join){join.hidden=false;join.disabled=false;join.textContent=noorLiveViewerJoined?"أنت تشاهد البث":"انضم للمشاهدة";}};
+async function cleanupNoorLiveGuest(updateRequest=true){try{noorLiveSpeakerRequestUnsub?.();noorLiveGuestCandidatesUnsub?.();}catch(e){}noorLiveSpeakerRequestUnsub=null;noorLiveGuestCandidatesUnsub=null;if(noorLiveGuestPc){try{noorLiveGuestPc.close();}catch(e){}noorLiveGuestPc=null;}if(noorLiveGuestStream){noorLiveGuestStream.getTracks().forEach(t=>t.stop());noorLiveGuestStream=null;}const preview=document.getElementById("noorLiveGuestPreview");if(preview){preview.pause();preview.srcObject=null;preview.style.display="none";}if(updateRequest&&noorLiveSpeakerRequestRef){try{await updateDoc(noorLiveSpeakerRequestRef,{status:"left",leftAt:serverTimestamp()});}catch(e){}}noorLiveSpeakerRequestRef=null;noorLiveGuestPendingIce=[];noorLiveGuestRemoteSet=false;const req=document.getElementById("noorLiveSpeakerRequestBtn"),start=document.getElementById("noorLiveSpeakerStartBtn"),leave=document.getElementById("noorLiveSpeakerLeaveBtn");if(req){req.hidden=false;req.disabled=noorLiveState?.speakerEnabled===false;}if(start)start.hidden=true;if(leave)leave.hidden=true;}
+window.requestNoorLiveSpeaker=async function(){if(!noorLiveViewerJoined)return toast("انضم للمشاهدة أولًا قبل طلب المشاركة","error");if(noorLiveState?.speakerEnabled===false)return toast("المشاركة بالصوت والصورة مغلقة من الإدارة","error");if(noorLiveSpeakerRequestRef)return toast("لديك طلب مشاركة بالفعل");const btn=document.getElementById("noorLiveSpeakerRequestBtn"),status=document.getElementById("noorLiveSpeakerStatus");if(btn)btn.disabled=true;try{noorLiveSpeakerRequestRef=await addDoc(collection(db,"liveBroadcasts","current","speakerRequests"),{name:String(customer?.name||"عضو متجر النور").slice(0,40),customerId:customer?.id||null,viewerSessionId:noorLiveViewerSessionId,status:"pending",requestedAt:serverTimestamp()});if(status)status.textContent="تم إرسال طلبك للإدارة. انتظر الموافقة.";noorLiveSpeakerRequestUnsub=onSnapshot(noorLiveSpeakerRequestRef,async snap=>{if(!snap.exists())return;const d=snap.data();if(d.status==="invited"){if(status)status.textContent="وافقت الإدارة! اضغط للانضمام بالصوت والصورة.";const b=document.getElementById("noorLiveSpeakerStartBtn");if(b)b.hidden=false;}else if(d.status==="connecting"){if(status)status.textContent="جاري توصيل الصوت والصورة بالبث...";}else if(d.status==="connected"){if(status)status.textContent=d.hostMuted?"أنت على البث، لكن الإدارة كتمت صوتك مؤقتًا.":"أنت الآن مشارك في البث المباشر.";const b=document.getElementById("noorLiveSpeakerLeaveBtn");if(b)b.hidden=false;}else if(["rejected","removed","ended"].includes(d.status)){if(status)status.textContent=d.status==="rejected"?"لم تتم الموافقة على طلب المشاركة.":"أنهت الإدارة مشاركتك.";await cleanupNoorLiveGuest(false);}if(d.answer&&!noorLiveGuestRemoteSet&&noorLiveGuestPc){try{await noorLiveGuestPc.setRemoteDescription(new RTCSessionDescription(d.answer));noorLiveGuestRemoteSet=true;for(const c of noorLiveGuestPendingIce.splice(0)){try{await noorLiveGuestPc.addIceCandidate(c);}catch(e){}}}catch(e){console.error("Apply host answer",e);if(status)status.textContent="تعذر إكمال اتصال الصوت والصورة.";}}});toast("تم إرسال طلب المشاركة");}catch(e){console.error(e);if(btn)btn.disabled=false;noorLiveSpeakerRequestRef=null;toast("تعذر إرسال طلب المشاركة. راجع صلاحيات Firebase.","error");}};
+window.startNoorLiveGuestParticipation=async function(){if(!noorLiveSpeakerRequestRef)return;if(noorLiveState?.speakerEnabled===false)return toast("المشاركة متوقفة من الإدارة","error");const btn=document.getElementById("noorLiveSpeakerStartBtn");if(btn){btn.disabled=true;btn.textContent="جاري تشغيل الكاميرا...";}try{if(!window.isSecureContext||!navigator.mediaDevices?.getUserMedia)throw new Error("secure-context");const useCamera=document.getElementById("noorLiveGuestVideoEnabled")?.checked!==false;noorLiveGuestStream=await navigator.mediaDevices.getUserMedia({video:useCamera?{width:{ideal:640},height:{ideal:360},frameRate:{ideal:20,max:24}}:false,audio:{echoCancellation:true,noiseSuppression:true}});const preview=document.getElementById("noorLiveGuestPreview");if(preview){preview.srcObject=noorLiveGuestStream;preview.style.display="block";preview.play().catch(()=>{});}noorLiveGuestPc=new RTCPeerConnection(noorLiveIceConfig);noorLiveGuestStream.getTracks().forEach(track=>noorLiveGuestPc.addTrack(track,noorLiveGuestStream));noorLiveGuestPc.onicecandidate=async ev=>{if(ev.candidate&&noorLiveSpeakerRequestRef)try{await addDoc(collection(noorLiveSpeakerRequestRef,"guestCandidates"),ev.candidate.toJSON());}catch(e){console.warn("Guest ICE",e);}};noorLiveGuestPc.onconnectionstatechange=()=>{const state=noorLiveGuestPc?.connectionState;if(state==="connected"){const status=document.getElementById("noorLiveSpeakerStatus");if(status)status.textContent="أنت الآن على الهواء مباشرة.";const leave=document.getElementById("noorLiveSpeakerLeaveBtn");if(leave)leave.hidden=false;}else if(state==="failed"||state==="disconnected"){const status=document.getElementById("noorLiveSpeakerStatus");if(status)status.textContent="انقطع اتصال المشاركة. جرّب مغادرة المشاركة وطلبها مرة أخرى.";}};let answerApplied=false;noorLiveGuestCandidatesUnsub=onSnapshot(collection(noorLiveSpeakerRequestRef,"adminCandidates"),snap=>{snap.docChanges().forEach(async change=>{if(change.type!=="added")return;const cand=new RTCIceCandidate(change.doc.data());if(noorLiveGuestRemoteSet)try{await noorLiveGuestPc.addIceCandidate(cand);}catch(e){console.warn(e);}else noorLiveGuestPendingIce.push(cand);});},e=>console.warn("Admin guest candidates",e));const offer=await noorLiveGuestPc.createOffer();await noorLiveGuestPc.setLocalDescription(offer);await updateDoc(noorLiveSpeakerRequestRef,{offer:{type:offer.type,sdp:offer.sdp},status:"connecting",connectingAt:serverTimestamp()});if(btn){btn.hidden=true;btn.disabled=false;btn.textContent="انضم بالصوت والصورة";} // process answer through request listener
+}catch(e){console.error("Guest participation",e);if(noorLiveGuestStream)noorLiveGuestStream.getTracks().forEach(t=>t.stop());noorLiveGuestStream=null;if(btn){btn.disabled=false;btn.textContent="حاول الانضمام مرة أخرى";}toast("تعذر تشغيل المشاركة. تأكد من السماح بالكاميرا والميكروفون.","error");}};
+window.leaveNoorLiveGuestParticipation=async function(){await cleanupNoorLiveGuest(true);const status=document.getElementById("noorLiveSpeakerStatus");if(status)status.textContent="غادرت المشاركة بالصوت والصورة.";};
+async function cleanupNoorLiveViewer(updateSession=true){await cleanupNoorLiveGuest(true);try{noorLiveViewerDocUnsub?.();}catch(e){}try{noorLiveAdminCandidatesUnsub?.();}catch(e){}noorLiveViewerDocUnsub=null;noorLiveAdminCandidatesUnsub=null;if(noorLiveViewerPc){try{noorLiveViewerPc.ontrack=null;noorLiveViewerPc.close();}catch(e){}noorLiveViewerPc=null;}if(updateSession&&noorLiveViewerDoc){try{await updateDoc(noorLiveViewerDoc,{status:"left",leftAt:serverTimestamp()});}catch(e){}}const video=document.getElementById("noorLiveViewerVideo");if(video){video.pause();video.srcObject=null;}noorLiveViewerDoc=null;noorLiveViewerSessionId=null;noorLiveViewerJoined=false;noorLiveViewerRemoteStream=null;const join=document.getElementById("noorLiveJoinButton");if(join){join.hidden=false;join.disabled=false;join.textContent="انضم للمشاهدة";}const area=document.getElementById("noorLiveSpeakerArea");if(area)area.hidden=true;return true;}
+window.closeNoorLiveViewer=async function(){const modal=document.getElementById("noorLiveViewerModal");if(modal)modal.classList.remove("open");await cleanupNoorLiveViewer(true);if(noorLiveCommentsUnsubscribe){noorLiveCommentsUnsubscribe();noorLiveCommentsUnsubscribe=null;}if(noorLiveViewersUnsubscribe){noorLiveViewersUnsubscribe();noorLiveViewersUnsubscribe=null;}};
+window.joinNoorLiveBroadcast=async function(){if(noorLiveViewerJoined)return;if(!noorLiveState?.isLive)return toast("انتهى البث أو لم يبدأ بعد","error");const btn=document.getElementById("noorLiveJoinButton");if(btn){btn.disabled=true;btn.textContent="جاري الاتصال...";}noorLiveSetStatus("جاري الاتصال بالبث المباشر...");try{const viewersRef=collection(db,"liveBroadcasts","current","viewers");noorLiveViewerDoc=await addDoc(viewersRef,{name:customer?.name||"مشاهد",customerId:customer?.id||null,status:"requesting",joinedAt:serverTimestamp()});noorLiveViewerSessionId=noorLiveViewerDoc.id;noorLiveViewerPc=new RTCPeerConnection(noorLiveIceConfig);noorLiveViewerRemoteStream=new MediaStream();noorLiveViewerPc.addTransceiver("video",{direction:"recvonly"});noorLiveViewerPc.addTransceiver("audio",{direction:"recvonly"});noorLiveViewerPc.ontrack=event=>{const video=document.getElementById("noorLiveViewerVideo");if(!video)return;const tracks=event.streams?.[0]?.getTracks?.()||[event.track];tracks.forEach(t=>{if(!noorLiveViewerRemoteStream.getTracks().some(x=>x.id===t.id))noorLiveViewerRemoteStream.addTrack(t);});video.srcObject=noorLiveViewerRemoteStream;video.play().catch(()=>noorLiveSetStatus("اضغط تشغيل الفيديو لبدء المشاهدة."));};noorLiveViewerPc.onicecandidate=async event=>{if(event.candidate&&noorLiveViewerDoc){try{await addDoc(collection(noorLiveViewerDoc,"viewerCandidates"),event.candidate.toJSON());}catch(e){console.warn("Viewer ICE candidate",e);}}};noorLiveViewerPc.onconnectionstatechange=()=>{const state=noorLiveViewerPc?.connectionState;if(state==="connected"){noorLiveViewerJoined=true;noorLiveSetStatus("أنت تشاهد البث المباشر الآن.");if(btn){btn.disabled=false;btn.hidden=true;}noorLiveUpdateCommentsAccess();}else if(state==="failed"||state==="disconnected"){noorLiveSetStatus("انقطع الاتصال. أغلق نافذة البث وحاول الانضمام مرة أخرى.",true);if(btn){btn.disabled=false;btn.hidden=false;btn.textContent="إعادة الاتصال";}}};let appliedOffer=false;noorLiveViewerDocUnsub=onSnapshot(noorLiveViewerDoc,async snap=>{if(!snap.exists())return;const d=snap.data();if(d.status==="ended"){noorLiveSetStatus("انتهى البث المباشر.");await cleanupNoorLiveViewer(false);return;}if(d.offer&&!appliedOffer){appliedOffer=true;try{await noorLiveViewerPc.setRemoteDescription(new RTCSessionDescription(d.offer));const answer=await noorLiveViewerPc.createAnswer();await noorLiveViewerPc.setLocalDescription(answer);await updateDoc(noorLiveViewerDoc,{answer:{type:answer.type,sdp:answer.sdp},status:"offered",answeredAt:serverTimestamp()});}catch(e){console.error(e);noorLiveSetStatus("تعذر إعداد الاتصال بالبث. راجع صلاحيات Firestore.",true);}}});noorLiveAdminCandidatesUnsub=onSnapshot(collection(noorLiveViewerDoc,"adminCandidates"),snap=>{snap.docChanges().forEach(async change=>{if(change.type!=="added")return;try{if(noorLiveViewerPc?.remoteDescription)await noorLiveViewerPc.addIceCandidate(new RTCIceCandidate(change.doc.data()));}catch(e){console.warn("Admin ICE candidate",e);}});},err=>console.warn("Admin ICE listener",err));}catch(error){console.error("Join live broadcast",error);await cleanupNoorLiveViewer(false);noorLiveSetStatus("تعذر الاتصال بالبث. راجع صلاحيات Firestore واتصال الشبكة.",true);if(btn){btn.disabled=false;btn.textContent="حاول مرة أخرى";}toast("تعذر الانضمام للبث المباشر","error");}};
+window.addEventListener("pagehide",()=>{cleanupNoorLiveViewer(true);});
+initNoorLiveViewer();
 
 /* ================= EXPOSE ================= */
 
