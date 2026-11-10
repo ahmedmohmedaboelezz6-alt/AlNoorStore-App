@@ -1990,18 +1990,34 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
 .review-purchase-proof{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:4px 8px;border-radius:999px;background:rgba(34,197,94,.1);color:#86efac;border:1px solid rgba(34,197,94,.22);font-size:10px;font-weight:800}
 </style>
 <style id="noor-public-chat-verified-edit-style">
-.public-chat-verified-badge{display:inline-flex;align-items:center;gap:4px;margin-inline-start:6px;padding:2px 7px;border-radius:999px;color:#fff;background:linear-gradient(110deg,#0ea5e9,#2563eb,#7c3aed,#0ea5e9);background-size:220% 100%;font-size:9px;font-weight:1000;vertical-align:middle;box-shadow:0 0 0 1px rgba(147,197,253,.3),0 0 12px rgba(59,130,246,.22);animation:noorVerifiedShine 2.4s linear infinite, noorVerifiedPulse 2.1s ease-in-out infinite}
-.public-chat-verified-badge i{font-size:9px}
-.public-chat-verified-badge.admin{background:linear-gradient(110deg,#b45309,#f59e0b,#fef3c7,#d97706);background-size:220% 100%;color:#201307;box-shadow:0 0 0 1px rgba(253,230,138,.5),0 0 15px rgba(245,158,11,.3)}
-@keyframes noorVerifiedShine{to{background-position:220% 0}}
-@keyframes noorVerifiedPulse{50%{transform:translateY(-1px) scale(1.035);filter:brightness(1.16)}}
+.noor-verified-badge{--seal-color:#1877f2;position:relative;display:inline-flex;vertical-align:middle;align-items:center;justify-content:center;width:23px;height:23px;margin-inline-start:5px;flex:0 0 23px;filter:drop-shadow(0 1px 4px color-mix(in srgb,var(--seal-color) 55%,transparent));animation:noorBadgeGlow 2.2s ease-in-out infinite}
+.noor-verified-seal-spin,.noor-verified-seal-core{position:absolute;inset:0;display:grid;place-items:center}
+.noor-verified-seal-spin{animation:noorBadgeRotate 7s linear infinite}
+.noor-verified-seal-spin svg,.noor-verified-seal-core svg{width:100%;height:100%;display:block}
+.noor-verified-seal-spin svg{color:var(--seal-color);filter:drop-shadow(0 0 2px rgba(255,255,255,.7))}
+.noor-verified-seal-core{inset:18%;animation:noorBadgeCorePulse 2.2s ease-in-out infinite}
+.noor-verified-badge.blue{--seal-color:#1677ef}
+.noor-verified-badge.sky{--seal-color:#39bde9}
+.noor-verified-badge.red{--seal-color:#ed3348}
+.noor-verified-badge.gold{--seal-color:#e7a52b}
+.noor-verified-badge.purple{--seal-color:#a855f7}
+.noor-verified-badge.rainbow{--seal-color:#c026d3;filter:drop-shadow(0 0 5px rgba(192,38,211,.8)) hue-rotate(0deg);animation:noorBadgeRainbow 4s linear infinite,noorBadgeGlow 2.2s ease-in-out infinite}
+.noor-verified-badge.cyan{--seal-color:#06b6d4}
+.noor-verified-badge.dark{--seal-color:#64748b}
+.noor-verified-badge-label{font-size:9px;font-weight:900;color:#bfdbfe;margin-inline-start:3px;vertical-align:middle}
+.public-chat-name .noor-verified-badge{width:21px;height:21px;flex-basis:21px}
+.public-chat-dock-line .noor-verified-badge{width:17px;height:17px;flex-basis:17px;margin-inline-start:3px}
+@keyframes noorBadgeRotate{to{transform:rotate(360deg)}}
+@keyframes noorBadgeGlow{0%,100%{filter:drop-shadow(0 0 2px color-mix(in srgb,var(--seal-color) 45%,transparent))}50%{filter:drop-shadow(0 0 7px color-mix(in srgb,var(--seal-color) 85%,transparent)) brightness(1.16)}}
+@keyframes noorBadgeCorePulse{50%{transform:scale(1.12)}}
+@keyframes noorBadgeRainbow{to{filter:drop-shadow(0 0 7px rgba(192,38,211,.8)) hue-rotate(360deg)}}
 .public-chat-message-actions{display:flex;gap:6px;justify-content:flex-start;margin-top:8px;flex-wrap:wrap}
 .public-chat-message-actions button{border:1px solid rgba(148,163,184,.2);border-radius:8px;padding:4px 8px;background:rgba(15,23,42,.45);color:#cbd5e1;font:inherit;font-size:10px;font-weight:800;cursor:pointer}
 .public-chat-message-actions button.edit{color:#bfdbfe;border-color:rgba(96,165,250,.25)}
 .public-chat-message-actions button.delete{color:#fecaca;border-color:rgba(248,113,113,.25)}
 .public-chat-edited{font-size:9px;color:#94a3b8;margin-inline-start:5px}
 .public-room-compose-hint{font-size:9px;color:#94a3b8;padding:0 4px 5px}
-@media(prefers-reduced-motion:reduce){.public-chat-verified-badge{animation:none}}
+@media(prefers-reduced-motion:reduce){.noor-verified-badge,.noor-verified-seal-spin,.noor-verified-seal-core{animation:none!important}}
 </style>
 
 
@@ -3110,7 +3126,8 @@ let customer = JSON.parse(
 let chatUnsubscribe = null;
 let publicChatUnsubscribe = null;
 let publicChatVerifiedUnsubscribe = null;
-let publicChatVerifiedMemberIds = new Set();
+let publicChatVerifiedMembers = new Map();
+let publicChatAdminBadgeStyle = "gold";
 let publicChatEditExpiryTimer = null;
 const PUBLIC_CHAT_EDIT_WINDOW_MS = 2 * 60 * 1000;
 let currentCustomerChatMode = "private";
@@ -3549,6 +3566,9 @@ function subscribeStoreSettings(){
 
             const data=snap.data();
             storeSettings={...storeSettings,...data};
+            const previousAdminBadgeStyle=publicChatAdminBadgeStyle;
+            publicChatAdminBadgeStyle=noorNormalizeChatBadgeStyle(data.adminVerifiedBadgeStyle||"gold");
+            if(previousAdminBadgeStyle!==publicChatAdminBadgeStyle && window.__noorPublicChatLatestMessages && typeof renderPublicChatMessages==="function") renderPublicChatMessages(window.__noorPublicChatLatestMessages);
             publicChatEnabled=data.publicChatEnabled!==false;
             applySeasonTheme(data.seasonTheme||"normal");
             updatePublicChatAvailability();
@@ -5373,6 +5393,32 @@ window.setCustomerChatMode=function(mode){
     updatePublicChatAvailability();
 };
 
+const NOOR_CHAT_BADGE_STYLES = [
+    {id:"blue",label:"أزرق موثّق"},
+    {id:"sky",label:"سماوي"},
+    {id:"red",label:"أحمر"},
+    {id:"gold",label:"ذهبي"},
+    {id:"purple",label:"بنفسجي نجمة"},
+    {id:"rainbow",label:"متدرّج"},
+    {id:"cyan",label:"فيروزي"},
+    {id:"dark",label:"فضي داكن"}
+];
+function noorNormalizeChatBadgeStyle(style){
+    const value=String(style||"").trim().toLowerCase();
+    return NOOR_CHAT_BADGE_STYLES.some(x=>x.id===value)?value:"blue";
+}
+function noorChatBadgeMarkup(style,kind="member",label=""){
+    const chosen=noorNormalizeChatBadgeStyle(style);
+    const sealPoints="50,3 59,16 74,8 75,25 92,25 84,41 97,50 84,59 92,75 75,75 74,92 59,84 50,97 41,84 26,92 25,75 8,75 16,59 3,50 16,41 8,25 25,25 26,8 41,16";
+    const starPath="M50 3 L61 34 L94 22 L72 50 L96 75 L63 67 L50 97 L37 67 L4 75 L28 50 L6 22 L39 34 Z";
+    const shape=(chosen==="purple"||chosen==="rainbow"||chosen==="dark")?`<path d="${starPath}" fill="currentColor"/>`:`<polygon points="${sealPoints}" fill="currentColor"/>`;
+    const glyph=(chosen==="purple"||chosen==="rainbow")
+      ? '<path d="M50 21 L57 42 L79 43 L62 56 L68 78 L50 65 L32 78 L38 56 L21 43 L43 42 Z" fill="white" stroke="rgba(255,255,255,.7)" stroke-width="2" stroke-linejoin="round"/>'
+      : '<path d="M31 51 L44 64 L70 36" fill="none" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>';
+    const title=kind==="admin"?"شارة الإدارة الرسمية":"شارة عضو موثّق";
+    return `<span class="noor-verified-badge ${chosen} ${kind}" title="${title}" aria-label="${title}"><span class="noor-verified-seal-spin"><svg viewBox="0 0 100 100" aria-hidden="true">${shape}</svg></span><span class="noor-verified-seal-core"><svg viewBox="0 0 100 100" aria-hidden="true">${glyph}</svg></span></span>${label?`<span class="noor-verified-badge-label">${label}</span>`:""}`;
+}
+
 function publicChatTime(value){
     try{return value?.toDate?value.toDate().toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit"}):"";}catch(e){return "";}
 }
@@ -5389,7 +5435,8 @@ function renderPublicChatDock(messages){
     lines.innerHTML=messages.slice(-2).map(m=>{
         const name=m.sender==="admin"?"الإدارة":(m.customerName||"عضو");
         const text=String(m.text||"").replace(/\s+/g," ").trim();
-        const mark=(m.sender==="admin"&&m.adminVerified===true)?'<span class="public-chat-verified-badge admin"><i class="fa-solid fa-check-double"></i></span>':(publicChatVerifiedMemberIds.has(String(m.customerId||""))?'<span class="public-chat-verified-badge"><i class="fa-solid fa-check"></i></span>':"");
+        const memberBadge=publicChatVerifiedMembers.get(String(m.customerId||""));
+        const mark=(m.sender==="admin"&&m.adminVerified===true)?noorChatBadgeMarkup(m.adminBadgeStyle||publicChatAdminBadgeStyle,"admin"):((memberBadge?.verified===true)?noorChatBadgeMarkup(memberBadge.badgeStyle||"blue","member"):"");
         return `<span class="public-chat-dock-line"><strong>${escapeHTML(name)}${mark}:</strong> ${escapeHTML(text)}</span>`;
     }).join("");
 }
@@ -5400,8 +5447,9 @@ function publicChatCanEditMessage(message){
     return created>0 && age>=0 && age<=PUBLIC_CHAT_EDIT_WINDOW_MS;
 }
 function publicChatVerifiedBadge(message){
-    if(message?.sender==="admin"&&message?.adminVerified===true) return '<span class="public-chat-verified-badge admin" title="رسالة رسمية من إدارة المتجر"><i class="fa-solid fa-check-double"></i> إدارة موثّقة</span>';
-    if(message?.customerId && publicChatVerifiedMemberIds.has(String(message.customerId))) return '<span class="public-chat-verified-badge" title="عضو موثّق من إدارة المتجر"><i class="fa-solid fa-check"></i> موثّق</span>';
+    if(message?.sender==="admin"&&message.adminVerified===true) return noorChatBadgeMarkup(message.adminBadgeStyle||publicChatAdminBadgeStyle,"admin");
+    const member=message?.customerId?publicChatVerifiedMembers.get(String(message.customerId)):null;
+    if(member?.verified===true) return noorChatBadgeMarkup(member.badgeStyle||"blue","member");
     return "";
 }
 function renderPublicChatMessages(messages){
@@ -5477,8 +5525,8 @@ function subscribePublicChat(){
     }
     if(!publicChatVerifiedUnsubscribe){
         publicChatVerifiedUnsubscribe=onSnapshot(collection(db,"publicChatVerifiedMembers"),snapshot=>{
-            publicChatVerifiedMemberIds=new Set(snapshot.docs.filter(d=>d.data()?.verified===true).map(d=>d.id));
-            // Refresh visible bubbles when the administrator grants/revokes a badge.
+            publicChatVerifiedMembers=new Map(snapshot.docs.filter(d=>d.data()?.verified===true).map(d=>[d.id,{id:d.id,...d.data()}]));
+            // Refresh visible bubbles when the administrator grants/revokes or restyles a badge.
             renderPublicChatMessages(window.__noorPublicChatLatestMessages||[]);
         },error=>console.warn("Verified members listener:",error));
     }
