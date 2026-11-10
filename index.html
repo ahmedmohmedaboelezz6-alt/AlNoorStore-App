@@ -2064,6 +2064,50 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
 #chatWindow.chat-public-mode .public-chat-messages{display:block;min-height:220px}
 </style>
 
+
+<style id="noor-public-room-and-movable-widgets-v10">
+/* Keep private support and the public members room as two completely separate screens. */
+.chat-mode-tabs,#publicChatMessages,#publicChatPaused{display:none!important}
+.public-chat-page{position:fixed;inset:0;z-index:22000;display:none;direction:rtl;background:radial-gradient(circle at 15% 0%,rgba(16,185,129,.13),transparent 32%),#08111d;color:#f8fafc;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.public-chat-page.open{display:flex;align-items:stretch;justify-content:center}
+.public-chat-page-shell{width:min(780px,100%);height:100%;display:flex;flex-direction:column;background:rgba(10,18,30,.98);border-inline:1px solid rgba(148,163,184,.13);box-shadow:0 0 60px rgba(0,0,0,.35);overflow:hidden}
+.public-room-header{display:flex;align-items:center;gap:12px;padding:14px 16px;min-height:72px;border-bottom:1px solid rgba(148,163,184,.18);background:linear-gradient(135deg,#102b28,#111d2e)}
+.public-room-back{width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.07);color:#fff;font-size:18px}
+.public-room-avatar{width:42px;height:42px;display:grid;place-items:center;flex:0 0 42px;border-radius:14px;background:linear-gradient(135deg,#059669,#0f766e);font-size:18px}
+.public-room-title{min-width:0;flex:1}.public-room-title strong{display:block;font-size:15px;font-weight:900}.public-room-title small{display:block;margin-top:4px;color:#a7f3d0;font-size:10px;font-weight:800}
+.public-room-status{display:inline-flex;align-items:center;gap:6px}.public-room-status:before{content:"";width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 10px rgba(34,197,94,.7)}.public-room-status.off:before{background:#ef4444;box-shadow:none}
+.public-room-messages{flex:1;min-height:0;overflow:auto;padding:16px max(12px,calc((100% - 720px)/2));overscroll-behavior:contain;scroll-behavior:smooth;background:radial-gradient(circle at 85% 8%,rgba(16,185,129,.06),transparent 28%)}
+.public-room-messages .public-chat-line{max-width:min(82%,560px);padding:12px 14px;border-radius:17px;margin:9px 0;background:#172638}
+.public-room-messages .public-chat-line.mine{margin-inline-start:auto;margin-inline-end:0;background:linear-gradient(135deg,rgba(5,150,105,.23),rgba(15,118,110,.2));border-color:rgba(16,185,129,.3)}
+.public-room-empty{margin:auto;text-align:center;padding:26px 18px;color:#9fb0c4}.public-room-empty i{font-size:38px;color:#34d399;margin-bottom:12px}.public-room-empty strong{display:block;color:#fff;margin-bottom:6px}
+.public-room-paused{padding:12px 16px;text-align:center;background:rgba(127,29,29,.2);border-top:1px solid rgba(239,68,68,.22);color:#fecaca;font-size:12px;font-weight:900}.public-room-paused[hidden]{display:none!important}
+.public-room-compose{display:flex;align-items:center;gap:9px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid rgba(148,163,184,.18);background:#0e1928}
+.public-room-compose input{flex:1;min-width:0;height:48px;border:1px solid rgba(148,163,184,.22);border-radius:15px;background:#172638;color:#fff;padding:0 14px;font:inherit;font-size:13px;outline:none}
+.public-room-compose input:focus{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.12)}
+.public-room-compose button{width:48px;height:48px;flex:0 0 48px;border:0;border-radius:15px;background:linear-gradient(135deg,#059669,#0d9488);color:#fff;font-size:17px}
+.public-room-compose button:disabled,.public-room-compose input:disabled{opacity:.45;cursor:not-allowed}
+/* Draggable containers: drag using the small grip; the main action remains a normal tap target. */
+.noor-floating-widget{position:fixed;z-index:18000;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.noor-widget-drag-handle{position:absolute;z-index:3;display:grid;place-items:center;width:27px;height:20px;border:1px solid rgba(255,255,255,.24);border-radius:9px;background:rgba(7,13,22,.78);color:#e2e8f0;font-size:13px;letter-spacing:-3px;cursor:grab;touch-action:none;backdrop-filter:blur(8px)}
+.noor-widget-drag-handle:active{cursor:grabbing;background:#334155}
+.noor-floating-cart{right:18px;bottom:calc(102px + env(safe-area-inset-bottom));width:66px;height:72px}
+.noor-floating-cart .noor-widget-drag-handle{top:-8px;left:-8px}
+.noor-floating-cart-action{position:relative;width:66px;height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid rgba(255,255,255,.28);border-radius:22px;background:linear-gradient(145deg,#f59e0b,#ea580c);color:#fff;box-shadow:0 10px 28px rgba(234,88,12,.35);font:inherit;cursor:pointer}
+.noor-floating-cart-action i{font-size:24px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2))}.noor-floating-cart-action span.label{font-size:10px;font-weight:900}
+.noor-floating-cart-count{position:absolute;top:-7px;right:-6px;min-width:22px;height:22px;padding:0 5px;display:grid;place-items:center;border:2px solid #0d131d;border-radius:999px;background:#ef4444;color:#fff;font-size:10px;font-weight:900}
+.noor-floating-cart-count[hidden]{display:none!important}
+.public-chat-dock{right:16px;bottom:16px;width:min(330px,calc(100vw - 100px));z-index:18001}
+.public-chat-dock .noor-widget-drag-handle{top:5px;left:5px}.public-chat-dock-trigger{padding-top:24px}
+.public-chat-dock-trigger{padding:12px 12px 10px}
+.public-chat-dock-hint{padding-left:28px}
+.noor-floating-widget.is-dragging{transition:none!important;opacity:.92;filter:drop-shadow(0 12px 16px rgba(0,0,0,.32))}
+@media(max-width:600px){
+ .public-chat-page-shell{width:100%;border:0}.public-room-header{padding:11px 12px;min-height:64px}.public-room-title strong{font-size:14px}.public-room-messages{padding:12px 10px}.public-room-messages .public-chat-line{max-width:88%}.public-room-compose{padding:9px 10px calc(10px + env(safe-area-inset-bottom))}.public-room-compose input{height:46px}.public-room-compose button{width:46px;height:46px;flex-basis:46px}
+ .noor-floating-cart{right:12px;bottom:calc(92px + env(safe-area-inset-bottom));width:59px;height:64px}.noor-floating-cart-action{width:59px;height:64px;border-radius:19px}.noor-floating-cart-action i{font-size:22px}.noor-floating-cart-action span.label{font-size:9px}
+ .public-chat-dock{right:10px;bottom:12px;width:min(280px,calc(100vw - 95px));max-width:280px}.public-chat-dock-trigger{padding:10px 9px 8px}
+}
+</style>
+
 </head>
 
 <body>
@@ -2908,8 +2952,20 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
 
 </button>
 
+
+<!-- Floating quick-cart button: movable by dragging its small grip. -->
+<div id="floatingCartWidget" class="noor-floating-widget noor-floating-cart" aria-label="اختصار سلة المشتريات">
+    <button type="button" class="noor-widget-drag-handle" data-drag-target="floatingCartWidget" aria-label="اسحب لتحريك زر السلة" title="اسحب لتحريك زر السلة">⠿</button>
+    <button type="button" class="noor-floating-cart-action" onclick="openCart()" aria-label="فتح سلة المشتريات">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="label">السلة</span>
+        <span id="floatingCartCount" class="noor-floating-cart-count" hidden>0</span>
+    </button>
+</div>
+
 <!-- Public members chat preview, styled like the compact in-game chat feed. -->
-<aside class="public-chat-dock" id="publicChatDock" aria-label="رسائل الأعضاء العامة المباشرة">
+<aside class="public-chat-dock noor-floating-widget" id="publicChatDock" aria-label="رسائل الأعضاء العامة المباشرة">
+    <button type="button" class="noor-widget-drag-handle" data-drag-target="publicChatDock" aria-label="اسحب لتحريك محادثة الأعضاء" title="اسحب لتحريك المحادثة">⠿</button>
     <button type="button" class="public-chat-dock-trigger" onclick="openPublicChatRoom()" aria-label="فتح المحادثة العامة لكل الأعضاء">
         <span class="public-chat-dock-top">
             <span class="public-chat-dock-title"><span class="public-chat-dock-live"></span> محادثة الأعضاء <span id="publicChatDockStatus">مباشر</span></span>
@@ -2920,6 +2976,29 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
         </span>
     </button>
 </aside>
+
+
+<!-- Separate full-screen page for the public members chat. Private support chat stays unchanged. -->
+<section id="publicChatPage" class="public-chat-page" aria-hidden="true" aria-label="محادثة أعضاء متجر النور">
+  <div class="public-chat-page-shell">
+    <header class="public-room-header">
+      <button type="button" class="public-room-back" onclick="closePublicChatRoom()" aria-label="العودة للمتجر"><i class="fa-solid fa-arrow-right"></i></button>
+      <div class="public-room-avatar"><i class="fa-solid fa-users"></i></div>
+      <div class="public-room-title">
+        <strong>محادثة أعضاء متجر النور</strong>
+        <small><span id="publicRoomStatus" class="public-room-status">مباشرة الآن</span> · رسائل عامة لكل الأعضاء</small>
+      </div>
+    </header>
+    <div id="publicRoomMessages" class="public-room-messages" aria-live="polite" aria-relevant="additions">
+      <div class="public-room-empty"><i class="fa-regular fa-comments"></i><strong>أهلًا بك في محادثة الأعضاء</strong><span>اكتب رسالة وشاركها مع أعضاء المتجر.</span></div>
+    </div>
+    <div id="publicRoomPaused" class="public-room-paused" hidden>المحادثة العامة متوقفة حاليًا من إدارة المتجر. يمكنك قراءة الرسائل السابقة.</div>
+    <div class="public-room-compose">
+      <input id="publicRoomInput" type="text" maxlength="500" autocomplete="off" placeholder="اكتب رسالة لكل أعضاء المتجر..." onkeydown="handlePublicRoomKey(event)">
+      <button id="publicRoomSend" type="button" onclick="sendPublicRoomMessage()" aria-label="إرسال الرسالة"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+</section>
 
 <!-- TOAST -->
 <div class="toast-container" id="toastContainer"></div>
@@ -3409,9 +3488,17 @@ function updatePublicChatAvailability(){
     const send=document.querySelector("#chatWindow .chat-send");
     const dock=document.getElementById("publicChatDock");
     const dockStatus=document.getElementById("publicChatDockStatus");
+    const roomStatus=document.getElementById("publicRoomStatus");
+    const roomPaused=document.getElementById("publicRoomPaused");
+    const roomInput=document.getElementById("publicRoomInput");
+    const roomSend=document.getElementById("publicRoomSend");
     if(dot) dot.classList.toggle("off",!publicChatEnabled);
     if(dock){dock.classList.toggle("paused",!publicChatEnabled);dock.setAttribute("aria-label",publicChatEnabled?"رسائل الأعضاء العامة المباشرة":"المحادثة العامة متوقفة مؤقتًا");}
     if(dockStatus) dockStatus.textContent=publicChatEnabled?"مباشر":"متوقفة";
+    if(roomStatus){roomStatus.textContent=publicChatEnabled?"مباشرة الآن":"متوقفة مؤقتًا";roomStatus.classList.toggle("off",!publicChatEnabled);}
+    if(roomPaused) roomPaused.hidden=publicChatEnabled;
+    if(roomInput){roomInput.disabled=!publicChatEnabled;roomInput.placeholder=publicChatEnabled?"اكتب رسالة لكل أعضاء المتجر...":"المحادثة متوقفة مؤقتًا؛ يمكنك قراءة الرسائل فقط";}
+    if(roomSend) roomSend.disabled=!publicChatEnabled;
     if(pause) pause.hidden=!(currentCustomerChatMode==="public"&&!publicChatEnabled);
     if(input&&currentCustomerChatMode==="public"){input.disabled=!publicChatEnabled;input.placeholder=publicChatEnabled?"اكتب رسالة تظهر لكل العملاء...":"المحادثة العامة متوقفة مؤقتًا";}
     if(send&&currentCustomerChatMode==="public") send.disabled=!publicChatEnabled;
@@ -4510,6 +4597,10 @@ function renderCart(){
 
     document.getElementById("cartCount")
         .textContent = count;
+    const floatingCount=document.getElementById("floatingCartCount");
+    if(floatingCount){floatingCount.textContent=count>99?"99+":String(count);floatingCount.hidden=count<=0;}
+    const floatingCart=document.getElementById("floatingCartWidget");
+    if(floatingCart) floatingCart.setAttribute("aria-label",count?`السلة وبها ${count} قطعة`:"سلة المشتريات فارغة");
 
 }
 
@@ -5192,12 +5283,26 @@ window.openChat = function(){
 };
 
 window.openPublicChatRoom = function(){
-    // The separate bottom dock opens the public members' room only.
+    // Public members chat has its own full-screen page; it never switches the private support window.
     if(!ensureCustomer()) return;
-    const win=document.getElementById("chatWindow");
-    if(win) win.classList.add("open");
-    window.setCustomerChatMode("public");
-    setTimeout(()=>document.getElementById("chatInput")?.focus(),180);
+    const page=document.getElementById("publicChatPage");
+    if(!page) return;
+    page.classList.add("open");
+    page.setAttribute("aria-hidden","false");
+    document.body.classList.add("public-room-open");
+    subscribePublicChat();
+    updatePublicChatAvailability();
+    setTimeout(()=>document.getElementById("publicRoomInput")?.focus(),180);
+};
+window.closePublicChatRoom = function(){
+    const page=document.getElementById("publicChatPage");
+    if(!page) return;
+    page.classList.remove("open");
+    page.setAttribute("aria-hidden","true");
+    document.body.classList.remove("public-room-open");
+};
+window.handlePublicRoomKey = function(event){
+    if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();window.sendPublicRoomMessage();}
 };
 
 
@@ -5269,16 +5374,20 @@ function renderPublicChatDock(messages){
     }).join("");
 }
 function renderPublicChatMessages(messages){
-    const container=document.getElementById("publicChatMessages");
+    const legacy=document.getElementById("publicChatMessages");
+    const room=document.getElementById("publicRoomMessages");
     renderPublicChatDock(messages);
-    if(!container) return;
-    if(!messages.length){container.innerHTML='<div class="empty" style="padding:30px 10px"><i class="fa-regular fa-comments"></i><p>ابدأوا أول محادثة عامة في متجر النور 💬</p></div>';return;}
-    container.innerHTML=messages.map(m=>{
+    const html=messages.length?messages.map(m=>{
         const mine=m.sender==="customer"&&m.customerId===customer?.id;
-        const name=m.sender==="admin"?"إدارة متجر النور":(m.customerName||"عميل");
+        const name=m.sender==="admin"?"إدارة متجر النور":(m.customerName||"عضو");
         return `<div class="public-chat-line ${mine?"mine":""}"><div class="public-chat-name">${escapeHTML(name)}</div><div class="public-chat-text">${escapeHTML(m.text||"")}</div><time>${publicChatTime(m.createdAt)}</time></div>`;
-    }).join("");
-    container.scrollTop=container.scrollHeight;
+    }).join(""):'<div class="public-room-empty"><i class="fa-regular fa-comments"></i><strong>لسه مفيش رسائل</strong><span>ابدأ أول محادثة وحيّي أعضاء المتجر 💬</span></div>';
+    if(legacy) legacy.innerHTML=html;
+    if(room){
+        const wasNearBottom=room.scrollHeight-room.clientHeight-room.scrollTop<110;
+        room.innerHTML=html;
+        if(wasNearBottom||document.getElementById("publicChatPage")?.classList.contains("open")) room.scrollTop=room.scrollHeight;
+    }
 }
 function subscribePublicChat(){
     // One persistent listener feeds both the chat window and the fixed preview.
@@ -5304,6 +5413,22 @@ async function sendPublicChatMessage(){
     try{await addDoc(collection(db,"publicChatMessages"),{sender:"customer",customerId:customer.id,customerName:customer.name||"عميل",text,createdAt:serverTimestamp()});}
     catch(error){console.error(error);toast("تعذر إرسال الرسالة العامة. راجع صلاحيات Firebase.","error");}
 }
+
+window.sendPublicRoomMessage = async function(){
+    if(!ensureCustomer()||!await verifyCustomerAllowed()) return;
+    const input=document.getElementById("publicRoomInput");
+    const text=String(input?.value||"").trim().slice(0,500);
+    if(!text) return;
+    try{
+        // Re-check the latest shared setting before each send so a just-paused room stops immediately.
+        const settingsSnapshot=await getDoc(doc(db,"settings","store"));
+        publicChatEnabled=!settingsSnapshot.exists()||settingsSnapshot.data().publicChatEnabled!==false;
+        updatePublicChatAvailability();
+        if(!publicChatEnabled){toast("المحادثة العامة متوقفة حاليًا من إدارة المتجر","error");return;}
+        await addDoc(collection(db,"publicChatMessages"),{sender:"customer",customerId:customer.id,customerName:customer.name||"عضو",text,createdAt:serverTimestamp()});
+        input.value="";
+    }catch(error){console.error(error);toast("تعذر التحقق من حالة المحادثة أو إرسال الرسالة. راجع اتصال وصلاحيات Firebase.","error");}
+};
 
 function subscribeChat(){
 
@@ -5667,7 +5792,70 @@ window.scrollToProducts = function(){
 
 /* ================= INIT ================= */
 
+
+/* Movable quick actions: the shopper can drag the cart and public chat grip anywhere on screen. */
+function initNoorMovableWidgets(){
+    const configs=[
+        {id:"floatingCartWidget",key:"noor_widget_cart_pos_v1"},
+        {id:"publicChatDock",key:"noor_widget_public_chat_pos_v1"}
+    ];
+    configs.forEach(config=>{
+        const widget=document.getElementById(config.id);
+        const handle=widget?.querySelector(`[data-drag-target="${config.id}"]`);
+        if(!widget||!handle||handle.dataset.dragReady==="1") return;
+        handle.dataset.dragReady="1";
+        try{
+            const saved=JSON.parse(localStorage.getItem(config.key)||"null");
+            if(saved&&Number.isFinite(saved.left)&&Number.isFinite(saved.top)){
+                widget.style.left=`${saved.left}px`;widget.style.top=`${saved.top}px`;widget.style.right="auto";widget.style.bottom="auto";
+            }
+        }catch(error){console.warn("Floating widget position restore",error);}
+        let drag=null;
+        handle.addEventListener("pointerdown",event=>{
+            if(event.button!==undefined&&event.button!==0) return;
+            const rect=widget.getBoundingClientRect();
+            drag={pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,left:rect.left,top:rect.top,moved:false};
+            try{handle.setPointerCapture(event.pointerId);}catch(e){}
+            event.preventDefault();event.stopPropagation();
+        });
+        handle.addEventListener("pointermove",event=>{
+            if(!drag||event.pointerId!==drag.pointerId) return;
+            const dx=event.clientX-drag.startX,dy=event.clientY-drag.startY;
+            if(Math.abs(dx)+Math.abs(dy)>3) drag.moved=true;
+            if(!drag.moved) return;
+            const rect=widget.getBoundingClientRect();
+            const maxLeft=Math.max(4,window.innerWidth-rect.width-4);
+            const maxTop=Math.max(4,window.innerHeight-rect.height-4);
+            const left=Math.max(4,Math.min(maxLeft,drag.left+dx));
+            const top=Math.max(4,Math.min(maxTop,drag.top+dy));
+            widget.style.left=`${left}px`;widget.style.top=`${top}px`;widget.style.right="auto";widget.style.bottom="auto";widget.classList.add("is-dragging");
+        });
+        const finish=event=>{
+            if(!drag||event.pointerId!==drag.pointerId) return;
+            if(drag.moved){
+                const rect=widget.getBoundingClientRect();
+                try{localStorage.setItem(config.key,JSON.stringify({left:Math.round(rect.left),top:Math.round(rect.top)}));}catch(e){}
+            }
+            drag=null;widget.classList.remove("is-dragging");
+        };
+        handle.addEventListener("pointerup",finish);
+        handle.addEventListener("pointercancel",finish);
+        handle.addEventListener("lostpointercapture",event=>{if(drag)finish(event);});
+    });
+    // Keep saved floating controls inside the viewport after rotating or resizing the phone.
+    window.addEventListener("resize",()=>configs.forEach(config=>{
+        const widget=document.getElementById(config.id);if(!widget||!widget.style.left||!widget.style.top)return;
+        const rect=widget.getBoundingClientRect();
+        const left=Math.max(4,Math.min(window.innerWidth-rect.width-4,rect.left));
+        const top=Math.max(4,Math.min(window.innerHeight-rect.height-4,rect.top));
+        widget.style.left=`${left}px`;widget.style.top=`${top}px`;
+        try{localStorage.setItem(config.key,JSON.stringify({left,top}));}catch(e){}
+    }));
+}
+
 function init(){
+
+    initNoorMovableWidgets();
 
     setTimeout(()=>{
 
