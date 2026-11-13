@@ -2376,6 +2376,20 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
 </section>
 
 
+<!-- WHEEL OF FORTUNE -->
+<section class="section" id="noorWheelSection" hidden style="padding-top:28px;padding-bottom:28px">
+  <div style="max-width:1050px;margin:auto;background:linear-gradient(135deg,#171d29,#0d121b);border:1px solid rgba(245,158,11,.3);border-radius:24px;padding:22px;box-shadow:0 15px 45px rgba(0,0,0,.25)">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div><div style="color:#fbbf24;font-size:12px;font-weight:800">🎁 سحب وجوائز متجر النور</div><h2 style="font-size:25px;margin:4px 0">عجلة الحظ</h2><p id="noorWheelStatus" style="color:#a8b3c5;font-size:12px">شارك واربح هديتك</p></div>
+      <div id="noorWheelGift" style="width:76px;height:76px;border-radius:16px;overflow:hidden;background:#202938;display:none"><img id="noorWheelGiftImg" alt="صورة الهدية" style="width:100%;height:100%;object-fit:cover"></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;margin-top:16px">
+      <div style="position:relative;width:min(310px,75vw);aspect-ratio:1"><div style="position:absolute;top:-5px;left:50%;transform:translateX(-50%);z-index:2;color:#fbbf24;font-size:30px">▼</div><canvas id="noorWheelCanvas" width="620" height="620" style="width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 10px 22px #0008);transition:transform 5s cubic-bezier(.12,.78,.12,1)"></canvas></div>
+      <div style="min-width:220px;max-width:330px;flex:1"><button id="noorWheelJoinBtn" type="button" class="primary-btn" onclick="joinNoorWheel()" style="width:100%">اشترك في السحب</button><div id="noorWheelEntryMessage" style="font-size:12px;color:#94a3b8;margin-top:10px;line-height:1.8">التسجيل متاح للعملاء المسجلين فقط.</div><div id="noorWheelWinner" style="margin-top:12px;color:#fbbf24;font-weight:800;line-height:1.8"></div></div>
+    </div>
+  </div>
+</section>
+
 <!-- ADS -->
 <section class="section" id="adsSection">
 
@@ -3376,7 +3390,7 @@ window.signInWithGoogle=async function(){
         document.getElementById("nameModal").classList.remove("show");
         document.getElementById("checkoutName").value=name;
         document.getElementById("applicationName").value=name;
-        subscribeCustomerQuoteRequests();watchCustomerBlockState();
+        subscribeCustomerQuoteRequests();watchCustomerBlockState();watchNoorWheelCustomer();updateNoorWheelUI();
         toast("تم تسجيل الدخول بحساب جوجل بنجاح");
     }catch(error){
         console.error("Google sign-in failed",error);
@@ -3455,6 +3469,8 @@ window.saveCustomerName = async function(){
     );
 
     subscribeCustomerQuoteRequests();
+    watchNoorWheelCustomer();
+    updateNoorWheelUI();
 
 };
 
@@ -6343,6 +6359,71 @@ function initNoorMovableWidgets(){
     }));
 }
 
+/* ================= NOOR WHEEL OF FORTUNE ================= */
+let noorWheelSettings={wheelEnabled:false,wheelShowNames:true,wheelPrizes:[],wheelMaxEntries:0,wheelEndsAt:null,wheelGiftImage:"",wheelEntriesCount:0,wheelWinner:null};
+let noorWheelUnsubscribe=null,noorWheelEntryUnsubscribe=null;
+function noorWheelIsOpen(){
+    return noorWheelSettings.wheelEnabled===true &&
+      !(Number(noorWheelSettings.wheelMaxEntries)>0 && Number(noorWheelSettings.wheelEntriesCount||0)>=Number(noorWheelSettings.wheelMaxEntries)) &&
+      !(Number(noorWheelSettings.wheelEndsAt)>0 && Date.now()>=Number(noorWheelSettings.wheelEndsAt));
+}
+function drawNoorWheel(){
+    const canvas=document.getElementById("noorWheelCanvas");if(!canvas)return;
+    const ctx=canvas.getContext("2d"),prizes=(Array.isArray(noorWheelSettings.wheelPrizes)&&noorWheelSettings.wheelPrizes.length?noorWheelSettings.wheelPrizes:[{name:"حظ سعيد",weight:1}]);
+    const colors=["#f97316","#f59e0b","#2563eb","#16a34a","#9333ea","#db2777","#0d9488","#b45309"],cx=310,cy=310,r=292,step=Math.PI*2/prizes.length;
+    ctx.clearRect(0,0,620,620);
+    prizes.forEach((p,i)=>{const a=-Math.PI/2+i*step;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a+step);ctx.closePath();ctx.fillStyle=colors[i%colors.length];ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=5;ctx.stroke();if(noorWheelSettings.wheelShowNames!==false){ctx.save();ctx.translate(cx,cy);ctx.rotate(a+step/2);ctx.textAlign="right";ctx.fillStyle="#fff";ctx.font="bold 23px Cairo, sans-serif";ctx.shadowColor="#000";ctx.shadowBlur=4;let label=String(p.name||"جائزة");if(label.length>18)label=label.slice(0,17)+"…";ctx.fillText(label,r-22,8);ctx.restore();}});
+    ctx.beginPath();ctx.arc(cx,cy,52,0,Math.PI*2);ctx.fillStyle="#111827";ctx.fill();ctx.strokeStyle="#fbbf24";ctx.lineWidth=8;ctx.stroke();ctx.fillStyle="#fbbf24";ctx.font="bold 22px Cairo";ctx.textAlign="center";ctx.fillText("النور",cx,cy+8);
+}
+function updateNoorWheelUI(){
+    const section=document.getElementById("noorWheelSection");if(!section)return;
+    section.hidden=!(noorWheelSettings.wheelEnabled===true || !!noorWheelSettings.wheelWinner);
+    const gift=document.getElementById("noorWheelGift"),img=document.getElementById("noorWheelGiftImg");
+    if(noorWheelSettings.wheelGiftImage&&img){img.src=noorWheelSettings.wheelGiftImage;gift.style.display="block";}else if(gift)gift.style.display="none";
+    const status=document.getElementById("noorWheelStatus"),btn=document.getElementById("noorWheelJoinBtn"),msg=document.getElementById("noorWheelEntryMessage"),open=noorWheelIsOpen();
+    if(status)status.textContent=open?"التسجيل متاح الآن — سارع بالمشاركة":(noorWheelSettings.wheelWinner?"انتهى السحب":"انتهى وقت التسجيل أو اكتمل العدد");
+    if(btn){btn.disabled=!open||!customer;btn.textContent=customer?"اشترك في السحب":"سجّل اسمك أولًا";}
+    if(msg)msg.textContent=!customer?"يجب تسجيل الدخول باسمك في المتجر قبل الاشتراك.":open?"كل عميل يمكنه الاشتراك مرة واحدة فقط.":`عدد المشاركين: ${noorWheelSettings.wheelEntriesCount||0}`;
+    const winner=document.getElementById("noorWheelWinner");if(winner&&noorWheelSettings.wheelWinner)winner.textContent=`🏆 الفائز: ${noorWheelSettings.wheelWinner.name||"مشارك"} — ${noorWheelSettings.wheelWinner.prize||"الجائزة"}`;
+    drawNoorWheel();
+}
+function watchNoorWheelCustomer(){
+    if(noorWheelEntryUnsubscribe){noorWheelEntryUnsubscribe();noorWheelEntryUnsubscribe=null;}
+    if(!customer?.id)return;
+    noorWheelEntryUnsubscribe=onSnapshot(doc(db,"wheelEntries",customer.id),snap=>{
+        const btn=document.getElementById("noorWheelJoinBtn");
+        if(btn&&snap.exists()){btn.disabled=true;btn.textContent="تم تسجيل اشتراكك ✓";const msg=document.getElementById("noorWheelEntryMessage");if(msg)msg.textContent="تم تسجيلك بنجاح. بالتوفيق!";}
+        else updateNoorWheelUI();
+    },e=>console.warn("Wheel entry listener",e));
+}
+function subscribeNoorWheel(){
+    if(noorWheelUnsubscribe)return;
+    noorWheelUnsubscribe=onSnapshot(doc(db,"settings","store"),snap=>{if(snap.exists())noorWheelSettings={...noorWheelSettings,...snap.data()};updateNoorWheelUI();},e=>console.warn("Wheel settings listener",e));
+    watchNoorWheelCustomer();
+}
+setInterval(()=>{if(noorWheelSettings.wheelEndsAt)updateNoorWheelUI();},15000);
+window.joinNoorWheel=async function(){
+    if(!customer?.id){toast("سجّل اسمك في المتجر أولًا","error");return;}
+    const btn=document.getElementById("noorWheelJoinBtn");if(btn)btn.disabled=true;
+    try{
+        const settingsRef=doc(db,"settings","store"),entryRef=doc(db,"wheelEntries",customer.id);
+        await runTransaction(db,async tx=>{
+            const [settingsSnap,entrySnap]=await Promise.all([tx.get(settingsRef),tx.get(entryRef)]);
+            if(entrySnap.exists())throw new Error("already-entered");
+            const d=settingsSnap.exists()?settingsSnap.data():{};
+            if(d.wheelEnabled!==true)throw new Error("closed");
+            const max=Number(d.wheelMaxEntries||0),count=Number(d.wheelEntriesCount||0),ends=Number(d.wheelEndsAt||0);
+            if(max>0&&count>=max)throw new Error("full");
+            if(ends>0&&Date.now()>=ends)throw new Error("expired");
+            tx.set(entryRef,{customerId:customer.id,name:String(customer.name||"عميل").slice(0,60),active:true,createdAt:serverTimestamp()});
+            tx.set(settingsRef,{wheelEntriesCount:count+1},{merge:true});
+        });
+        toast("تم تسجيل اشتراكك في عجلة الحظ 🎉");const msg=document.getElementById("noorWheelEntryMessage");if(msg)msg.textContent="تم تسجيلك بنجاح. بالتوفيق!";if(btn)btn.textContent="تم تسجيل اشتراكك ✓";
+    }catch(e){
+        const errors={"already-entered":"أنت مسجل بالفعل في السحب","closed":"التسجيل مغلق حاليًا","full":"اكتمل عدد المشاركين","expired":"انتهى وقت التسجيل"};
+        toast(errors[e.message]||"تعذر التسجيل. حاول مرة أخرى","error");if(btn)btn.disabled=false;updateNoorWheelUI();
+    }
+};
 function init(){
 
     initNoorMovableWidgets();
@@ -6370,6 +6451,7 @@ subscribeProducts();
 
     subscribeAds();
     subscribeStoreSettings();
+    subscribeNoorWheel();
     subscribePublicChatDock();
 
     if(customer){
