@@ -2741,9 +2741,15 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
     <section class="cart-installment-panel" aria-labelledby="cartInstallmentHeading">
         <h3 id="cartInstallmentHeading"><i class="fa-solid fa-calendar-check"></i> طريقة الدفع والتقسيط</h3>
         <p class="cart-installment-help">اختار الدفع الكامل أو اطلب التقسيط على شهر أو شهرين. طلب التقسيط يذهب للإدارة للموافقة أولًا، ولن يتم اعتماد الطلب أو خصم المخزون قبل الموافقة.</p>
-        <label for="cartPaymentPlan">طريقة الدفع</label>
+        <label for="cartPaymentMethod">وسيلة الدفع</label>
+        <select id="cartPaymentMethod" class="input" onchange="window.noorUpdatePaymentMethod()">
+            <option value="cash_on_delivery">الدفع عند الاستلام</option>
+            <option value="vodafone_cash">الدفع الإلكتروني — Vodafone Cash عبر Paymob</option>
+        </select>
+        <div id="cartPaymobNote" class="cart-installment-notice" aria-live="polite">يمكنك الدفع عند الاستلام أو اختيار فودافون كاش للدفع الإلكتروني.</div>
+        <label for="cartPaymentPlan" style="display:block;margin-top:12px">خطة الدفع</label>
         <select id="cartPaymentPlan" class="input" onchange="window.updateCartInstallmentUI()">
-            <option value="full">دفع كامل عند الاستلام</option>
+            <option value="full">دفع كامل</option>
             <option value="installment-1">تقسيط على شهر واحد</option>
             <option value="installment-2">تقسيط على شهرين</option>
         </select>
@@ -5282,9 +5288,16 @@ window.updateCartInstallmentUI = function(){
     const status = signature && signature === activeInstallmentSignature ? activeInstallmentRequestStatus : null;
     summary.className = "cart-installment-summary";
     if(!months){
-        summary.textContent = `الدفع الكامل عند الاستلام: ${money(total)}.`;
-        if(notice) notice.textContent = "لن يتم إنشاء طلب تقسيط عند اختيار الدفع الكامل.";
-        if(button) button.innerHTML = '<i class="fa-solid fa-check"></i> إتمام الطلب';
+        const online = document.getElementById("cartPaymentMethod")?.value === "vodafone_cash";
+        summary.textContent = online
+            ? `إجمالي الدفع الإلكتروني عبر Vodafone Cash: ${money(total)}.`
+            : `الدفع الكامل عند الاستلام: ${money(total)}.`;
+        if(notice) notice.textContent = online
+            ? "سيتم اعتماد الدفع بعد وصول تأكيد Paymob الموثّق فقط."
+            : "لن يتم إنشاء طلب تقسيط عند اختيار الدفع الكامل.";
+        if(button) button.innerHTML = online
+            ? '<i class="fa-solid fa-lock"></i> الدفع عبر فودافون كاش'
+            : '<i class="fa-solid fa-check"></i> إتمام الطلب';
     }else{
         const monthly = Math.round((total/months)*100)/100;
         if(status === "approved"){
@@ -5309,6 +5322,84 @@ window.updateCartInstallmentUI = function(){
         }
     }
 };
+
+/* ================= PAYMOB / VODAFONE CASH ================= */
+// بعد نشر Cloudflare Worker، استبدل القيمة بعنوان Worker الذي سيظهر لك.
+// لا تضع أي Secret Key أو HMAC Secret هنا.
+window.NOOR_PAYMOB_WORKER_URL = "https://shiny-flower-6cd4.ahmedmohmedaboelezz6.workers.dev";
+
+window.noorUpdatePaymentMethod = function(){
+    const method = document.getElementById("cartPaymentMethod")?.value || "cash_on_delivery";
+    const plan = document.getElementById("cartPaymentPlan");
+    const note = document.getElementById("cartPaymobNote");
+    const online = method === "vodafone_cash";
+    if(plan){
+        if(online && plan.value !== "full") plan.value = "full";
+        plan.disabled = online;
+    }
+    if(note){
+        note.textContent = online
+            ? "سيتم تحويلك إلى صفحة Paymob الآمنة. لا تعتبر العملية مدفوعة إلا بعد تأكيدها تلقائيًا من Paymob. الدفع الإلكتروني متاح حاليًا للشراء الكامل بدون كوبون خصم."
+            : "يمكنك الدفع نقدًا عند استلام الطلب، أو اختيار التقسيط بعد موافقة الإدارة.";
+    }
+    if(typeof window.updateCartInstallmentUI === "function") window.updateCartInstallmentUI();
+};
+
+async function noorStartPaymobPayment(orderId){
+    const workerUrl = String(window.NOOR_PAYMOB_WORKER_URL || "").replace(/\/$/, "");
+    if(!workerUrl || workerUrl.includes("YOUR-CLOUDFLARE-WORKER")){
+        throw new Error("لم يتم ضبط رابط خادم الدفع بعد نشر Cloudflare Worker.");
+    }
+    const response = await fetch(workerUrl + "/api/create-payment", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({orderId})
+    });
+    let data = {};
+    try { data = await response.json(); } catch (_) {}
+    if(!response.ok || !data.checkoutUrl){
+        throw new Error(data.error || "تعذر إنشاء جلسة دفع Paymob.");
+    }
+    window.location.assign(data.checkoutUrl);
+}
+
+function noorWatchReturnedPaymobPayment(){
+    const params = new URLSearchParams(window.location.search);
+    if(params.get("noor_payment") !== "return") return;
+    const orderId = params.get("orderId");
+    if(!orderId || !customer?.id) return;
+    const orderRef = doc(db,"orders",orderId);
+    let unsubscribe = null;
+    let finished = false;
+    const stop = () => { if(unsubscribe) unsubscribe(); unsubscribe=null; };
+    const cleanupUrl = () => {
+        const clean = new URL(window.location.href);
+        clean.searchParams.delete("noor_payment");
+        clean.searchParams.delete("orderId");
+        window.history.replaceState({},"",clean.pathname + clean.search + clean.hash);
+    };
+    unsubscribe = onSnapshot(orderRef, snap => {
+        if(!snap.exists()) return;
+        const order = snap.data();
+        if(order.customerId !== customer.id) return;
+        if(order.paymentStatus === "paid" && !finished){
+            finished = true;
+            cart = [];
+            appliedCoupon = null;
+            saveCart();
+            renderCart();
+            toast("تم تأكيد الدفع الإلكتروني بنجاح ✅");
+            stop();
+            cleanupUrl();
+        } else if(order.paymentStatus === "failed" && !finished){
+            finished = true;
+            toast("لم يكتمل الدفع. يمكنك التواصل مع المتجر أو إعادة المحاولة.","error");
+            stop();
+            cleanupUrl();
+        }
+    }, error => console.warn("Paymob return status listener:",error));
+    setTimeout(() => { if(!finished) stop(); }, 60000);
+}
 
 /* ================= CHECKOUT ================= */
 
@@ -5336,9 +5427,18 @@ window.checkout = async function(){
     const delivery=shippingInfo(subtotal);
     const shippingFee=delivery.configured?delivery.fee:null;
     const total=Math.max(0,subtotal-discount+delivery.fee);
+    const paymentMethod=document.getElementById("cartPaymentMethod")?.value||"cash_on_delivery";
     const planValue=document.getElementById("cartPaymentPlan")?.value||"full";
     const installmentMonths=installmentMonthsFromSelection(planValue);
     const signature=installmentMonths?makeInstallmentSignature(items,total,installmentMonths):"";
+    if(paymentMethod === "vodafone_cash"){
+        if(installmentMonths){toast("الدفع الإلكتروني متاح للشراء الكامل فقط حاليًا.","error");return;}
+        if(discount > 0 || appliedCoupon){toast("الدفع الإلكتروني لا يدعم أكواد الخصم حاليًا. أزل الكوبون أو اختر الدفع عند الاستلام.","error");return;}
+        if(!window.__noorCheckoutZone?.id){toast("اختر منطقة التوصيل أولًا حتى يتم التحقق من إجمالي الطلب.","error");return;}
+        if(!window.NOOR_PAYMOB_WORKER_URL || window.NOOR_PAYMOB_WORKER_URL.includes("YOUR-CLOUDFLARE-WORKER")){
+            toast("خادم الدفع لم يُنشر أو لم يُضبط رابطه بعد.","error");return;
+        }
+    }
     let approvedInstallmentRequest=null;
 
     if(installmentMonths){
@@ -5423,8 +5523,9 @@ window.checkout = async function(){
                 const soldCount=Number(snap.data().soldCount||0);
                 fresh.push({ref,stock,soldCount,qty:item.qty});
             }
-            for(const p of fresh) transaction.update(p.ref,{stock:p.stock-p.qty,soldCount:p.soldCount+p.qty});
+            // لا نخصم المخزون عند إنشاء الطلب؛ الخصم يتم مرة واحدة عند الشحن أو التسليم من لوحة التحكم.
             const orderData={
+                inventoryHandled:false,
                 customerId:customer.id,
                 customerName:checkoutName,
                 items:items.map(item=>({productId:item.id,name:item.name,price:item.price,quantity:item.qty})),
@@ -5436,6 +5537,10 @@ window.checkout = async function(){
                 shippingZoneId:window.__noorCheckoutZone?.id||null,
                 shippingZoneName:window.__noorCheckoutZone?.name||null,
                 status:"new",
+                paymentMethod,
+                paymentProvider:paymentMethod === "vodafone_cash" ? "paymob" : null,
+                paymentStatus:paymentMethod === "vodafone_cash" ? "pending" : "cash_on_delivery",
+                paymentCurrency:paymentMethod === "vodafone_cash" ? "EGP" : null,
                 paymentPlan:installmentMonths?"installment":"full",
                 installmentMonths:installmentMonths||null,
                 installmentMonthlyAmount:installmentMonths?Math.round((total/installmentMonths)*100)/100:null,
@@ -5474,6 +5579,20 @@ window.checkout = async function(){
         });
         customer={...customer,name:checkoutName,phone:checkoutPhone,address:checkoutAddress};
         localStorage.setItem("noor_customer",JSON.stringify(customer));
+        if(paymentMethod === "vodafone_cash"){
+            try{
+                toast("تم حفظ الطلب مؤقتًا. جاري فتح بوابة الدفع الآمنة...");
+                await noorStartPaymobPayment(orderRef.id);
+                return;
+            }catch(paymentStartError){
+                console.error("Paymob start error:",paymentStartError);
+                try{
+                    await updateDoc(orderRef,{paymentStatus:"initialization_failed",paymentInitError:String(paymentStartError.message||"PAYMENT_INIT_FAILED").slice(0,180),updatedAt:serverTimestamp()});
+                }catch(updateError){console.warn("Could not mark Paymob initialization issue:",updateError);}
+                toast("تم حفظ الطلب رقم " + orderRef.id + " لكن تعذر فتح الدفع: " + (paymentStartError.message||"خطأ غير معروف"),"error");
+                return;
+            }
+        }
         const successMessage=installmentMonths
             ? `تم تأكيد طلبك بالتقسيط بعد موافقة الإدارة. القسط ${money(Math.round((total/installmentMonths)*100)/100)} لمدة ${installmentMonths===1?"شهر":"شهرين"}.`
             : "تم إرسال طلبك بنجاح وسيتم مراجعته من متجر النور.";
@@ -5485,6 +5604,8 @@ window.checkout = async function(){
         if(trackOrderEl) trackOrderEl.value=orderRef.id;
         cart=[]; appliedCoupon=null;
         const paymentPlanSelect=document.getElementById("cartPaymentPlan"); if(paymentPlanSelect) paymentPlanSelect.value="full";
+        const paymentMethodSelect=document.getElementById("cartPaymentMethod"); if(paymentMethodSelect) paymentMethodSelect.value="cash_on_delivery";
+        window.noorUpdatePaymentMethod();
         activeInstallmentRequestId=null;activeInstallmentRequestStatus=null;activeInstallmentSignature="";
         if(installmentRequestUnsubscribe){installmentRequestUnsubscribe();installmentRequestUnsubscribe=null;}
         saveCart(); renderCart(); updateProductCardControls(); closeCart(); toast("يمكنك متابعة حالة طلبك من قسم تتبع الطلب أسفل المتجر");
@@ -6744,6 +6865,9 @@ shippingInfo=function(subtotal){
  if(!z)return base;
  return {...base,configured:true,fee:Math.max(0,Number(z.fee)||0),free:Number(z.fee)<=0,zoneId:z.id,zoneName:z.name,zoneRequired:false};
 };
+
+// متابعة حالة الدفع من Firestore عند عودة العميل من صفحة Paymob؛ لا نعتمد على redirect وحده.
+try { noorWatchReturnedPaymobPayment(); } catch(e) { console.warn("Paymob return handler:",e); }
 
 </script>
 
