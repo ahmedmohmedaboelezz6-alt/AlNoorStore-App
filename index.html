@@ -2727,7 +2727,7 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
             <div class="cart-progress-track"><div class="cart-progress-fill" id="cartProgressFill"></div></div>
         </div>
 
-        <div class="cart-loyalty" id="cartLoyalty"><i class="fa-solid fa-award"></i> ستكسب <strong id="loyaltyPoints">0</strong> نقطة ولاء عند إتمام الطلب</div>
+        <div class="cart-loyalty" id="cartLoyalty"><i class="fa-solid fa-award"></i> نقاط متوقعة بانتظار مراجعة الإدارة: <strong id="loyaltyPoints">0</strong> نقطة ولاء عند إتمام الطلب</div>
         <div class="cart-items" id="cartItems"></div>
 
         <div class="checkout-fields">
@@ -5036,6 +5036,14 @@ window.applyDiscount = async function(){
             return;
         }
 
+        const usageLimit=Math.max(0,Number(coupon.usageLimit)||0);
+        if(usageLimit>0&&Number(coupon.usedCount||0)>=usageLimit){
+            appliedCoupon=null;
+            showDiscountMessage("تم استخدام كود الخصم من قبل", "error");
+            updateCartSummary();
+            return;
+        }
+
         const now = Date.now();
 
         if(
@@ -5178,11 +5186,13 @@ function updateCartSummary(){
         if(progressBox) progressBox.classList.toggle("free-shipping-achieved",subtotalValue>=target);
         progressText.innerHTML=target<=0?'استمتع بتجربة التسوق من متجر النور ✨':subtotalValue<=0?`أضف منتجاتك للسلة لتحصل على شحن مجاني عند الوصول إلى <strong>${money(target)}</strong> ✨`:subtotalValue<target?`أضف <strong>${money(target-subtotalValue)}</strong> لتحصل على الشحن المجاني`:'🎉 <strong>مبروك! حصلت على الشحن المجاني</strong>';
     }
+    const subtotal = Number(calculateSubtotal())||0;
     const pointsEl=document.getElementById("loyaltyPoints");
-    if(pointsEl) pointsEl.textContent=Math.floor((Number(calculateSubtotal())||0)/10).toLocaleString("ar-EG");
+    if(pointsEl){
+        const estimatedTotal=Math.max(0,subtotal-(Number(calculateDiscount(subtotal))||0)+(Number(shippingInfo(subtotal)?.fee)||0));
+        pointsEl.textContent=Math.floor(estimatedTotal/Math.max(1,Number(noorPointsPerMoney)||10)).toLocaleString("ar-EG");
+    }
 
-    const subtotal =
-        calculateSubtotal();
 
     const pieceCountElement = document.getElementById("cartPieceCount");
     if(pieceCountElement){
@@ -5196,7 +5206,7 @@ function updateCartSummary(){
     const delivery=shippingInfo(subtotal);
     const total = subtotal - discount + delivery.fee;
     const shippingEl=document.getElementById("shipping");
-    if(shippingEl) shippingEl.textContent=delivery.configured?(delivery.free?"مجاني":money(delivery.fee)):"يحدد عند التأكيد";
+    if(shippingEl) shippingEl.textContent=delivery.zoneRequired?"اختر المنطقة":(delivery.configured?(delivery.free?"مجاني":money(delivery.fee)):"يحدد عند التأكيد");
 
     document.getElementById("subtotal")
         .textContent = money(subtotal);
@@ -5379,13 +5389,30 @@ window.checkout = async function(){
 
     try{
         const orderRef=doc(collection(db,"orders"));
+        const customerRef=doc(db,"customers",customer.id);
+        const earnedPoints=Math.floor(total/Math.max(1,Number(noorPointsPerMoney)||10));
+        const loyaltyRequestRef=doc(collection(db,"loyaltyRequests"));
         const installmentRequestRef=approvedInstallmentRequest?doc(db,"installmentRequests",approvedInstallmentRequest.id):null;
+        const couponRef=appliedCoupon?.id?doc(db,"coupons",appliedCoupon.id):null;
         await runTransaction(db,async transaction=>{
             if(installmentRequestRef){
                 const requestSnap=await transaction.get(installmentRequestRef);
                 if(!requestSnap.exists()||requestSnap.data().status!=="approved"||requestSnap.data().cartSignature!==signature){
                     throw new Error("INSTALLMENT_NOT_APPROVED");
                 }
+            }
+            // Read every document before writing, as required by Firestore transactions.
+            let couponUsage=null;
+            if(couponRef){
+                const couponSnap=await transaction.get(couponRef);
+                if(!couponSnap.exists()) throw new Error("COUPON_INVALID");
+                const liveCoupon=couponSnap.data();
+                if(liveCoupon.active===false) throw new Error("COUPON_INVALID");
+                if(liveCoupon.customerId&&liveCoupon.customerId!==customer.id) throw new Error("COUPON_NOT_YOURS");
+                const usageLimit=Math.max(0,Number(liveCoupon.usageLimit)||0);
+                const usedCount=Math.max(0,Number(liveCoupon.usedCount)||0);
+                if(usageLimit>0&&usedCount>=usageLimit) throw new Error("COUPON_ALREADY_USED");
+                if(usageLimit>0) couponUsage={ref:couponRef,usedCount};
             }
             const fresh=[];
             for(const item of items){
@@ -5417,6 +5444,13 @@ window.checkout = async function(){
                 createdAt:serverTimestamp()
             };
             transaction.set(orderRef,orderData);
+            transaction.set(customerRef,{name:checkoutName,phone:checkoutPhone,address:checkoutAddress,lastSeen:serverTimestamp()},{merge:true});
+            if(earnedPoints>0){
+                transaction.set(loyaltyRequestRef,{customerId:customer.id,customerName:checkoutName,customerPhone:checkoutPhone,orderId:orderRef.id,orderTotal:total,points:earnedPoints,status:"pending",createdAt:serverTimestamp(),reason:`نقاط طلب رقم ${orderRef.id}`});
+            }
+            if(couponUsage){
+                transaction.update(couponUsage.ref,{usedCount:couponUsage.usedCount+1,lastUsedAt:serverTimestamp(),lastUsedBy:customer.id,lastUsedOrderId:orderRef.id});
+            }
             if(installmentMonths){
                 const accountRef=doc(db,"installmentAccounts",orderRef.id);
                 const startDate=new Date();
@@ -5438,17 +5472,13 @@ window.checkout = async function(){
                 transaction.update(installmentRequestRef,{status:"converted",orderId:orderRef.id,convertedAt:serverTimestamp(),updatedAt:serverTimestamp()});
             }
         });
-        const earnedPoints=Math.floor(total/Math.max(1,Number(noorPointsPerMoney)||10));
-        const customerRef=doc(db,"customers",customer.id);
-        await setDoc(customerRef,{name:checkoutName,phone:checkoutPhone,address:checkoutAddress,lastSeen:serverTimestamp(),loyaltyPoints:(Number(customer.loyaltyPoints)||0)+earnedPoints},{merge:true});
-        try{await addDoc(collection(db,"customers",customer.id,"loyaltyHistory"),{amount:earnedPoints,oldBalance:Number(customer.loyaltyPoints)||0,newBalance:(Number(customer.loyaltyPoints)||0)+earnedPoints,reason:`مكافأة طلب رقم ${orderRef.id}`,action:"earn",orderId:orderRef.id,createdAt:serverTimestamp()});}catch(pointsLogError){console.warn("Loyalty history could not be saved",pointsLogError);}
-        customer={...customer,name:checkoutName,phone:checkoutPhone,address:checkoutAddress,loyaltyPoints:(Number(customer.loyaltyPoints)||0)+earnedPoints};
+        customer={...customer,name:checkoutName,phone:checkoutPhone,address:checkoutAddress};
         localStorage.setItem("noor_customer",JSON.stringify(customer));
         const successMessage=installmentMonths
             ? `تم تأكيد طلبك بالتقسيط بعد موافقة الإدارة. القسط ${money(Math.round((total/installmentMonths)*100)/100)} لمدة ${installmentMonths===1?"شهر":"شهرين"}.`
             : "تم إرسال طلبك بنجاح وسيتم مراجعته من متجر النور.";
         await addDoc(collection(db,"notifications"),{targetId:customer.id,target:"customer",title:installmentMonths?"تم تأكيد طلب التقسيط":"تم استلام طلبك",message:successMessage,type:"order",orderId:orderRef.id,createdAt:serverTimestamp()});
-        toast(installmentMonths?"تم إتمام الطلب بعد الموافقة على التقسيط ✅":`تم إرسال طلبك بنجاح ✅ كسبت ${Math.floor(total/10)} نقطة ولاء`);
+        toast(installmentMonths?"تم إتمام الطلب بعد الموافقة على التقسيط ✅":(earnedPoints>0?`تم إرسال طلبك بنجاح ✅ لديك ${earnedPoints} نقطة بانتظار موافقة الإدارة`:`تم إرسال طلبك بنجاح ✅`));
         const trackPhoneEl=document.getElementById("trackPhone");
         const trackOrderEl=document.getElementById("trackOrderId");
         if(trackPhoneEl) trackPhoneEl.value=checkoutPhone;
@@ -5462,6 +5492,8 @@ window.checkout = async function(){
     }catch(error){
         console.error(error);
         if(error.message==="INSTALLMENT_NOT_APPROVED"){toast("موافقة التقسيط لم تعد سارية. تحقق من الحالة في السلة.","error");return;}
+        if(error.message==="COUPON_ALREADY_USED"){appliedCoupon=null;updateCartSummary();showDiscountMessage("تم استخدام كود الخصم من قبل. احذف الكود وجرّب كودًا آخر.","error");return;}
+        if(error.message==="COUPON_INVALID"||error.message==="COUPON_NOT_YOURS"){appliedCoupon=null;updateCartSummary();showDiscountMessage("كود الخصم لم يعد صالحًا لهذا الطلب.","error");return;}
         if(String(error.message||"").startsWith("OUT_OF_STOCK:")){const p=String(error.message).split(":");toast(`الكمية المطلوبة من ${p[1]} غير متوفرة. المتاح: ${p[2]} قطعة`,"error");return;}
         toast("تعذر إرسال الطلب","error");
     }
@@ -6578,8 +6610,8 @@ window.products = products;
 
 
 /* ===== NOOR NEW CUSTOMER FEATURES v1 ===== */
-let noorPointsPerMoney=10;
-onSnapshot(doc(db,'settings','loyalty'),snap=>{if(snap.exists())noorPointsPerMoney=Math.max(1,Number(snap.data().moneyPerPoint)||10);},e=>console.warn('Loyalty settings listener',e));
+var noorPointsPerMoney=10;
+onSnapshot(doc(db,'settings','loyalty'),snap=>{if(snap.exists())noorPointsPerMoney=Math.max(1,Number(snap.data().moneyPerPoint)||10);if(typeof updateCartSummary==='function')updateCartSummary();},e=>console.warn('Loyalty settings listener',e));
 
 const noorExtraStyle=`<style>
 .noor-extra-dock{position:fixed;left:14px;bottom:86px;z-index:9998;display:flex;flex-direction:column;gap:8px}.noor-extra-dock button,.noor-extra-card button{border:0;border-radius:12px;padding:10px 13px;background:#172554;color:#fff;font-weight:800;box-shadow:0 5px 18px #0002;cursor:pointer}.noor-extra-card{position:fixed;inset:50% auto auto 50%;transform:translate(-50%,-50%);width:min(94vw,520px);max-height:82vh;overflow:auto;z-index:10001;background:#fff;color:#172033;border-radius:18px;padding:18px;box-shadow:0 18px 60px #0005;display:none}.noor-extra-card.open{display:block}.noor-extra-card input,.noor-extra-card select,.noor-extra-card textarea{width:100%;padding:11px;border:1px solid #dbe2ea;border-radius:10px;margin:6px 0 12px;box-sizing:border-box}.noor-extra-card h3{margin:0 0 12px}.noor-extra-muted{color:#64748b;font-size:12px}.noor-extra-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.noor-extra-row>*{flex:1}.noor-points-pill{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:12px;padding:10px;margin:8px 0}
@@ -6595,9 +6627,11 @@ window.noorOpenExtra=async function(which){
  const body=document.getElementById('noorExtraBody'),title=document.getElementById('noorExtraTitle');
  if(which==='points'){
   title.textContent='نقاط المكافآت';
-  try{const snap=await getDoc(doc(db,'customers',customer.id));const points=Number(snap.data()?.loyaltyPoints||customer.loyaltyPoints||0);customer.loyaltyPoints=points;localStorage.setItem('noor_customer',JSON.stringify(customer));
+  try{const snap=await getDoc(doc(db,'customers',customer.id));const remoteBalance=snap.exists()?snap.data().loyaltyPoints:null;const points=Math.max(0,Number(remoteBalance??customer.loyaltyPoints??0)||0);customer.loyaltyPoints=points;localStorage.setItem('noor_customer',JSON.stringify(customer));
    const hist=await getDocs(query(collection(db,'customers',customer.id,'loyaltyHistory'),orderBy('createdAt','desc'),limit(20)));
-   body.innerHTML=`<div class="noor-points-pill">رصيدك الحالي: <strong>${points.toLocaleString('ar-EG')} نقطة</strong></div><p class="noor-extra-muted">تُضاف النقاط بعد تأكيد الطلب. استبدال النقاط بخصم يتم بعد موافقة الإدارة.</p><h4>آخر الحركات</h4>${hist.empty?'<p>لا توجد حركات بعد.</p>':hist.docs.map(d=>{const x=d.data();return `<div style="padding:9px;border-bottom:1px solid #eee"><b style="color:${Number(x.amount)>=0?'#15803d':'#b91c1c'}">${Number(x.amount)>0?'+':''}${Number(x.amount||0)} نقطة</b> — ${escapeHTML(x.reason||'تعديل رصيد')}<div class="noor-extra-muted">${x.createdAt?.toDate?x.createdAt.toDate().toLocaleString('ar-EG'):''}</div></div>`}).join('')}`;
+   const pendingSnap=await getDocs(query(collection(db,'loyaltyRequests'),where('customerId','==',customer.id),limit(50)));
+   const pendingPoints=pendingSnap.docs.filter(d=>d.data().status==='pending').reduce((sum,d)=>sum+Math.max(0,Number(d.data().points)||0),0);
+   body.innerHTML=`<div class="noor-points-pill">رصيدك المعتمد: <strong>${points.toLocaleString('ar-EG')} نقطة</strong></div><div class="noor-points-pill" style="background:#eff6ff;border-color:#bfdbfe;color:#1e40af">نقاط بانتظار موافقة الإدارة: <strong>${pendingPoints.toLocaleString('ar-EG')} نقطة</strong></div><p class="noor-extra-muted">لا تُضاف نقاط الطلب إلى رصيدك إلا بعد مراجعة الإدارة والموافقة عليها.</p><h4>آخر الحركات المعتمدة</h4>${hist.empty?'<p>لا توجد حركات بعد.</p>':hist.docs.map(d=>{const x=d.data();return `<div style="padding:9px;border-bottom:1px solid #eee"><b style="color:${Number(x.amount)>=0?'#15803d':'#b91c1c'}">${Number(x.amount)>0?'+':''}${Number(x.amount||0)} نقطة</b> — ${escapeHTML(x.reason||'تعديل رصيد')}<div class="noor-extra-muted">${x.createdAt?.toDate?x.createdAt.toDate().toLocaleString('ar-EG'):''}</div></div>`}).join('')}`;
   }catch(e){console.error(e);body.innerHTML='<p>تعذر تحميل رصيد النقاط. حاول مرة أخرى.</p>';}
  }else{
   title.textContent='طلب إرجاع أو استبدال';
@@ -6606,34 +6640,110 @@ window.noorOpenExtra=async function(which){
  noorExtraModal.classList.add('open');
 };
 window.noorSubmitReturn=async function(){
- const orderId=document.getElementById('noorReturnOrder').value.trim(),phone=document.getElementById('noorReturnPhone').value.trim(),reason=document.getElementById('noorReturnReason').value.trim(),type=document.getElementById('noorReturnType').value;
- if(!orderId||phone.length<7||reason.length<5){toast('أكمل رقم الطلب والهاتف والسبب','error');return;}
- try{const order=await getDoc(doc(db,'orders',orderId));if(!order.exists()){toast('رقم الطلب غير موجود','error');return;}const o=order.data();if(o.customerId!==customer?.id&&String(o.customerPhone||'').replace(/\D/g,'')!==phone.replace(/\D/g,'')){toast('بيانات الطلب لا تطابق العميل','error');return;}
- await addDoc(collection(db,'returnRequests'),{orderId,customerId:customer?.id||o.customerId||null,customerName:o.customerName||customer?.name||'',customerPhone:phone,type,reason,status:'pending',createdAt:serverTimestamp(),updatedAt:serverTimestamp()});toast('تم إرسال طلبك للإدارة للمراجعة');noorCloseExtra();
- }catch(e){console.error(e);toast('تعذر إرسال الطلب. راجع اتصال Firebase','error');}
+ const orderId=document.getElementById('noorReturnOrder')?.value.trim()||'',phone=document.getElementById('noorReturnPhone')?.value.trim()||'',reason=document.getElementById('noorReturnReason')?.value.trim()||'',type=document.getElementById('noorReturnType')?.value||'return';
+ const phoneDigits=phone.replace(/\D/g,'');
+ if(!customer||!orderId||phoneDigits.length<7||reason.length<5){toast('أكمل رقم الطلب والهاتف والسبب','error');return;}
+ if(reason.length>700){toast('اختصر سبب الطلب إلى 700 حرف','error');return;}
+ try{
+  const orderSnap=await getDoc(doc(db,'orders',orderId));
+  if(!orderSnap.exists()){toast('رقم الطلب غير موجود','error');return;}
+  const o=orderSnap.data();
+  const orderCustomerId=String(o.customerId||'');
+  const orderPhone=String(o.customerPhoneNormalized||o.customerPhone||'').replace(/\D/g,'');
+  const customerIdMatches=Boolean(orderCustomerId&&orderCustomerId===String(customer.id));
+  const phoneMatches=Boolean(orderPhone&&orderPhone===phoneDigits);
+  const savedCustomerPhone=String(customer.phone||'').replace(/\D/g,'');
+  const phoneMatchesAccount=!savedCustomerPhone||savedCustomerPhone===phoneDigits;
+  if(!(customerIdMatches||phoneMatches)||!phoneMatches||!phoneMatchesAccount){toast('بيانات الطلب لا تطابق حسابك ورقم الهاتف المسجل','error');return;}
+  const previous=await getDocs(query(collection(db,'returnRequests'),where('orderId','==',orderId)));
+  const hasActive=previous.docs.some(d=>{const x=d.data();return String(x.customerId||'')===String(customer.id)&&['pending','approved'].includes(String(x.status||'pending'));});
+  if(hasActive){toast('يوجد بالفعل طلب إرجاع أو استبدال قيد المراجعة لهذا الطلب','error');return;}
+  await addDoc(collection(db,'returnRequests'),{orderId,customerId:customer.id,customerName:o.customerName||customer.name||'',customerPhone:phoneDigits,type,reason,status:'pending',createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  toast('تم إرسال طلبك للإدارة للمراجعة');noorCloseExtra();
+ }catch(e){console.error(e);toast('تعذر إرسال الطلب. راجع اتصال Firebase وصلاحيات الطلبات','error');}
 };
 window.noorShareWishlist=async function(){
  const ids=Array.isArray(favorites)?favorites:[];const list=products.map(normalizeProduct).filter(p=>ids.includes(p.id));if(!list.length){toast('قائمة المفضلة فارغة','error');return;}
- const text='قائمة الهدايا والمفضلات من متجر النور:\n'+list.map(p=>`${p.name} — ${money(p.price)}`).join('\n')+'\n'+location.href.split('#')[0];
- try{if(navigator.share)await navigator.share({title:'قائمة متجر النور',text});else{await navigator.clipboard.writeText(text);toast('تم نسخ قائمة المفضلات للمشاركة');}}catch(e){if(e?.name!=='AbortError')toast('تعذرت المشاركة','error');}
+ const text='قائمة الهدايا والمفضلات من متجر النور:\n'+list.map((p,i)=>`${i+1}) ${p.name} — ${money(p.price)}`).join('\n')+'\nرابط المتجر: '+location.href.split('#')[0];
+ try{
+  if(navigator.share){await navigator.share({title:'قائمة متجر النور',text});}
+  else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);toast('تم نسخ قائمة المفضلات للمشاركة');}
+  else{const field=document.createElement('textarea');field.value=text;field.setAttribute('readonly','');field.style.position='fixed';field.style.opacity='0';document.body.appendChild(field);field.select();const copied=document.execCommand('copy');field.remove();if(!copied)throw new Error('COPY_FAILED');toast('تم نسخ قائمة المفضلات للمشاركة');}
+ }catch(e){if(e?.name!=='AbortError')toast('تعذرت المشاركة أو النسخ','error');}
 };
 // Restock notifications: subscribe from the product card only when the visitor asks.
-window.noorNotifyRestock=async function(productId){if(!customer){if(typeof ensureCustomer==='function'&&!ensureCustomer())return;}try{const p=products.map(normalizeProduct).find(x=>x.id===productId);if(!p)return;const existing=await getDocs(query(collection(db,'restockAlerts'),where('productId','==',productId),where('customerId','==',customer.id),where('status','==','waiting')));if(!existing.empty){toast('أنت مسجل بالفعل للتنبيه عند توفر المنتج');return;}await addDoc(collection(db,'restockAlerts'),{productId,productName:p.name,customerId:customer.id,customerName:customer.name||'',customerPhone:customer.phone||'',status:'waiting',createdAt:serverTimestamp()});toast('سنبعت لك إشعارًا عند رجوع المنتج للمخزون');}catch(e){console.error(e);toast('تعذر تسجيل التنبيه','error');}};
+window.noorNotifyRestock=async function(productId){if(!customer){if(typeof ensureCustomer==='function'&&!ensureCustomer())return;}try{const p=products.map(normalizeProduct).find(x=>String(x.id)===String(productId));if(!p)return;if(Number(p.stock)>0){toast('المنتج متوفر حاليًا، تقدر تضيفه للسلة');return;}const existing=await getDocs(query(collection(db,'restockAlerts'),where('productId','==',String(productId)),where('customerId','==',customer.id),where('status','==','waiting')));if(!existing.empty){toast('أنت مسجل بالفعل للتنبيه عند توفر المنتج');return;}await addDoc(collection(db,'restockAlerts'),{productId:String(productId),productName:p.name,customerId:customer.id,customerName:customer.name||'',customerPhone:customer.phone||'',status:'waiting',createdAt:serverTimestamp()});toast('تم تسجيل طلب التنبيه. سيصلك إشعار عند رجوع المنتج للمخزون');}catch(e){console.error(e);toast('تعذر تسجيل التنبيه','error');}};
 // Zone-based shipping; admin-managed documents live in shippingZones.
 let noorShippingZones=[];
-const noorZoneWrap=document.createElement('div');noorZoneWrap.id='noorShippingZoneWrap';noorZoneWrap.style.cssText='padding:10px 0';noorZoneWrap.innerHTML='<label for="noorShippingZone" style="display:block;font-weight:800;margin-bottom:5px">منطقة التوصيل</label><select id="noorShippingZone" style="width:100%;padding:11px;border:1px solid #ddd;border-radius:10px"><option value="">اختر منطقة التوصيل</option></select><small id="noorShippingZoneHint">سيتم حساب الشحن حسب المنطقة المحددة.</small>';
-const addressField=document.getElementById('checkoutAddress');if(addressField?.parentElement)addressField.parentElement.insertBefore(noorZoneWrap,addressField);
-try{onSnapshot(query(collection(db,'shippingZones'),where('active','==',true)),snap=>{noorShippingZones=snap.docs.map(d=>({id:d.id,...d.data()}));const sel=document.getElementById('noorShippingZone');if(!sel)return;const old=sel.value;sel.innerHTML='<option value="">اختر منطقة التوصيل</option>'+noorShippingZones.map(z=>`<option value="${escapeHTML(z.id)}">${escapeHTML(z.name)} — ${money(z.fee||0)}</option>`).join('');if(noorShippingZones.some(z=>z.id===old))sel.value=old;});}catch(e){console.warn('Shipping zones listener',e);}
+let noorShippingZonesLoaded=false;
+let noorShippingZonesLoadError=false;
+let noorCheckoutInProgress=false;
+window.__noorCheckoutZone=null;
+const noorZoneWrap=document.createElement('div');
+noorZoneWrap.id='noorShippingZoneWrap';
+noorZoneWrap.style.cssText='padding:10px 0';
+noorZoneWrap.innerHTML='<label for="noorShippingZone" style="display:block;font-weight:800;margin-bottom:5px">منطقة التوصيل</label><select id="noorShippingZone" style="width:100%;padding:11px;border:1px solid #ddd;border-radius:10px"><option value="">جاري تحميل المناطق...</option></select><small id="noorShippingZoneHint" aria-live="polite">سيتم حساب الشحن حسب المنطقة المحددة.</small>';
+const addressField=document.getElementById('checkoutAddress');
+if(addressField?.parentElement)addressField.parentElement.insertBefore(noorZoneWrap,addressField);
+const noorZoneSelect=document.getElementById('noorShippingZone');
+if(noorZoneSelect){
+ noorZoneSelect.addEventListener('change',()=>{
+  const zone=noorShippingZones.find(z=>z.id===noorZoneSelect.value);
+  window.__noorCheckoutZone=zone?{id:zone.id,name:zone.name,fee:Math.max(0,Number(zone.fee)||0)}:null;
+  const hint=document.getElementById('noorShippingZoneHint');
+  if(hint)hint.textContent=zone?`تكلفة التوصيل إلى ${zone.name}: ${money(zone.fee||0)}`:(noorShippingZones.length?'اختر منطقة التوصيل لعرض السعر النهائي.':'سيتم تأكيد تكلفة التوصيل مع الإدارة.');
+  if(typeof updateCartSummary==='function')updateCartSummary();
+ });
+}
+try{
+ onSnapshot(query(collection(db,'shippingZones'),where('active','==',true)),snap=>{
+  noorShippingZones=snap.docs.map(d=>({id:d.id,...d.data()}));
+  noorShippingZonesLoaded=true;
+  const sel=document.getElementById('noorShippingZone');
+  if(sel){
+   const old=sel.value;
+   sel.innerHTML='<option value="">اختر منطقة التوصيل</option>'+noorShippingZones.map(z=>`<option value="${escapeHTML(z.id)}">${escapeHTML(z.name)} — ${money(z.fee||0)}</option>`).join('');
+   if(noorShippingZones.some(z=>z.id===old))sel.value=old;
+   else{sel.value='';window.__noorCheckoutZone=null;}
+   sel.disabled=noorShippingZones.length===0;
+  }
+  const hint=document.getElementById('noorShippingZoneHint');
+  if(hint)hint.textContent=noorShippingZones.length?'اختر منطقتك لعرض تكلفة التوصيل النهائية.':'لم تُحدد مناطق شحن خاصة؛ ستُستخدم تكلفة الشحن العامة.';
+  if(typeof updateCartSummary==='function')updateCartSummary();
+ },e=>{
+  console.warn('Shipping zones listener',e);
+  noorShippingZonesLoaded=true;noorShippingZonesLoadError=true;noorShippingZones=[];window.__noorCheckoutZone=null;
+  const sel=document.getElementById('noorShippingZone');if(sel){sel.innerHTML='<option value="">سيتم تأكيد المنطقة مع الإدارة</option>';sel.disabled=true;}
+  const hint=document.getElementById('noorShippingZoneHint');if(hint)hint.textContent='تعذر تحميل المناطق حاليًا؛ سيتم استخدام إعداد الشحن العام.';
+  if(typeof updateCartSummary==='function')updateCartSummary();
+ });
+}catch(e){console.warn('Shipping zones setup',e);noorShippingZonesLoaded=true;noorShippingZonesLoadError=true;}
 const originalCheckout=window.checkout;
 window.checkout=async function(){
- const sel=document.getElementById('noorShippingZone');const zone=noorShippingZones.find(z=>z.id===sel?.value);
- if(noorShippingZones.length&&!zone){toast('اختر منطقة التوصيل أولاً','error');return;}
- window.__noorCheckoutZone=zone?{id:zone.id,name:zone.name,fee:Number(zone.fee)||0}:null;
- return originalCheckout();
+ if(noorCheckoutInProgress)return;
+ if(!noorShippingZonesLoaded){toast('جاري تحميل مناطق الشحن، حاول مرة أخرى بعد لحظات','error');return;}
+ const sel=document.getElementById('noorShippingZone');
+ const zone=noorShippingZones.find(z=>z.id===sel?.value);
+ if(noorShippingZones.length&&!zone){toast('اختر منطقة التوصيل أولًا حتى يظهر السعر النهائي','error');sel?.focus();return;}
+ window.__noorCheckoutZone=zone?{id:zone.id,name:zone.name,fee:Math.max(0,Number(zone.fee)||0)}:null;
+ noorCheckoutInProgress=true;
+ const button=document.getElementById('checkoutButton');
+ const wasDisabled=button?.disabled;
+ if(button){button.disabled=true;button.dataset.noorBusy='true';button.setAttribute('aria-busy','true');button.textContent='جاري تأكيد الطلب...';}
+ try{return await originalCheckout();}
+ finally{
+  noorCheckoutInProgress=false;
+  if(button){button.disabled=Boolean(wasDisabled);button.removeAttribute('aria-busy');delete button.dataset.noorBusy;button.innerHTML='<i class="fa-solid fa-check"></i> إتمام الطلب';}
+ }
 };
-// Keep selected zone and the actual charged fee on the created order.
 const originalShippingInfo=shippingInfo;
-shippingInfo=function(subtotal){const base=originalShippingInfo(subtotal);const z=window.__noorCheckoutZone;if(!z)return base;return {...base,configured:true,fee:z.fee,zoneId:z.id,zoneName:z.name};};
+shippingInfo=function(subtotal){
+ const base=originalShippingInfo(subtotal);
+ if(noorShippingZones.length&&!window.__noorCheckoutZone)return {...base,configured:true,fee:0,free:false,zoneRequired:true};
+ const z=window.__noorCheckoutZone;
+ if(!z)return base;
+ return {...base,configured:true,fee:Math.max(0,Number(z.fee)||0),free:Number(z.fee)<=0,zoneId:z.id,zoneName:z.name,zoneRequired:false};
+};
 
 </script>
 
