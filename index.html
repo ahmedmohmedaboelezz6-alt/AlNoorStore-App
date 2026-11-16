@@ -5346,21 +5346,20 @@ window.noorUpdatePaymentMethod = function(){
 };
 
 async function noorStartPaymobPayment(orderId){
-    const workerUrl = String(window.NOOR_PAYMOB_WORKER_URL || "").replace(/\/$/, "");
-    if(!workerUrl || workerUrl.includes("YOUR-CLOUDFLARE-WORKER")){
-        throw new Error("لم يتم ضبط رابط خادم الدفع بعد نشر Cloudflare Worker.");
-    }
-    const response = await fetch(workerUrl + "/api/create-payment", {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({orderId})
-    });
-    let data = {};
-    try { data = await response.json(); } catch (_) {}
-    if(!response.ok || !data.checkoutUrl){
-        throw new Error(data.error || "تعذر إنشاء جلسة دفع Paymob.");
-    }
-    window.location.assign(data.checkoutUrl);
+  const workerUrl = String(window.NOOR_PAYMOB_WORKER_URL || "").replace(/\/$/, "");
+  if(!workerUrl || workerUrl.includes("YOUR-CLOUDFLARE-WORKER")){
+    throw new Error("لم يتم ضبط رابط خادم الدفع بعد نشر Cloudflare Worker.");
+  }
+  const response = await fetch(workerUrl + "/api/create-payment", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+   body: JSON.stringify({
+  orderId,
+  amount: Number(document.getElementById("cartGrandTotal")?.textContent?.replace(/[^\d.]/g, "") || 0),
+  customerName: document.getElementById("cartCustomerName")?.value || "عميل متجر النور",
+  customerPhone: document.getElementById("cartCustomerPhone")?.value || ""
+})
+  });
 }
 
 function noorWatchReturnedPaymobPayment(){
