@@ -4239,6 +4239,7 @@ function productCard(product){
                     <button onclick="quickQty('${product.id}',1)">+</button>
                 </div>
 
+                ${Number(product.stock||0)<=0 ? `<button type="button" class="noor-restock-btn" onclick="event.stopPropagation();noorNotifyRestock('${product.id}')" style="position:absolute;bottom:10px;right:10px;z-index:4;background:#172554;color:#fff;border:0;border-radius:9px;padding:7px 10px;font-size:11px">نبّهني عند التوفر</button>` : ""}
                 <div class="product-actions">
 
                     <button
@@ -5020,6 +5021,11 @@ window.applyDiscount = async function(){
         const coupon =
             couponDoc.data();
 
+        if(coupon.customerId && coupon.customerId !== customer?.id){
+            showDiscountMessage("كود الخصم ده مخصص لحساب عميل آخر", "error");
+            return;
+        }
+
         if(coupon.active === false){
 
             showDiscountMessage(
@@ -5400,6 +5406,8 @@ window.checkout = async function(){
                 customerPhone:checkoutPhone,
                 customerPhoneNormalized:checkoutPhone.replace(/\D/g,""),
                 customerAddress:checkoutAddress,
+                shippingZoneId:window.__noorCheckoutZone?.id||null,
+                shippingZoneName:window.__noorCheckoutZone?.name||null,
                 status:"new",
                 paymentPlan:installmentMonths?"installment":"full",
                 installmentMonths:installmentMonths||null,
@@ -5430,9 +5438,10 @@ window.checkout = async function(){
                 transaction.update(installmentRequestRef,{status:"converted",orderId:orderRef.id,convertedAt:serverTimestamp(),updatedAt:serverTimestamp()});
             }
         });
-        const earnedPoints=Math.floor(total/10);
+        const earnedPoints=Math.floor(total/Math.max(1,Number(noorPointsPerMoney)||10));
         const customerRef=doc(db,"customers",customer.id);
         await setDoc(customerRef,{name:checkoutName,phone:checkoutPhone,address:checkoutAddress,lastSeen:serverTimestamp(),loyaltyPoints:(Number(customer.loyaltyPoints)||0)+earnedPoints},{merge:true});
+        try{await addDoc(collection(db,"customers",customer.id,"loyaltyHistory"),{amount:earnedPoints,oldBalance:Number(customer.loyaltyPoints)||0,newBalance:(Number(customer.loyaltyPoints)||0)+earnedPoints,reason:`مكافأة طلب رقم ${orderRef.id}`,action:"earn",orderId:orderRef.id,createdAt:serverTimestamp()});}catch(pointsLogError){console.warn("Loyalty history could not be saved",pointsLogError);}
         customer={...customer,name:checkoutName,phone:checkoutPhone,address:checkoutAddress,loyaltyPoints:(Number(customer.loyaltyPoints)||0)+earnedPoints};
         localStorage.setItem("noor_customer",JSON.stringify(customer));
         const successMessage=installmentMonths
@@ -6566,6 +6575,65 @@ initNoorLiveViewer();
 /* ================= EXPOSE ================= */
 
 window.products = products;
+
+
+/* ===== NOOR NEW CUSTOMER FEATURES v1 ===== */
+let noorPointsPerMoney=10;
+onSnapshot(doc(db,'settings','loyalty'),snap=>{if(snap.exists())noorPointsPerMoney=Math.max(1,Number(snap.data().moneyPerPoint)||10);},e=>console.warn('Loyalty settings listener',e));
+
+const noorExtraStyle=`<style>
+.noor-extra-dock{position:fixed;left:14px;bottom:86px;z-index:9998;display:flex;flex-direction:column;gap:8px}.noor-extra-dock button,.noor-extra-card button{border:0;border-radius:12px;padding:10px 13px;background:#172554;color:#fff;font-weight:800;box-shadow:0 5px 18px #0002;cursor:pointer}.noor-extra-card{position:fixed;inset:50% auto auto 50%;transform:translate(-50%,-50%);width:min(94vw,520px);max-height:82vh;overflow:auto;z-index:10001;background:#fff;color:#172033;border-radius:18px;padding:18px;box-shadow:0 18px 60px #0005;display:none}.noor-extra-card.open{display:block}.noor-extra-card input,.noor-extra-card select,.noor-extra-card textarea{width:100%;padding:11px;border:1px solid #dbe2ea;border-radius:10px;margin:6px 0 12px;box-sizing:border-box}.noor-extra-card h3{margin:0 0 12px}.noor-extra-muted{color:#64748b;font-size:12px}.noor-extra-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.noor-extra-row>*{flex:1}.noor-points-pill{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:12px;padding:10px;margin:8px 0}
+</style>`;
+document.head.insertAdjacentHTML('beforeend',noorExtraStyle);
+const noorExtraDock=document.createElement('div');noorExtraDock.className='noor-extra-dock';noorExtraDock.innerHTML='<button type="button" onclick="noorOpenExtra(\'points\')">⭐ نقاطي</button><button type="button" onclick="noorOpenExtra(\'returns\')">↩️ إرجاع / استبدال</button><button type="button" onclick="noorShareWishlist()">🎁 مشاركة قائمتي</button>';
+document.body.appendChild(noorExtraDock);
+const noorExtraModal=document.createElement('section');noorExtraModal.className='noor-extra-card';noorExtraModal.id='noorExtraModal';noorExtraModal.innerHTML='<div class="noor-extra-row"><h3 id="noorExtraTitle">حسابي</h3><button type="button" style="flex:0 0 auto" onclick="noorCloseExtra()">إغلاق ×</button></div><div id="noorExtraBody"></div>';
+document.body.appendChild(noorExtraModal);
+window.noorCloseExtra=()=>noorExtraModal.classList.remove('open');
+window.noorOpenExtra=async function(which){
+ if(!customer){if(typeof ensureCustomer==='function'&&!ensureCustomer())return;}
+ const body=document.getElementById('noorExtraBody'),title=document.getElementById('noorExtraTitle');
+ if(which==='points'){
+  title.textContent='نقاط المكافآت';
+  try{const snap=await getDoc(doc(db,'customers',customer.id));const points=Number(snap.data()?.loyaltyPoints||customer.loyaltyPoints||0);customer.loyaltyPoints=points;localStorage.setItem('noor_customer',JSON.stringify(customer));
+   const hist=await getDocs(query(collection(db,'customers',customer.id,'loyaltyHistory'),orderBy('createdAt','desc'),limit(20)));
+   body.innerHTML=`<div class="noor-points-pill">رصيدك الحالي: <strong>${points.toLocaleString('ar-EG')} نقطة</strong></div><p class="noor-extra-muted">تُضاف النقاط بعد تأكيد الطلب. استبدال النقاط بخصم يتم بعد موافقة الإدارة.</p><h4>آخر الحركات</h4>${hist.empty?'<p>لا توجد حركات بعد.</p>':hist.docs.map(d=>{const x=d.data();return `<div style="padding:9px;border-bottom:1px solid #eee"><b style="color:${Number(x.amount)>=0?'#15803d':'#b91c1c'}">${Number(x.amount)>0?'+':''}${Number(x.amount||0)} نقطة</b> — ${escapeHTML(x.reason||'تعديل رصيد')}<div class="noor-extra-muted">${x.createdAt?.toDate?x.createdAt.toDate().toLocaleString('ar-EG'):''}</div></div>`}).join('')}`;
+  }catch(e){console.error(e);body.innerHTML='<p>تعذر تحميل رصيد النقاط. حاول مرة أخرى.</p>';}
+ }else{
+  title.textContent='طلب إرجاع أو استبدال';
+  body.innerHTML=`<p class="noor-extra-muted">أدخل رقم الطلب ورقم الهاتف المسجل، ثم اشرح سبب الطلب. الطلب يذهب للإدارة للمراجعة ولا يعني الموافقة التلقائية.</p><label>رقم الطلب</label><input id="noorReturnOrder" placeholder="رقم الطلب"><label>رقم الهاتف</label><input id="noorReturnPhone" value="${escapeHTML(customer?.phone||'')}"><label>نوع الطلب</label><select id="noorReturnType"><option value="return">إرجاع</option><option value="exchange">استبدال</option></select><label>السبب والتفاصيل</label><textarea id="noorReturnReason" rows="3" placeholder="اكتب تفاصيل الطلب"></textarea><button type="button" onclick="noorSubmitReturn()">إرسال الطلب</button>`;
+ }
+ noorExtraModal.classList.add('open');
+};
+window.noorSubmitReturn=async function(){
+ const orderId=document.getElementById('noorReturnOrder').value.trim(),phone=document.getElementById('noorReturnPhone').value.trim(),reason=document.getElementById('noorReturnReason').value.trim(),type=document.getElementById('noorReturnType').value;
+ if(!orderId||phone.length<7||reason.length<5){toast('أكمل رقم الطلب والهاتف والسبب','error');return;}
+ try{const order=await getDoc(doc(db,'orders',orderId));if(!order.exists()){toast('رقم الطلب غير موجود','error');return;}const o=order.data();if(o.customerId!==customer?.id&&String(o.customerPhone||'').replace(/\D/g,'')!==phone.replace(/\D/g,'')){toast('بيانات الطلب لا تطابق العميل','error');return;}
+ await addDoc(collection(db,'returnRequests'),{orderId,customerId:customer?.id||o.customerId||null,customerName:o.customerName||customer?.name||'',customerPhone:phone,type,reason,status:'pending',createdAt:serverTimestamp(),updatedAt:serverTimestamp()});toast('تم إرسال طلبك للإدارة للمراجعة');noorCloseExtra();
+ }catch(e){console.error(e);toast('تعذر إرسال الطلب. راجع اتصال Firebase','error');}
+};
+window.noorShareWishlist=async function(){
+ const ids=Array.isArray(favorites)?favorites:[];const list=products.map(normalizeProduct).filter(p=>ids.includes(p.id));if(!list.length){toast('قائمة المفضلة فارغة','error');return;}
+ const text='قائمة الهدايا والمفضلات من متجر النور:\n'+list.map(p=>`${p.name} — ${money(p.price)}`).join('\n')+'\n'+location.href.split('#')[0];
+ try{if(navigator.share)await navigator.share({title:'قائمة متجر النور',text});else{await navigator.clipboard.writeText(text);toast('تم نسخ قائمة المفضلات للمشاركة');}}catch(e){if(e?.name!=='AbortError')toast('تعذرت المشاركة','error');}
+};
+// Restock notifications: subscribe from the product card only when the visitor asks.
+window.noorNotifyRestock=async function(productId){if(!customer){if(typeof ensureCustomer==='function'&&!ensureCustomer())return;}try{const p=products.map(normalizeProduct).find(x=>x.id===productId);if(!p)return;const existing=await getDocs(query(collection(db,'restockAlerts'),where('productId','==',productId),where('customerId','==',customer.id),where('status','==','waiting')));if(!existing.empty){toast('أنت مسجل بالفعل للتنبيه عند توفر المنتج');return;}await addDoc(collection(db,'restockAlerts'),{productId,productName:p.name,customerId:customer.id,customerName:customer.name||'',customerPhone:customer.phone||'',status:'waiting',createdAt:serverTimestamp()});toast('سنبعت لك إشعارًا عند رجوع المنتج للمخزون');}catch(e){console.error(e);toast('تعذر تسجيل التنبيه','error');}};
+// Zone-based shipping; admin-managed documents live in shippingZones.
+let noorShippingZones=[];
+const noorZoneWrap=document.createElement('div');noorZoneWrap.id='noorShippingZoneWrap';noorZoneWrap.style.cssText='padding:10px 0';noorZoneWrap.innerHTML='<label for="noorShippingZone" style="display:block;font-weight:800;margin-bottom:5px">منطقة التوصيل</label><select id="noorShippingZone" style="width:100%;padding:11px;border:1px solid #ddd;border-radius:10px"><option value="">اختر منطقة التوصيل</option></select><small id="noorShippingZoneHint">سيتم حساب الشحن حسب المنطقة المحددة.</small>';
+const addressField=document.getElementById('checkoutAddress');if(addressField?.parentElement)addressField.parentElement.insertBefore(noorZoneWrap,addressField);
+try{onSnapshot(query(collection(db,'shippingZones'),where('active','==',true)),snap=>{noorShippingZones=snap.docs.map(d=>({id:d.id,...d.data()}));const sel=document.getElementById('noorShippingZone');if(!sel)return;const old=sel.value;sel.innerHTML='<option value="">اختر منطقة التوصيل</option>'+noorShippingZones.map(z=>`<option value="${escapeHTML(z.id)}">${escapeHTML(z.name)} — ${money(z.fee||0)}</option>`).join('');if(noorShippingZones.some(z=>z.id===old))sel.value=old;});}catch(e){console.warn('Shipping zones listener',e);}
+const originalCheckout=window.checkout;
+window.checkout=async function(){
+ const sel=document.getElementById('noorShippingZone');const zone=noorShippingZones.find(z=>z.id===sel?.value);
+ if(noorShippingZones.length&&!zone){toast('اختر منطقة التوصيل أولاً','error');return;}
+ window.__noorCheckoutZone=zone?{id:zone.id,name:zone.name,fee:Number(zone.fee)||0}:null;
+ return originalCheckout();
+};
+// Keep selected zone and the actual charged fee on the created order.
+const originalShippingInfo=shippingInfo;
+shippingInfo=function(subtotal){const base=originalShippingInfo(subtotal);const z=window.__noorCheckoutZone;if(!z)return base;return {...base,configured:true,fee:z.fee,zoneId:z.id,zoneName:z.name};};
 
 </script>
 
