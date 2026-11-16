@@ -5353,12 +5353,10 @@ async function noorStartPaymobPayment(orderId){
   const response = await fetch(workerUrl + "/api/create-payment", {
     method: "POST",
     headers: {"Content-Type":"application/json"},
-   body: JSON.stringify({
-  orderId,
-  amount: Number(document.getElementById("cartGrandTotal")?.textContent?.replace(/[^\d.]/g, "") || 0),
-  customerName: document.getElementById("cartCustomerName")?.value || "عميل متجر النور",
-  customerPhone: document.getElementById("cartCustomerPhone")?.value || ""
-})
+   orderId,
+  amount: Number((document.getElementById("cartGrandTotal") || document.getElementById("cartTotal") || document.querySelector("[id*='Total'], [id*='total']"))?.textContent?.replace(/[^\d.]/g, "") || 0),
+  customerName: (document.getElementById("cartCustomerName") || document.querySelector("input[placeholder*='الاسم']"))?.value || "عميل متجر النور",
+  customerPhone: (document.getElementById("cartCustomerPhone") || document.querySelector("input[type='tel'], input[placeholder*='التليفون']"))?.value || ""
   });
 }
 
