@@ -1721,6 +1721,13 @@ body::after{right:-180px;bottom:5%;background:#f59e0b;animation-delay:-7s}
 @media(max-width:700px){.shop-toolbar{grid-template-columns:1fr 1fr}.shop-toolbar>*:first-child{grid-column:1/-1}.track-fields{grid-template-columns:1fr}.shop-info-grid{grid-template-columns:1fr}.shop-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.shop-action-row{justify-content:stretch}.shop-action-btn{flex:1;justify-content:center;font-size:12px;padding:10px 8px}}
 @media(prefers-reduced-motion:reduce){.shop-action-btn{transition:none}}
 
+
+/* Store identity: uploaded logo + verified mark */
+.brand.has-logo .brand-icon{display:none}
+.store-logo-img{display:none;width:48px;height:48px;object-fit:cover;border-radius:15px;border:1px solid rgba(255,255,255,.16);box-shadow:0 8px 25px rgba(249,115,22,.2)}
+.brand.has-logo .store-logo-img{display:block}
+.store-verified-badge{display:inline-flex;align-items:center;justify-content:center;color:#3b82f6;font-size:16px;margin-inline-start:5px;vertical-align:middle;filter:drop-shadow(0 2px 5px rgba(59,130,246,.25))}
+
 </style>
 <style id="noor-mobile-horizontal-layout">
 /* Mobile redesign: compact horizontal product cards */
@@ -2228,9 +2235,90 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
 @media(prefers-reduced-motion:reduce){.product-card,.product-card *{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
 </style>
+<style id="noor-multistore-store-style">
+.noor-stores-directory[hidden]{display:none!important}
+.noor-stores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.noor-store-card{padding:20px;border:1px solid rgba(249,115,22,.22);border-radius:19px;background:linear-gradient(145deg,rgba(249,115,22,.09),rgba(15,23,42,.72));display:flex;flex-direction:column;gap:9px;min-height:175px}
+.noor-store-card strong{font-size:18px}.noor-store-card p{font-size:12px;color:var(--muted);line-height:1.8;flex:1}.noor-store-card a{align-self:flex-start;padding:9px 14px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--gold));font-size:12px;font-weight:800;color:#fff}
+.chat-page-back{display:none;align-items:center;gap:7px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:#fff;border-radius:11px;padding:9px 12px;font:inherit;font-size:12px;font-weight:800}
+.chat-page-cta{display:inline-flex;align-items:center;gap:9px;margin:12px 0;padding:12px 18px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--gold));color:#fff;font-weight:900}
+html.chat-page-mode,body.chat-page-mode{min-height:100%;background:radial-gradient(circle at 50% 0%,rgba(249,115,22,.12),transparent 45%),#080b12}
+body.chat-page-mode{padding:18px}
+body.chat-page-mode> *:not(#loader):not(#chatWindow):not(#toastContainer):not(#nameModal){display:none!important}
+body.chat-page-mode #chatWindow{display:flex!important;position:relative!important;inset:auto!important;left:auto!important;right:auto!important;bottom:auto!important;width:min(100%,980px)!important;height:min(84vh,820px)!important;min-height:520px!important;margin:4vh auto!important;transform:none!important;opacity:1!important;visibility:visible!important;border-radius:22px!important;z-index:100!important}
+body.chat-page-mode #chatWindow .chat-page-back{display:inline-flex}
+body.chat-page-mode #chatWindow .chat-header .close-btn{display:none!important}
+body.chat-page-mode #nameModal{z-index:20000!important}
+body.chat-page-mode #toastContainer{z-index:30000!important}
+@media(max-width:600px){body.chat-page-mode{padding:7px}body.chat-page-mode #chatWindow{width:100%!important;height:calc(100dvh - 14px)!important;min-height:0!important;margin:0 auto!important;border-radius:15px!important}}
+</style>
+
+<style id="noor-store-choice-landing-style">
+#storeChoiceLanding{display:none;min-height:100vh;width:100%;padding:clamp(22px,5vw,64px);align-items:center;justify-content:center;background:radial-gradient(circle at 12% 12%,rgba(249,115,22,.20),transparent 32%),radial-gradient(circle at 88% 80%,rgba(245,158,11,.13),transparent 34%),#080b12;color:#f8fafc;direction:rtl}
+html.store-choice-mode body>*:not(#storeChoiceLanding):not(#loader){display:none!important}
+html.store-choice-mode #storeChoiceLanding{display:flex!important}
+html.store-choice-mode #loader{display:none!important}
+.noor-choice-shell{width:min(1120px,100%);margin:auto}
+.noor-choice-heading{text-align:center;margin:0 auto 34px;max-width:720px}
+.noor-choice-mark{width:68px;height:68px;border-radius:22px;margin:0 auto 17px;display:grid;place-items:center;background:linear-gradient(135deg,#f97316,#f59e0b);box-shadow:0 15px 45px rgba(249,115,22,.25);font-size:27px}
+.noor-choice-kicker{color:#fdba74;font-size:12px;font-weight:900;letter-spacing:.4px}
+.noor-choice-heading h1{font-size:clamp(28px,4vw,48px);font-weight:900;line-height:1.35;margin:8px 0 10px}
+.noor-choice-heading p{color:#aeb9c9;font-size:14px;line-height:2;margin:0}
+.noor-choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:18px}
+.noor-choice-card{position:relative;min-height:245px;padding:24px;border:1px solid rgba(255,255,255,.1);border-radius:24px;background:linear-gradient(145deg,rgba(24,34,49,.96),rgba(12,18,29,.96));display:flex;flex-direction:column;align-items:flex-start;text-decoration:none;color:#fff;overflow:hidden;transition:transform .22s,border-color .22s,box-shadow .22s}
+.noor-choice-card:before{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:rgba(249,115,22,.10);left:-65px;top:-75px;pointer-events:none}
+.noor-choice-card:hover{transform:translateY(-5px);border-color:rgba(249,115,22,.58);box-shadow:0 22px 55px rgba(0,0,0,.3)}
+.noor-choice-icon{width:62px;height:62px;border-radius:19px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(249,115,22,.2),rgba(245,158,11,.12));border:1px solid rgba(249,115,22,.3);color:#fdba74;font-size:26px;margin-bottom:20px}
+.noor-choice-card strong{font-size:21px;font-weight:900;position:relative}
+.noor-choice-card p{font-size:12px;color:#aeb9c9;line-height:1.9;margin:8px 0 20px;flex:1;position:relative}
+.noor-choice-enter{display:inline-flex;align-items:center;gap:8px;padding:10px 15px;border-radius:12px;background:linear-gradient(135deg,#f97316,#d97706);font-size:12px;font-weight:900;position:relative}
+.noor-choice-main .noor-choice-icon{background:linear-gradient(135deg,#f97316,#f59e0b);color:white}
+.noor-choice-status{margin:18px auto 0;color:#8996a9;text-align:center;font-size:11px;min-height:22px}
+@media(max-width:600px){#storeChoiceLanding{padding:24px 16px}.noor-choice-grid{grid-template-columns:1fr}.noor-choice-card{min-height:205px;padding:20px}.noor-choice-heading{margin-bottom:24px}}
+@media(prefers-reduced-motion:reduce){.noor-choice-card{transition:none}}
+.store-switch-pill{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:0 13px;border:1px solid rgba(249,115,22,.35);border-radius:13px;background:rgba(249,115,22,.10);color:#fed7aa;font:800 11px Cairo,sans-serif;white-space:nowrap}
+.store-switch-pill:hover{background:rgba(249,115,22,.18)}
+</style>
+<script>
+try{
+  const p=new URLSearchParams(location.search);
+  const hasStore=p.has('store')||p.has('storeId')||p.has('store_id');
+  if(!hasStore&&p.get('view')!=='chat'){
+    document.documentElement.classList.add('store-choice-mode');
+    document.title='اختيار المتجر | متاجر النور';
+  }
+}catch(e){console.warn('Store landing route:',e)}
+</script>
+
 </head>
 
+
 <body>
+<main id="storeChoiceLanding" aria-labelledby="storeChoiceTitle">
+  <div class="noor-choice-shell">
+    <header class="noor-choice-heading">
+      <div class="noor-choice-mark"><i class="fa-solid fa-store"></i></div>
+      <div class="noor-choice-kicker">منصة متاجر النور</div>
+      <h1 id="storeChoiceTitle">اختار المتجر اللي تحب تدخله</h1>
+      <p>كل متجر له منتجاته وطلباته وخدمة العملاء الخاصة به. اختار المتجر المناسب وابدأ التسوق.</p>
+    </header>
+    <section class="noor-choice-grid" id="storeChoiceGrid" aria-live="polite">
+      <a class="noor-choice-card noor-choice-main" href="./index.html?store=main">
+        <span class="noor-choice-icon"><i class="fa-solid fa-crown"></i></span>
+        <strong>متجر النور</strong>
+        <p>المتجر الأساسي ومنتجاته الأصلية وخدماته المعتادة.</p>
+        <span class="noor-choice-enter">دخول متجر النور <i class="fa-solid fa-arrow-left"></i></span>
+      </a>
+      <div class="noor-choice-card" aria-busy="true">
+        <span class="noor-choice-icon"><i class="fa-solid fa-store"></i></span>
+        <strong>جاري تحميل المتاجر...</strong>
+        <p>سيتم عرض المتاجر التي تمت إضافتها من لوحة التحكم هنا.</p>
+      </div>
+    </section>
+    <div class="noor-choice-status" id="storeChoiceStatus" role="status">اختر متجرًا للانتقال إلى صفحته المستقلة.</div>
+  </div>
+</main>
+
 <!-- STORE CLOSED OVERLAY -->
 <div class="store-closed-screen" id="storeClosedScreen" hidden>
     <div class="store-closed-box">
@@ -2287,6 +2375,10 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
     <div class="nav-actions">
 
         <span class="season-theme-badge" id="seasonThemeBadge" hidden></span>
+
+        <button class="store-switch-pill" type="button" onclick="window.noorBackToStoreChoice()" title="الرجوع إلى شاشة اختيار المتجر">
+            <i class="fa-solid fa-shop"></i><span>كل المتاجر</span>
+        </button>
 
         <button class="icon-btn" onclick="scrollToProducts()">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -2627,6 +2719,11 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
   <div id="storeContactLinks" class="shop-contact-links"></div>
 </section>
 
+<section class="section noor-stores-directory" id="storesDirectorySection" hidden>
+    <div class="section-head"><div><div class="section-title">اكتشف <span>متاجرنا</span></div><div class="section-subtitle">متاجر مستقلة، لكل متجر منتجاته وطلباته وخدمة عملائه الخاصة.</div></div></div>
+    <div class="noor-stores-grid" id="storesDirectoryGrid"><div class="empty">جاري تحميل المتاجر...</div></div>
+</section>
+
 <footer>
 
     <div class="footer-grid">
@@ -2653,7 +2750,8 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
                 <li><a href="#productsSection">المنتجات</a></li>
                 <li><a href="#adsSection">العروض</a></li>
                 <li onclick="openCart()">السلة</li>
-                <li onclick="openChat()">خدمة العملاء</li>
+                <li><a href="#" onclick="event.preventDefault();openDedicatedChatPage()">الدردشة</a></li>
+                <li onclick="openChat()">نافذة خدمة العملاء</li>
             </ul>
 
         </div>
@@ -2994,9 +3092,11 @@ body.season-theme-eid .season-theme-badge{color:#fde68a;background:rgba(13,148,1
 
         </div>
 
+        <button type="button" class="chat-page-back" id="chatPageBack" onclick="noorBackFromChat()"><i class="fa-solid fa-arrow-right"></i> العودة للمتجر</button>
+
         <button
             class="close-btn"
-            onclick="closeChat()">
+            onclick="noorHandleChatClose()">
 
             <i class="fa-solid fa-xmark"></i>
 
@@ -3200,8 +3300,8 @@ import {
     initializeFirestore,
     persistentLocalCache,
     persistentMultipleTabManager,
-    collection,
-    doc,
+    collection as firestoreCollection,
+    doc as firestoreDoc,
     addDoc,
     setDoc,
     getDoc,
@@ -3254,6 +3354,46 @@ try {
 
 const noorChatStorage = getStorage(app);
 
+/* ================= MULTI-STORE / CUSTOMER SESSION ISOLATION ================= */
+const noorUrlParams = new URLSearchParams(location.search);
+// Read the tenant ID from the URL. "store" is the canonical parameter;
+// the other names keep older/shared links compatible.
+const requestedStoreId = String(
+    noorUrlParams.get("store") || noorUrlParams.get("storeId") || noorUrlParams.get("store_id") || "main"
+).trim();
+const hasExplicitStoreRoute = noorUrlParams.has("store") || noorUrlParams.has("storeId") || noorUrlParams.has("store_id");
+const activeStoreId = requestedStoreId === "main" ? "main" : (/^[A-Za-z0-9_-]{1,150}$/.test(requestedStoreId) ? requestedStoreId : "invalid");
+const noorChatPageMode = noorUrlParams.get("view") === "chat";
+const isStoreChoiceLanding = !hasExplicitStoreRoute && !noorChatPageMode;
+function noorBuildStoreUrl(storeId="main", extra={}){
+    const targetFile = String(storeId || "main") === "main" ? "index.html" : "storefront.html";
+    const url = new URL("./" + targetFile, window.location.href);
+    url.searchParams.set("store", String(storeId || "main"));
+    for(const [key,value] of Object.entries(extra||{})){
+        if(value===null||value===undefined||value==="")url.searchParams.delete(key);
+        else url.searchParams.set(key,String(value));
+    }
+    return url.href;
+}
+window.noorBackToStoreChoice=function(){
+    const url=new URL("./index.html",window.location.href);
+    window.location.assign(url.href);
+};
+if(noorChatPageMode){document.documentElement.classList.add("chat-page-mode");document.body?.classList.add("chat-page-mode");}
+function collection(database, ...segments){
+    if(database !== db || activeStoreId === "main") return firestoreCollection(database, ...segments);
+    const tenantPathId=activeStoreId === "invalid" ? "__invalid_store_route__" : activeStoreId;
+    return firestoreCollection(database, "stores", tenantPathId, ...segments);
+}
+function doc(databaseOrCollection, ...segments){
+    if(databaseOrCollection !== db || activeStoreId === "main") return firestoreDoc(databaseOrCollection, ...segments);
+    const tenantPathId=activeStoreId === "invalid" ? "__invalid_store_route__" : activeStoreId;
+    return firestoreDoc(databaseOrCollection, "stores", tenantPathId, ...segments);
+}
+function storeLocalKey(key){return activeStoreId === "main" ? key : `${key}__${activeStoreId}`;}
+function storeStoragePath(path){return activeStoreId === "main" ? path : `stores/${activeStoreId}/${path}`;}
+
+
 
 /* ================= GLOBAL ================= */
 
@@ -3271,11 +3411,11 @@ let noorCustomerChatLoaded = false;
 let noorNotificationsLoaded = false;
 
 let cart = JSON.parse(
-    localStorage.getItem("noor_cart") || "[]"
+    localStorage.getItem(storeLocalKey("noor_cart")) || "[]"
 );
 
 let favorites = JSON.parse(
-    localStorage.getItem("noor_favorites") || "[]"
+    localStorage.getItem(storeLocalKey("noor_favorites")) || "[]"
 );
 
 let currentCategory = "all";
@@ -3283,7 +3423,7 @@ let currentCategory = "all";
 let appliedCoupon = null;
 
 let customer = JSON.parse(
-    localStorage.getItem("noor_customer") || "null"
+    localStorage.getItem(storeLocalKey("noor_customer")) || "null"
 );
 
 let chatUnsubscribe = null;
@@ -3320,13 +3460,15 @@ let publicChatEnabled = true;
 let notificationsUnsubscribe = null;
 let customerQuoteRequestsUnsubscribe = null;
 let storeSettingsUnsubscribe = null;
+let activeStoreStatusUnsubscribe = null;
+let storeDisabledByRegistry = false;
 let allNotifications = [];
 let unreadNotifications = 0;
 let unreadChatCount = 0;
 let reviewsUnsubscribe = null;
 let storeIsOpen = (() => {
     try{
-        const cached = JSON.parse(localStorage.getItem("noor_store_state") || "null");
+        const cached = JSON.parse(localStorage.getItem(storeLocalKey("noor_store_state")) || "null");
         return cached && typeof cached.open === "boolean" ? cached.open : true;
     }catch(e){
         return true;
@@ -3392,11 +3534,12 @@ window.signInWithGoogle=async function(){
         const name=user.displayName||"عميل متجر النور";
         customer={id,name,email:user.email||"",photoURL:user.photoURL||"",authProvider:"google",createdAt:Date.now()};
         await setDoc(doc(db,"customers",id),{name,email:customer.email,photoURL:customer.photoURL,customerId:id,authProvider:"google",lastSeen:serverTimestamp(),createdAt:serverTimestamp()},{merge:true});
-        localStorage.setItem("noor_customer",JSON.stringify(customer));
+        localStorage.setItem(storeLocalKey("noor_customer"),JSON.stringify(customer));
         document.getElementById("nameModal").classList.remove("show");
         document.getElementById("checkoutName").value=name;
         document.getElementById("applicationName").value=name;
         subscribeCustomerQuoteRequests();watchCustomerBlockState();watchNoorWheelCustomer();updateNoorWheelUI();
+        if(noorChatPageMode)setTimeout(()=>window.openChat(),60);
         toast("تم تسجيل الدخول بحساب جوجل بنجاح");
     }catch(error){
         console.error("Google sign-in failed",error);
@@ -3441,7 +3584,7 @@ window.saveCustomerName = async function(){
         createdAt:Date.now()
     };
 
-    localStorage.setItem("noor_customer",JSON.stringify(customer));
+    localStorage.setItem(storeLocalKey("noor_customer"),JSON.stringify(customer));
     document.getElementById("checkoutName").value=name;
     document.getElementById("applicationName").value=name;
 
@@ -3477,6 +3620,7 @@ window.saveCustomerName = async function(){
     subscribeCustomerQuoteRequests();
     watchNoorWheelCustomer();
     updateNoorWheelUI();
+    if(noorChatPageMode)setTimeout(()=>window.openChat(),60);
 
 };
 
@@ -3487,16 +3631,16 @@ async function verifyCustomerAllowed(showToast = true){
         const customerSnapshot = await getDoc(doc(db,"customers",customer.id));
         const isBlocked = customerSnapshot.exists() && customerSnapshot.data().blocked === true;
         if(isBlocked){
-            localStorage.setItem("noor_customer_blocked","true");
+            localStorage.setItem(storeLocalKey("noor_customer_blocked"),"true");
             if(showToast) toast("تم تقييد حسابك من المتجر. تواصل مع خدمة العملاء للمراجعة.","error");
             return false;
         }
-        localStorage.removeItem("noor_customer_blocked");
+        localStorage.removeItem(storeLocalKey("noor_customer_blocked"));
         return true;
     }catch(error){
         console.warn("Unable to verify customer block state:",error);
         // عند انقطاع الاتصال لا نعتمد على حالة محلية قديمة كبديل عن التحقق من الخادم.
-        if(localStorage.getItem("noor_customer_blocked") === "true"){
+        if(localStorage.getItem(storeLocalKey("noor_customer_blocked")) === "true"){
             if(showToast) toast("لا يمكن التحقق من حالة حسابك الآن. حاول مرة أخرى عند عودة الاتصال.","error");
             return false;
         }
@@ -3509,18 +3653,18 @@ function watchCustomerBlockState(){
     onSnapshot(doc(db,"customers",customer.id),snapshot=>{
         const isBlocked = snapshot.exists() && snapshot.data().blocked === true;
         if(isBlocked){
-            const wasAlreadyBlocked = localStorage.getItem("noor_customer_blocked") === "true";
-            localStorage.setItem("noor_customer_blocked","true");
+            const wasAlreadyBlocked = localStorage.getItem(storeLocalKey("noor_customer_blocked")) === "true";
+            localStorage.setItem(storeLocalKey("noor_customer_blocked"),"true");
             if(!wasAlreadyBlocked) toast("تم تقييد حسابك من المتجر. لا يمكن إرسال طلبات أو رسائل أثناء الحظر.","error");
         }else{
-            localStorage.removeItem("noor_customer_blocked");
+            localStorage.removeItem(storeLocalKey("noor_customer_blocked"));
         }
     },error=>console.warn("Customer block status listener:",error));
 }
 
 function ensureCustomer(){
 
-    if(localStorage.getItem("noor_customer_blocked") === "true"){
+    if(localStorage.getItem(storeLocalKey("noor_customer_blocked")) === "true"){
         toast("حسابك محظور حاليًا من المتجر. تواصل مع الإدارة للمراجعة.","error");
         return false;
     }
@@ -3741,8 +3885,8 @@ function subscribeStoreSettings(){
                 publicChatEnabled=true;
                 applySeasonTheme("normal");
                 updatePublicChatAvailability();
-                storeIsOpen=true;
-                localStorage.setItem("noor_store_state", JSON.stringify({
+                storeIsOpen=!storeDisabledByRegistry;
+                localStorage.setItem(storeLocalKey("noor_store_state"), JSON.stringify({
                     open:true,
                     syncedAt:Date.now()
                 }));
@@ -3765,21 +3909,25 @@ function subscribeStoreSettings(){
             renderStoreInformation();
             const logo=data.logo||data.logoUrl||data.storeLogo||"";
 
-            if(logo){
-                document.getElementById("storeLogo").src=logo;
-                document.getElementById("storeBrand").classList.add("has-logo");
+            const logoEl=document.getElementById("storeLogo");
+            const brandEl=document.getElementById("storeBrand");
+            if(logoEl && brandEl){
+                if(logo){logoEl.src=logo;brandEl.classList.add("has-logo");}
+                else{logoEl.removeAttribute("src");brandEl.classList.remove("has-logo");}
             }
+            const brandName=document.querySelector(".brand-text strong");
+            if(brandName && data.name){brandName.textContent=data.name;document.title=`${data.name} | المتجر الإلكتروني`;if(noorChatPageMode){const chatTitle=document.querySelector("#chatWindow .chat-header-info strong");if(chatTitle)chatTitle.textContent=`دردشة ${data.name}`;}}
+            if(brandName){let verified=brandName.querySelector(".store-verified-badge");if(data.verifiedBadge===true){if(!verified){verified=document.createElement("span");verified.className="store-verified-badge";verified.title="علامة توثيق المتجر";verified.setAttribute("aria-label","متجر موثق");verified.innerHTML='<i class="fa-solid fa-circle-check"></i>';brandName.appendChild(verified);}}else if(verified)verified.remove();}
+            if(data.subtitle){const subtitle=document.querySelector(".brand-text small");if(subtitle)subtitle.textContent=data.subtitle;}
 
-            if(data.name) document.querySelector(".brand-text strong").textContent=data.name;
-            if(data.subtitle) document.querySelector(".brand-text small").textContent=data.subtitle;
-
-            storeIsOpen =
+            storeIsOpen = !storeDisabledByRegistry && (
                 data.open!==undefined ? data.open===true :
                 data.storeOpen!==undefined ? data.storeOpen===true :
                 data.isOpen!==undefined ? data.isOpen===true :
-                true;
+                true
+            );
 
-            localStorage.setItem("noor_store_state", JSON.stringify({
+            localStorage.setItem(storeLocalKey("noor_store_state"), JSON.stringify({
                 open:storeIsOpen,
                 syncedAt:Date.now()
             }));
@@ -3831,12 +3979,91 @@ window.submitApplication=async function(){
     try{
         await addDoc(collection(db,"applications"),{customerId:customer.id,customerName:name,phone,title,receiveAt:receive,details,status:"new",createdAt:serverTimestamp()});
         await setDoc(doc(db,"customers",customer.id),{name,phone,lastSeen:serverTimestamp()},{merge:true});
-        customer={...customer,name,phone}; localStorage.setItem("noor_customer",JSON.stringify(customer));
+        customer={...customer,name,phone}; localStorage.setItem(storeLocalKey("noor_customer"),JSON.stringify(customer));
         status.innerHTML="تم إرسال التقديم بنجاح ✅ وسيظهر في لوحة التحكم."; toast("تم إرسال التقديم بنجاح ✅");
     }catch(e){console.error(e);status.textContent="تعذر إرسال التقديم";toast("تعذر إرسال التقديم","error");}
 };
 
 /* ================= PRODUCTS ================= */
+
+/* ================= MULTI STORE DIRECTORY / STORE CHOOSER / CHAT PAGE ================= */
+let storeDirectoryUnsubscribe=null;
+function renderStoreChoices(rows=[],errorMessage=""){
+    const host=document.getElementById("storeChoiceGrid");
+    const status=document.getElementById("storeChoiceStatus");
+    if(!host)return;
+    const mainCard=`<a class="noor-choice-card noor-choice-main" href="./index.html?store=main"><span class="noor-choice-icon"><i class="fa-solid fa-crown"></i></span><strong>متجر النور</strong><p>المتجر الأساسي ومنتجاته الأصلية وخدماته المعتادة.</p><span class="noor-choice-enter">دخول متجر النور <i class="fa-solid fa-arrow-left"></i></span></a>`;
+    const childCards=rows.map(store=>`<a class="noor-choice-card" href="${escapeHTML(noorBuildStoreUrl(store.id))}"><span class="noor-choice-icon"><i class="fa-solid fa-store"></i></span><strong>${escapeHTML(store.name||"متجر مستقل")}</strong><p>${escapeHTML(store.description||store.subtitle||"متجر مستقل، بمنتجات وطلبات ودردشة خاصة به.")}</p><span class="noor-choice-enter">دخول ${escapeHTML(store.name||"المتجر")} <i class="fa-solid fa-arrow-left"></i></span></a>`).join("");
+    host.innerHTML=mainCard+(childCards||`<article class="noor-choice-card"><span class="noor-choice-icon"><i class="fa-solid fa-shop"></i></span><strong>متاجر جديدة قريبًا</strong><p>عند إضافة متجر من لوحة التحكم وتفعيله، سيظهر هنا تلقائيًا بجوار متجر النور.</p><span class="noor-choice-enter" style="background:rgba(148,163,184,.15);color:#cbd5e1">لا توجد متاجر إضافية حاليًا</span></article>`);
+    if(status)status.textContent=errorMessage||`متجر النور${rows.length?` و${rows.length} متجر مستقل`:""} — اضغط على المتجر الذي تريد الدخول إليه.`;
+}
+function renderStoresDirectory(rows=[]){
+    const section=document.getElementById("storesDirectorySection"),host=document.getElementById("storesDirectoryGrid");
+    if(!section||!host)return;
+    if(activeStoreId!=="main"||!rows.length){section.hidden=true;return;}
+    section.hidden=false;
+    host.innerHTML=rows.map(store=>`<article class="noor-store-card"><strong><i class="fa-solid fa-store" style="color:var(--primary)"></i> ${escapeHTML(store.name||"متجر")}</strong><p>${escapeHTML(store.description||store.subtitle||"تسوق من متجر مستقل بخدمة عملاء وطلبات خاصة به.")}</p><a href="${escapeHTML(noorBuildStoreUrl(store.id))}">دخول المتجر <i class="fa-solid fa-arrow-left"></i></a></article>`).join("");
+}
+function subscribeStoresDirectory(){
+    if(activeStoreId!=="main"||storeDirectoryUnsubscribe)return;
+    if(isStoreChoiceLanding)renderStoreChoices([]);
+    storeDirectoryUnsubscribe=onSnapshot(firestoreCollection(db,"stores"),snapshot=>{
+        const rows=snapshot.docs.map(d=>({id:d.id,...d.data()})).filter(store=>store.active!==false&&store.status!=="inactive");
+        renderStoreChoices(rows);
+        renderStoresDirectory(rows);
+    },error=>{
+        console.warn("Stores directory listener:",error);
+        if(isStoreChoiceLanding)renderStoreChoices([],"تعذر تحميل المتاجر الإضافية. يمكنك دخول متجر النور الآن، وتحقق من صلاحيات قراءة stores في Firebase.");
+        const section=document.getElementById("storesDirectorySection");if(section)section.hidden=true;
+    });
+}
+
+function applyStoreRouteBrand(name,subtitle=""){
+    const storeName=String(name||"متجر مستقل").trim()||"متجر مستقل";
+    const brandName=document.querySelector("#storeBrand .brand-text strong");
+    const brandSubtitle=document.querySelector("#storeBrand .brand-text small");
+    const logo=document.getElementById("storeLogo");
+    if(brandName)brandName.textContent=storeName;
+    if(brandSubtitle)brandSubtitle.textContent=String(subtitle||storeName);
+    if(logo)logo.alt="لوجو "+storeName;
+    document.title=storeName+" | متجر مستقل";
+    const marquee=document.querySelector(".top-bar .marquee");
+    if(marquee)marquee.textContent=`✨ أهلاً بك في ${storeName} ✨ منتجات مختارة بعناية — عروض حصرية — خدمة عملاء مباشرة 💬`;
+}
+function subscribeActiveStoreStatus(){
+    if(activeStoreId==="main"||activeStoreStatusUnsubscribe)return;
+    // اعرض هوية المتجر المختار فورًا لتجنب ظهور اسم متجر النور أثناء انتظار Firebase.
+    const routeName=noorUrlParams.get("storeName")||"";
+    const routeSubtitle=noorUrlParams.get("storeSubtitle")||"";
+    if(routeName)applyStoreRouteBrand(routeName,routeSubtitle);
+    activeStoreStatusUnsubscribe=onSnapshot(firestoreDoc(db,"stores",activeStoreId),snap=>{
+        const data=snap.exists()?snap.data():{};
+        storeDisabledByRegistry=!snap.exists()||data.active===false||data.status==="inactive";
+        if(snap.exists()){
+            applyStoreRouteBrand(data.name||routeName||data.subtitle||"متجر مستقل",data.subtitle||routeSubtitle||data.name||"متجر مستقل");
+        }else{
+            document.title="المتجر غير موجود | متاجر النور";
+            storeDisabledByRegistry=true;
+            const closedTitle=document.getElementById("storeClosedTitle");
+            const closedMessage=document.getElementById("storeClosedMessage");
+            if(closedTitle)closedTitle.textContent="المتجر غير موجود";
+            if(closedMessage)closedMessage.innerHTML='لم نعثر على المتجر المطلوب. <a href="./index.html" style="color:#fdba74;text-decoration:underline">ارجع إلى قائمة المتاجر</a> واختر المتجر الصحيح.';
+        }
+        if(storeDisabledByRegistry){storeIsOpen=false;applyStoreVisibility();}
+        else if(storeSettings.open!==false){storeIsOpen=true;applyStoreVisibility();}
+    },error=>{
+        console.warn("Active store status listener:",error);
+        // لو تعذر تحميل سجل المتجر مؤقتًا، لا نعرض اسم متجر النور على رابط متجر آخر.
+        if(routeName)applyStoreRouteBrand(routeName,routeSubtitle);
+    });
+}
+window.openDedicatedChatPage=function(){
+    const target=new URL(noorBuildStoreUrl(activeStoreId),location.href);target.searchParams.set("view","chat");location.assign(target.href);
+};
+window.noorBackFromChat=function(){
+    location.assign(noorBuildStoreUrl(activeStoreId));
+};
+window.noorHandleChatClose=function(){if(noorChatPageMode)window.noorBackFromChat();else window.closeChat();};
 
 function subscribeProducts(){
 
@@ -4664,7 +4891,7 @@ window.toggleFavorite = function(id){
         favorites.push(id);
         toast("تمت إضافة المنتج للمفضلة ❤");
     }
-    localStorage.setItem("noor_favorites",JSON.stringify(favorites));
+    localStorage.setItem(storeLocalKey("noor_favorites"),JSON.stringify(favorites));
     updateFavoriteCount();
     updateProductCardControls();
     renderFavoritesSection();
@@ -4754,7 +4981,7 @@ window.quickQty=function(id,change){
 function saveCart(){
 
     localStorage.setItem(
-        "noor_cart",
+        storeLocalKey("noor_cart"),
         JSON.stringify(cart)
     );
 
@@ -5355,6 +5582,7 @@ async function noorStartPaymobPayment(orderId){
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       orderId,
+      storeId: activeStoreId === "main" ? null : activeStoreId,
       amount: Number((document.getElementById("cartGrandTotal") || document.getElementById("cartTotal") || document.querySelector("[id*='Total'], [id*='total']"))?.textContent?.replace(/[^\d.]/g, "") || 0),
       customerName: (document.getElementById("cartCustomerName") || document.querySelector("input[placeholder*='الاسم']"))?.value || "عميل متجر النور",
       customerPhone: (document.getElementById("cartCustomerPhone") || document.querySelector("input[type='tel'], input[placeholder*='التليفون']"))?.value || ""
@@ -5415,7 +5643,7 @@ window.checkout = async function(){
     try{
         const phoneMatches = await getDocs(query(collection(db,"customers"),where("phone","==",checkoutPhone)));
         if(phoneMatches.docs.some(d=>d.data().blocked === true)){
-            localStorage.setItem("noor_customer_blocked","true");
+            localStorage.setItem(storeLocalKey("noor_customer_blocked"),"true");
             toast("هذا الرقم محظور من المتجر. تواصل مع الإدارة للمراجعة.","error");
             return;
         }
@@ -5524,6 +5752,7 @@ window.checkout = async function(){
             }
             // لا نخصم المخزون عند إنشاء الطلب؛ الخصم يتم مرة واحدة عند الشحن أو التسليم من لوحة التحكم.
             const orderData={
+                storeId:activeStoreId,
                 inventoryHandled:false,
                 customerId:customer.id,
                 customerName:checkoutName,
@@ -5577,7 +5806,7 @@ window.checkout = async function(){
             }
         });
         customer={...customer,name:checkoutName,phone:checkoutPhone,address:checkoutAddress};
-        localStorage.setItem("noor_customer",JSON.stringify(customer));
+        localStorage.setItem(storeLocalKey("noor_customer"),JSON.stringify(customer));
         if(paymentMethod === "vodafone_cash"){
             try{
                 toast("تم حفظ الطلب مؤقتًا. جاري فتح بوابة الدفع الآمنة...");
@@ -6421,8 +6650,8 @@ window.closePublicChatProfileModal=function(){document.getElementById("publicCha
 window.saveMyPublicChatProfile=async function(){if(!customer?.id)return;const displayName=String(document.getElementById("publicChatProfileName").value||"").trim().slice(0,40);const bio=String(document.getElementById("publicChatProfileBio").value||"").trim().slice(0,120);if(displayName.length<2)return toast("الاسم يجب أن يكون حرفين على الأقل","error");if(/admin|ادارة|إدارة|مدير|مشرف/i.test(displayName))return toast("لا يمكن استخدام أسماء توحي بأنك من الإدارة","error");try{const data={customerId:customer.id,displayName,bio,updatedAt:serverTimestamp()};await setDoc(doc(db,"publicChatProfiles",customer.id),data,{merge:true});publicChatProfiles.set(customer.id,data);document.getElementById("publicChatProfileAvatar").textContent=displayName.charAt(0);toast("تم حفظ ملفك الشخصي");closePublicChatProfileModal();}catch(e){console.error(e);toast("تعذر حفظ الملف الشخصي. راجع صلاحيات Firestore.","error");}};
 window.handlePublicRoomFile=async function(file){if(!file)return;if(!PUBLIC_CHAT_ALLOWED_FILE_TYPES.includes(file.type))return toast("نوع الملف غير مسموح. ارفع صورة أو PDF أو TXT.","error");if(file.size>PUBLIC_CHAT_MAX_FILE_BYTES)return toast("أقصى حجم للملف 5 ميجابايت","error");publicChatPendingFile=file;const preview=document.getElementById("publicChatFilePreview");if(preview){preview.hidden=false;preview.innerHTML=`<i class="fa-solid fa-paperclip"></i> ${escapeHTML(file.name)} · ${(file.size/1024/1024).toFixed(2)} MB <button type="button" onclick="clearPublicRoomFile()">إزالة</button>`;}};
 window.clearPublicRoomFile=function(){publicChatPendingFile=null;const input=document.getElementById("publicRoomFile");if(input)input.value="";const preview=document.getElementById("publicChatFilePreview");if(preview){preview.hidden=true;preview.innerHTML="";}};
-async function noorUploadPublicChatFile(file,ownerId){const safeName=String(file.name||"attachment").replace(/[^\w.\-\u0600-\u06FF]/g,"_").slice(-90);const path=`publicChatAttachments/${encodeURIComponent(ownerId)}/${Date.now()}_${safeName}`;const ref=storageRef(noorChatStorage,path);const snap=await uploadBytes(ref,file,{contentType:file.type,customMetadata:{ownerId:String(ownerId)}});const url=await getDownloadURL(snap.ref);return {url,name:file.name,type:file.type,size:file.size,path};}
-function noorPublicChatCheckSpam(text){const now=Date.now();if(now-publicChatLastSentAt<1700)return "انتظر قليلًا قبل إرسال رسالة أخرى";let history=[];try{history=JSON.parse(localStorage.getItem("noor_public_chat_rate_"+customer.id)||"[]");}catch(e){}history=history.filter(t=>now-t<60000);if(history.length>=6)return "أرسلت رسائل كثيرة خلال دقيقة. حاول بعد قليل";if(text&&history.length&&localStorage.getItem("noor_public_chat_last_text")==text)return "لا ترسل الرسالة نفسها عدة مرات";history.push(now);localStorage.setItem("noor_public_chat_rate_"+customer.id,JSON.stringify(history));if(text)localStorage.setItem("noor_public_chat_last_text",text);publicChatLastSentAt=now;return "";}
+async function noorUploadPublicChatFile(file,ownerId){const safeName=String(file.name||"attachment").replace(/[^\w.\-\u0600-\u06FF]/g,"_").slice(-90);const path=`publicChatAttachments/${encodeURIComponent(ownerId)}/${Date.now()}_${safeName}`;const ref=storageRef(noorChatStorage,storeStoragePath(path));const snap=await uploadBytes(ref,file,{contentType:file.type,customMetadata:{ownerId:String(ownerId)}});const url=await getDownloadURL(snap.ref);return {url,name:file.name,type:file.type,size:file.size,path};}
+function noorPublicChatCheckSpam(text){const now=Date.now();if(now-publicChatLastSentAt<1700)return "انتظر قليلًا قبل إرسال رسالة أخرى";let history=[];try{history=JSON.parse(localStorage.getItem(storeLocalKey("noor_public_chat_rate_")+customer.id)||"[]");}catch(e){}history=history.filter(t=>now-t<60000);if(history.length>=6)return "أرسلت رسائل كثيرة خلال دقيقة. حاول بعد قليل";if(text&&history.length&&localStorage.getItem(storeLocalKey("noor_public_chat_last_text"))==text)return "لا ترسل الرسالة نفسها عدة مرات";history.push(now);localStorage.setItem(storeLocalKey("noor_public_chat_rate_")+customer.id,JSON.stringify(history));if(text)localStorage.setItem(storeLocalKey("noor_public_chat_last_text"),text);publicChatLastSentAt=now;return "";}
 async function noorPublicChatCheckModeration(){if(!customer?.id)return "سجل دخولك أولًا";const snap=await getDoc(doc(db,"publicChatModeration",customer.id));const d=snap.exists()?snap.data():{};publicChatModerationState=d;if(d.blocked===true)return "تم منعك من استخدام المحادثة العامة";const until=d.mutedUntil?.toDate?d.mutedUntil.toDate().getTime():Number(d.mutedUntil||0);if(until>Date.now())return `أنت مكتوم حتى ${new Date(until).toLocaleTimeString("ar-EG",{hour:"2-digit",minute:"2-digit"})}`;return "";}
 window.sendPublicRoomMessage=async function(){
     if(!ensureCustomer()||!await verifyCustomerAllowed())return;if(!publicChatEnabled)return toast("المحادثة العامة متوقفة حاليًا","error");
@@ -6587,6 +6816,12 @@ window.joinNoorWheel=async function(){
 };
 function init(){
 
+    if(isStoreChoiceLanding){
+        requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById("loader")?.classList.add("hide")));
+        subscribeStoresDirectory();
+        return;
+    }
+
     initNoorMovableWidgets();
 
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
@@ -6612,8 +6847,14 @@ subscribeProducts();
 
     subscribeAds();
     subscribeStoreSettings();
+    subscribeActiveStoreStatus();
     subscribeNoorWheel();
     subscribePublicChatDock();
+    subscribeStoresDirectory();
+    if(noorChatPageMode){
+        document.title = `الدردشة - ${storeSettings.name||"المتجر"}`;
+        setTimeout(()=>{if(typeof window.openChat==="function")window.openChat();},80);
+    }
 
     if(customer){
         // Private chat and notifications are loaded only when the customer opens them.
@@ -6747,7 +6988,7 @@ window.noorOpenExtra=async function(which){
  const body=document.getElementById('noorExtraBody'),title=document.getElementById('noorExtraTitle');
  if(which==='points'){
   title.textContent='نقاط المكافآت';
-  try{const snap=await getDoc(doc(db,'customers',customer.id));const remoteBalance=snap.exists()?snap.data().loyaltyPoints:null;const points=Math.max(0,Number(remoteBalance??customer.loyaltyPoints??0)||0);customer.loyaltyPoints=points;localStorage.setItem('noor_customer',JSON.stringify(customer));
+  try{const snap=await getDoc(doc(db,'customers',customer.id));const remoteBalance=snap.exists()?snap.data().loyaltyPoints:null;const points=Math.max(0,Number(remoteBalance??customer.loyaltyPoints??0)||0);customer.loyaltyPoints=points;localStorage.setItem(storeLocalKey('noor_customer'),JSON.stringify(customer));
    const hist=await getDocs(query(collection(db,'customers',customer.id,'loyaltyHistory'),orderBy('createdAt','desc'),limit(20)));
    const pendingSnap=await getDocs(query(collection(db,'loyaltyRequests'),where('customerId','==',customer.id),limit(50)));
    const pendingPoints=pendingSnap.docs.filter(d=>d.data().status==='pending').reduce((sum,d)=>sum+Math.max(0,Number(d.data().points)||0),0);
